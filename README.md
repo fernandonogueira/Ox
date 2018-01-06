@@ -5,6 +5,14 @@ Ox - MongoDB Database Version Migration Tool
 Schemaless doesn't mean no schema!
 
 Control your MongoDB schema with ease.
+
+MongoDB is a NoSQL, Document-based, database but it also need some data migration in some cases, specially 
+when your application uses a multi-instance architecture and you must upgrade or change data in all your databases.
+
+Feel free to contribute and ask changes to this project.
+Pull Requests are also welcome and will be approved quickly.
+
+This project is mature. I use it since 2014 but it wasn't public since then.
 ## Usage
 
 #### Creating migrations...
@@ -65,3 +73,30 @@ public void myMethod(){
 - Log4j
 
 That' all folks. :)
+
+## LICENSE
+
+```
+MIT License
+
+Copyright (c) 2018 Ox Contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+
