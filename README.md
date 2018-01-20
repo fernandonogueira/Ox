@@ -4,7 +4,7 @@ Ox - MongoDB Database Version Migration Tool
 ## Description
 Schemaless doesn't mean no schema!
 
-Control your MongoDB schema with ease.
+Control and migrate your MongoDB schema versions with ease, ensuring that indexes are created right and that your data is exactly as you expect.
 
 MongoDB is a NoSQL, Document-based, database but it also need some data migration in some cases, specially 
 when your application uses a multi-instance architecture and you must upgrade or change data in all your databases.
@@ -12,7 +12,14 @@ when your application uses a multi-instance architecture and you must upgrade or
 Feel free to contribute and ask changes to this project.
 Pull Requests are also welcome and will be approved quickly.
 
-This project is mature. I use it since 2014 but it wasn't public since then.
+This project is mature. It is usedsince 2014 in production but it wasn't public since then.
+
+## Motivation
+
+When you have to manage a lot of MongoDB databases it may consume a lot of time when you need to keep your indexes and documents in the right version.
+
+This project simplifies that. 
+
 ## Usage
 
 #### Creating migrations...
