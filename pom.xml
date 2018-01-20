@@ -3,7 +3,7 @@
 
     <name>Ox</name>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>ox</groupId>
+    <groupId>com.github.fernandonogueira.Ox</groupId>
     <artifactId>ox</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
