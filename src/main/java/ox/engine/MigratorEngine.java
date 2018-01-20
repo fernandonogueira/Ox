@@ -1,6 +1,6 @@
 package ox.engine;
 
-import ox.engine.exception.GenericMongoMigratorException;
+import ox.engine.exception.OxException;
 import ox.engine.exception.InvalidMongoConfiguration;
 import ox.engine.exception.InvalidPackageToScan;
 import ox.engine.exception.NoMigrationFileFoundException;
@@ -185,14 +185,14 @@ public final class MigratorEngine {
                     runMigrationDownIfApplies(desiredVersion, env, migration, migrateStartTime, isMigrateVersionApplied);
                 }
             }
-        } catch (GenericMongoMigratorException e) {
+        } catch (OxException e) {
             LOG.error(Log.preff("MongoDB Migrations Generic Error"), e);
         }
 
         LOG.info(Log.preff("Migration Finished!"));
     }
 
-    private void runMigrationDownIfApplies(Integer desiredVersion, MigrationEnvironment env, ResolvedMigration migration, long migrateStartTime, boolean isMigrateVersionApplied) throws GenericMongoMigratorException {
+    private void runMigrationDownIfApplies(Integer desiredVersion, MigrationEnvironment env, ResolvedMigration migration, long migrateStartTime, boolean isMigrateVersionApplied) throws OxException {
         if (desiredVersion == null || migration.getVersion() > desiredVersion) {
             if (isMigrateVersionApplied) {
                 LOG.info(Log.preff(" ------- Executing migrate (DOWN) Version: " + migration.getVersion() + " migration: " + migration));
@@ -207,7 +207,7 @@ public final class MigratorEngine {
         }
     }
 
-    private void runMigrationUpIfApplies(Integer desiredVersion, MigrationEnvironment env, ResolvedMigration migration, long migrateStartTime, boolean isMigrateVersionApplied) throws GenericMongoMigratorException {
+    private void runMigrationUpIfApplies(Integer desiredVersion, MigrationEnvironment env, ResolvedMigration migration, long migrateStartTime, boolean isMigrateVersionApplied) throws OxException {
         if (desiredVersion == null || migration.getVersion() <= desiredVersion) {
             if (!isMigrateVersionApplied) {
                 LOG.info(Log.preff(" ------- Executing migrate (UP) Version: " + migration.getVersion() + " migration: " + migration));

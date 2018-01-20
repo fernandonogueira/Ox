@@ -1,6 +1,6 @@
 package ox.engine.structure;
 
-import ox.engine.exception.GenericMongoMigratorException;
+import ox.engine.exception.OxException;
 import ox.engine.internal.MigrationEnvironment;
 
 /**
@@ -13,7 +13,7 @@ import ox.engine.internal.MigrationEnvironment;
  */
 public interface Migration {
 
-    void up(MigrationEnvironment env) throws GenericMongoMigratorException;
-    void down(MigrationEnvironment env) throws GenericMongoMigratorException;
+    void up(MigrationEnvironment env) throws OxException;
+    void down(MigrationEnvironment env) throws OxException;
 
 }
