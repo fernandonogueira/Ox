@@ -13,6 +13,7 @@ public abstract class MigrateAction {
 
     /**
      * Create a new CreateIndex action.
+     *
      * @param indexName the index name
      * @return a CreateIndexAction
      */
@@ -22,6 +23,7 @@ public abstract class MigrateAction {
 
     /**
      * Create a new RemoveIndexAction
+     *
      * @param indexName the index name
      * @return a RemoveIndexAction
      */
@@ -29,7 +31,7 @@ public abstract class MigrateAction {
         return new RemoveIndexAction(indexName);
     }
 
-    public static RemoveCollectionAction removeCollection(String collectionName){
+    public static RemoveCollectionAction removeCollection(String collectionName) {
         return new RemoveCollectionAction(collectionName);
     }
 
@@ -39,6 +41,7 @@ public abstract class MigrateAction {
 
     /**
      * Executes this migrate action
+     *
      * @param env The MigrationEnvironment instance
      * @throws InvalidMigrateActionException
      */

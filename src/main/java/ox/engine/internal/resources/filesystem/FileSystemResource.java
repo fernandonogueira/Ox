@@ -16,7 +16,7 @@
 package ox.engine.internal.resources.filesystem;
 
 
-import ox.engine.exception.GenericMongoMigrationRuntimeException;
+import ox.engine.exception.OxRuntimeException;
 import ox.engine.internal.resources.Resource;
 import ox.utils.FileCopyUtils;
 import ox.utils.StringUtils;
@@ -71,7 +71,7 @@ public class FileSystemResource implements Resource, Comparable<FileSystemResour
 
             return FileCopyUtils.copyToString(reader);
         } catch (IOException e) {
-            throw new GenericMongoMigrationRuntimeException("Unable to load filesystem resource: " + location.getPath() + " (encoding: " + encoding + ")", e);
+            throw new OxRuntimeException("Unable to load filesystem resource: " + location.getPath() + " (encoding: " + encoding + ")", e);
         }
     }
 
@@ -85,7 +85,7 @@ public class FileSystemResource implements Resource, Comparable<FileSystemResour
             InputStream inputStream = new FileInputStream(location);
             return FileCopyUtils.copyToByteArray(inputStream);
         } catch (IOException e) {
-            throw new GenericMongoMigrationRuntimeException("Unable to load filesystem resource: " + location.getPath(), e);
+            throw new OxRuntimeException("Unable to load filesystem resource: " + location.getPath(), e);
         }
     }
 

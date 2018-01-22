@@ -3,7 +3,6 @@ package ox.engine.internal.resources;
 import ox.engine.structure.Migration;
 
 /**
- *
  * Every migration file will be transformed
  * in a ResolvedMigration before execution.
  *

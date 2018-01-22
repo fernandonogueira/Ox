@@ -22,6 +22,7 @@ public class RemoveIndexAction extends MigrateAction {
 
     /**
      * Removes the index only if it exists
+     *
      * @return
      */
     public RemoveIndexAction ifExists() {
@@ -31,6 +32,7 @@ public class RemoveIndexAction extends MigrateAction {
 
     /**
      * Set the collection that the index will be removed.
+     *
      * @param collection
      * @return
      */

@@ -5,7 +5,7 @@ import ox.engine.internal.MigrationEnvironment;
 
 /**
  * This is a migration template file.
- *
+ * <p>
  * Every migration file should implements this interface
  *
  * @author Fernando Nogueira
@@ -14,6 +14,7 @@ import ox.engine.internal.MigrationEnvironment;
 public interface Migration {
 
     void up(MigrationEnvironment env) throws OxException;
+
     void down(MigrationEnvironment env) throws OxException;
 
 }

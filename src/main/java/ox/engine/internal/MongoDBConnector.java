@@ -288,11 +288,11 @@ public class MongoDBConnector {
         return mongo.getDB(databaseName);
     }
 
-    public boolean verifyIfCollectionExists(String collectionName){
+    public boolean verifyIfCollectionExists(String collectionName) {
         return getMongoDatabase().collectionExists(collectionName);
     }
 
-    public void removeCollection(String collectionName){
+    public void removeCollection(String collectionName) {
         getMongoDatabase().getCollection(collectionName).drop();
     }
 

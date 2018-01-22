@@ -16,7 +16,7 @@
 package ox.engine.internal.resources.scanner;
 
 
-import ox.engine.exception.GenericMongoMigrationRuntimeException;
+import ox.engine.exception.OxRuntimeException;
 import ox.engine.internal.resources.Location;
 import ox.engine.internal.resources.Resource;
 import ox.engine.internal.resources.classpathscanner.ClassPathScanner;
@@ -51,7 +51,7 @@ public class Scanner {
             }
             return resourceAndClassScanner.scanForResources(location, prefix, suffix);
         } catch (Exception e) {
-            throw new GenericMongoMigrationRuntimeException("Unable to scan for SQL migrations in location: " + location, e);
+            throw new OxRuntimeException("Unable to scan for SQL migrations in location: " + location, e);
         }
     }
 

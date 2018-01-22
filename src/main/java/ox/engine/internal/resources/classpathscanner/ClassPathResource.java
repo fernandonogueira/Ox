@@ -15,7 +15,7 @@
  */
 package ox.engine.internal.resources.classpathscanner;
 
-import ox.engine.exception.GenericMongoMigrationRuntimeException;
+import ox.engine.exception.OxRuntimeException;
 import ox.engine.internal.resources.Resource;
 import ox.utils.FileCopyUtils;
 
@@ -56,12 +56,12 @@ public class ClassPathResource implements Comparable<ClassPathResource>, Resourc
     public String getLocationOnDisk() {
         URL url = getUrl();
         if (url == null) {
-            throw new GenericMongoMigrationRuntimeException("Unable to location resource on disk: " + location);
+            throw new OxRuntimeException("Unable to location resource on disk: " + location);
         }
         try {
             return new File(URLDecoder.decode(url.getPath(), "UTF-8")).getAbsolutePath();
         } catch (UnsupportedEncodingException e) {
-            throw new GenericMongoMigrationRuntimeException("Unknown encoding: UTF-8", e);
+            throw new OxRuntimeException("Unknown encoding: UTF-8", e);
         }
     }
 
@@ -76,13 +76,13 @@ public class ClassPathResource implements Comparable<ClassPathResource>, Resourc
         try {
             InputStream inputStream = classLoader.getResourceAsStream(location);
             if (inputStream == null) {
-                throw new GenericMongoMigrationRuntimeException("Unable to obtain inputstream for resource: " + location);
+                throw new OxRuntimeException("Unable to obtain inputstream for resource: " + location);
             }
             Reader reader = new InputStreamReader(inputStream, Charset.forName(encoding));
 
             return FileCopyUtils.copyToString(reader);
         } catch (IOException e) {
-            throw new GenericMongoMigrationRuntimeException("Unable to load resource: " + location + " (encoding: " + encoding + ")", e);
+            throw new OxRuntimeException("Unable to load resource: " + location + " (encoding: " + encoding + ")", e);
         }
     }
 
@@ -90,11 +90,11 @@ public class ClassPathResource implements Comparable<ClassPathResource>, Resourc
         try {
             InputStream inputStream = classLoader.getResourceAsStream(location);
             if (inputStream == null) {
-                throw new GenericMongoMigrationRuntimeException("Unable to obtain inputstream for resource: " + location);
+                throw new OxRuntimeException("Unable to obtain inputstream for resource: " + location);
             }
             return FileCopyUtils.copyToByteArray(inputStream);
         } catch (IOException e) {
-            throw new GenericMongoMigrationRuntimeException("Unable to load resource: " + location, e);
+            throw new OxRuntimeException("Unable to load resource: " + location, e);
         }
     }
 

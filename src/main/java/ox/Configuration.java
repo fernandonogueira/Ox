@@ -9,7 +9,8 @@ public final class Configuration {
     /**
      * Utils
      */
-    private Configuration() {}
+    private Configuration() {
+    }
 
     public static final String MIGRATION_COLLECTION_VERSION_ATTRIBUTE = "version";
     public static final String MODULE_TAG = "[MONGO_MIGRATION]";

@@ -16,7 +16,7 @@
 package ox.engine.internal.resources;
 
 
-import ox.engine.exception.GenericMongoMigrationRuntimeException;
+import ox.engine.exception.OxRuntimeException;
 
 /**
  * A location to load migrations from.
@@ -65,7 +65,7 @@ public final class Location implements Comparable<Location> {
             }
         } else {
             if (!isFileSystem()) {
-                throw new GenericMongoMigrationRuntimeException("Unknown prefix for location (should be either filesystem: or classpath:): "
+                throw new OxRuntimeException("Unknown prefix for location (should be either filesystem: or classpath:): "
                         + normalizedDescriptor);
             }
         }

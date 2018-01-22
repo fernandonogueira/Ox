@@ -15,7 +15,7 @@
  */
 package ox.engine.internal.resources.classpathscanner;
 
-import ox.engine.exception.GenericMongoMigrationRuntimeException;
+import ox.engine.exception.OxRuntimeException;
 import ox.engine.internal.resources.Location;
 import ox.engine.internal.resources.Resource;
 import ox.engine.internal.resources.scanner.ClassPathLocationScanner;
@@ -124,7 +124,7 @@ public class ClassPathScanner implements ResourceAndClassScanner {
                 LOG.debug("Skipping non-loadable class: " + className);
                 continue;
             } catch (Exception e) {
-                throw new GenericMongoMigrationRuntimeException("Unable to instantiate class: " + className, e);
+                throw new OxRuntimeException("Unable to instantiate class: " + className, e);
             }
 
             classes.add(clazz);

@@ -96,6 +96,7 @@ public class ValidateRemoveIndexActionTest {
 
     /**
      * No collection set
+     *
      * @throws InvalidMigrateActionException
      */
     @Test(expected = InvalidMigrateActionException.class)
@@ -107,6 +108,7 @@ public class ValidateRemoveIndexActionTest {
 
     /**
      * No index name set
+     *
      * @throws InvalidMigrateActionException
      */
     @Test(expected = InvalidMigrateActionException.class)
@@ -118,6 +120,7 @@ public class ValidateRemoveIndexActionTest {
 
     /**
      * Happy day!
+     *
      * @throws InvalidMigrateActionException
      */
     @Test

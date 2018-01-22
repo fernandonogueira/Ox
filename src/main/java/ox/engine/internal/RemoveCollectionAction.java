@@ -7,7 +7,7 @@ import com.mongodb.Mongo;
  * Created by matheus on 16/02/16.
  */
 public class RemoveCollectionAction extends MigrateAction {
-    public RemoveCollectionAction(String collection){
+    public RemoveCollectionAction(String collection) {
         this.collection = collection;
     }
 
@@ -18,13 +18,13 @@ public class RemoveCollectionAction extends MigrateAction {
 
     @Override
     protected void validateAction() throws InvalidMigrateActionException {
-        if(collection == null || collection.isEmpty())
+        if (collection == null || collection.isEmpty())
             throw new InvalidMigrateActionException("Invalid Migrate action.");
     }
 
     @Override
     void runAction(MongoDBConnector mongoDBConnector, Mongo mongo, String databaseName) {
-        if(mongoDBConnector.verifyIfCollectionExists(collection)){
+        if (mongoDBConnector.verifyIfCollectionExists(collection)) {
             mongoDBConnector.removeCollection(collection);
         }
     }

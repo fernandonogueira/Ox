@@ -16,7 +16,7 @@
 package ox.utils;
 
 
-import ox.engine.exception.GenericMongoMigrationRuntimeException;
+import ox.engine.exception.OxRuntimeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,7 +74,7 @@ public class ClassUtils {
                 try {
                     clazzes.add(ClassUtils.<T>instantiate(clazz, classLoader));
                 } catch (Exception e) {
-                    throw new GenericMongoMigrationRuntimeException("Unable to instantiate class: " + clazz, e);
+                    throw new OxRuntimeException("Unable to instantiate class: " + clazz, e);
                 }
             }
         }
@@ -148,7 +148,7 @@ public class ClassUtils {
             method.setAccessible(true);
             method.invoke(sysloader, url);
         } catch (Exception e) {
-            throw new GenericMongoMigrationRuntimeException("Unable to load " + name, e);
+            throw new OxRuntimeException("Unable to load " + name, e);
         }
     }
 }

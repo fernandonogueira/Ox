@@ -2,7 +2,7 @@ package ox.engine;
 
 import ox.engine.exception.OxException;
 import ox.engine.exception.InvalidMongoConfiguration;
-import ox.engine.exception.InvalidPackageToScan;
+import ox.engine.exception.InvalidPackageToScanException;
 import ox.engine.exception.NoMigrationFileFoundException;
 import ox.engine.internal.MigrationEnvironment;
 import ox.engine.internal.MongoDBConnector;
@@ -230,8 +230,8 @@ public final class MigratorEngine {
             LOG.error(Log.preff("Error updating MONGODB Database Schema"), e);
         } catch (NoMigrationFileFoundException e) {
             LOG.error(Log.preff("No Migration File Found Exception"), e);
-        } catch (InvalidPackageToScan invalidPackageToScan) {
-            LOG.error(Log.preff("Invalid package to scan."), invalidPackageToScan);
+        } catch (InvalidPackageToScanException invalidPackageToScanException) {
+            LOG.error(Log.preff("Invalid package to scan."), invalidPackageToScanException);
         } catch (ClassNotFoundException e) {
             LOG.error(Log.preff("Class not found error"), e);
         } catch (InstantiationException | IllegalAccessException e) {
