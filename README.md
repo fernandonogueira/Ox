@@ -12,7 +12,7 @@ when your application uses a multi-instance architecture and you must upgrade or
 Feel free to contribute and ask changes to this project.
 Pull Requests are also welcome and will be approved quickly.
 
-This project is mature. It is usedsince 2014 in production but it wasn't public since then.
+This project is mature. It is used since 2014 in production but it wasn't public since then.
 
 ## Motivation
 
@@ -30,13 +30,13 @@ public class V1_CreateIndexMigrationTest implements Migration {
     @Override
     public void up(MigrationEnvironment env) {
 
-        MigrateAction
+        OxAction
                 .createIndex("myIndex")
                 .setCollection("myCollection")
                 .addAttribute("attr1", OrderType.ASC)
                 .execute(env);
 
-        MigrateAction
+        OxAction
                 .createIndex("myIndex")
                 .setCollection("myCollection")
                 .addAttribute("attr2", OrderType.DESC)
@@ -61,7 +61,7 @@ public void myMethod(){
    ...
 
    MongoClient mongo = new MongoClient("myDatabaseHost");
-   MigratorEngine.setUp(mongo, "ox.db.migrates", "myDatabaseName").up();
+   Ox.setUp(mongo, "ox.db.migrates", "myDatabaseName").up();
 
    ...
 }
@@ -75,9 +75,8 @@ public void myMethod(){
 
 ## Dependencies
 
-- Guava Library
 - Mongo Java Driver
-- Log4j
+- SLF4j
 
 That' all folks. :)
 
