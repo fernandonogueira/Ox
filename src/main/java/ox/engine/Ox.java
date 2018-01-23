@@ -4,7 +4,7 @@ import ox.engine.exception.OxException;
 import ox.engine.exception.InvalidMongoConfiguration;
 import ox.engine.exception.InvalidPackageToScanException;
 import ox.engine.exception.NoMigrationFileFoundException;
-import ox.engine.internal.MigrationEnvironment;
+import ox.engine.internal.OxEnvironment;
 import ox.engine.internal.MongoDBConnector;
 import ox.engine.internal.MongoDBConnectorConfig;
 import ox.engine.internal.resources.Location;
@@ -32,7 +32,7 @@ import java.util.regex.Pattern;
  * <p/>
  * Usage:
  * <pre>
- *  MigratorEngine
+ *  Ox
  *  .setUp(mongoInstance, "ox.db.migrates", "databaseName", true)
  *  .up();
  * </pre>
@@ -40,19 +40,19 @@ import java.util.regex.Pattern;
  * @author Fernando Nogueira
  * @since 4/11/14 3:01 PM
  */
-public final class MigratorEngine {
+public final class Ox {
 
-    private static final Logger LOG = LoggerFactory.getLogger(MigratorEngine.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Ox.class);
 
     private boolean simulate = false;
     private Mongo mongo;
     private String scanPackage;
     private MongoDBConnector mongoConnector;
 
-    private MigratorEngine(Mongo mongo,
-                           String scanPackage,
-                           String databaseName,
-                           boolean createVersioningCollectionIfDoesntExists) {
+    private Ox(Mongo mongo,
+               String scanPackage,
+               String databaseName,
+               boolean createVersioningCollectionIfDoesntExists) {
 
         this.mongo = mongo;
         this.scanPackage = scanPackage;
@@ -65,13 +65,13 @@ public final class MigratorEngine {
 
     }
 
-    public static MigratorEngine setUp(
+    public static Ox setUp(
             Mongo mongo,
             String scanPackage,
             String databaseName,
             boolean createVersioningCollectionIfDoesntExists) {
 
-        return new MigratorEngine(mongo, scanPackage, databaseName, createVersioningCollectionIfDoesntExists);
+        return new Ox(mongo, scanPackage, databaseName, createVersioningCollectionIfDoesntExists);
     }
 
     /**
@@ -160,7 +160,7 @@ public final class MigratorEngine {
         }
 
         try {
-            MigrationEnvironment env = new MigrationEnvironment();
+            OxEnvironment env = new OxEnvironment();
             env.setSimulate(simulate);
             env.setMongoConnector(mongoConnector);
 
@@ -192,7 +192,7 @@ public final class MigratorEngine {
         LOG.info(Log.preff("Migration Finished!"));
     }
 
-    private void runMigrationDownIfApplies(Integer desiredVersion, MigrationEnvironment env, ResolvedMigration migration, long migrateStartTime, boolean isMigrateVersionApplied) throws OxException {
+    private void runMigrationDownIfApplies(Integer desiredVersion, OxEnvironment env, ResolvedMigration migration, long migrateStartTime, boolean isMigrateVersionApplied) throws OxException {
         if (desiredVersion == null || migration.getVersion() > desiredVersion) {
             if (isMigrateVersionApplied) {
                 LOG.info(Log.preff(" ------- Executing migrate (DOWN) Version: " + migration.getVersion() + " migration: " + migration));
@@ -207,7 +207,7 @@ public final class MigratorEngine {
         }
     }
 
-    private void runMigrationUpIfApplies(Integer desiredVersion, MigrationEnvironment env, ResolvedMigration migration, long migrateStartTime, boolean isMigrateVersionApplied) throws OxException {
+    private void runMigrationUpIfApplies(Integer desiredVersion, OxEnvironment env, ResolvedMigration migration, long migrateStartTime, boolean isMigrateVersionApplied) throws OxException {
         if (desiredVersion == null || migration.getVersion() <= desiredVersion) {
             if (!isMigrateVersionApplied) {
                 LOG.info(Log.preff(" ------- Executing migrate (UP) Version: " + migration.getVersion() + " migration: " + migration));
@@ -242,7 +242,7 @@ public final class MigratorEngine {
         return null;
     }
 
-    public MigratorEngine simulate() {
+    public Ox simulate() {
         simulate = true;
         return this;
     }

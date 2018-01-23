@@ -37,7 +37,7 @@ public class ValidateRemoveIndexActionTest {
      */
     @Test
     public void testIndexRemovalWithIfExistsEnabledAndIndexNotFound() throws InvalidMigrateActionException {
-        MigrateAction.removeIndex("someIndex")
+        OxAction.removeIndex("someIndex")
                 .setCollection("collectionName")
                 .ifExists()
                 .runAction(mongoDBConnector, mongo, "databaseName");
@@ -64,7 +64,7 @@ public class ValidateRemoveIndexActionTest {
         Mockito.when(mongo.getDB(Mockito.anyString())).thenReturn(db);
         Mockito.when(db.getCollection(Mockito.anyString())).thenReturn(collection);
 
-        MigrateAction
+        OxAction
                 .removeIndex("someIndex")
                 .setCollection("collectionName")
                 .ifExists()
@@ -86,7 +86,7 @@ public class ValidateRemoveIndexActionTest {
         Mockito.when(mongo.getDB(Mockito.anyString())).thenReturn(db);
         Mockito.when(db.getCollection(Mockito.anyString())).thenReturn(collection);
 
-        MigrateAction
+        OxAction
                 .removeIndex("someIndex")
                 .setCollection("collectionName")
                 .runAction(mongoDBConnector, mongo, "databaseName");
@@ -101,7 +101,7 @@ public class ValidateRemoveIndexActionTest {
      */
     @Test(expected = InvalidMigrateActionException.class)
     public void validateRemoveIndexAction() throws InvalidMigrateActionException {
-        MigrateAction
+        OxAction
                 .removeIndex("someIndex")
                 .validateAction();
     }
@@ -113,7 +113,7 @@ public class ValidateRemoveIndexActionTest {
      */
     @Test(expected = InvalidMigrateActionException.class)
     public void validateRemoveIndexActionWithoutIndexName() throws InvalidMigrateActionException {
-        MigrateAction
+        OxAction
                 .removeIndex(null)
                 .validateAction();
     }
@@ -125,7 +125,7 @@ public class ValidateRemoveIndexActionTest {
      */
     @Test
     public void validateRemoveIndexActionHappyDay() throws InvalidMigrateActionException {
-        MigrateAction
+        OxAction
                 .removeIndex("correctIndexName")
                 .setCollection("collectionSet")
                 .validateAction();

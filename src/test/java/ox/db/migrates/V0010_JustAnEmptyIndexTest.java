@@ -1,7 +1,7 @@
 package ox.db.migrates;
 
 import ox.engine.exception.InvalidMigrateActionException;
-import ox.engine.internal.MigrationEnvironment;
+import ox.engine.internal.OxEnvironment;
 import ox.engine.structure.Migration;
 
 /**
@@ -11,10 +11,10 @@ import ox.engine.structure.Migration;
 public class V0010_JustAnEmptyIndexTest implements Migration {
 
     @Override
-    public void up(MigrationEnvironment env) throws InvalidMigrateActionException {
+    public void up(OxEnvironment env) throws InvalidMigrateActionException {
     }
 
     @Override
-    public void down(MigrationEnvironment env) {
+    public void down(OxEnvironment env) {
     }
 }

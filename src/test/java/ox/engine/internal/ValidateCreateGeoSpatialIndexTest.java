@@ -22,7 +22,7 @@ public class ValidateCreateGeoSpatialIndexTest {
     private CreateIndexAction action;
 
     @Mock
-    private MigrationEnvironment environment;
+    private OxEnvironment environment;
 
     @Mock
     private Mongo mongo;
@@ -32,7 +32,7 @@ public class ValidateCreateGeoSpatialIndexTest {
 
     @Test
     public void createIndexGeospatialType() {
-        MigrateAction action = MigrateAction
+        OxAction action = OxAction
                 .createIndex("IndexName")
                 .setCollection("myCollection")
                 .addAttribute("myPositionAttr", OrderingType.GEO_2DSPHERE);
@@ -40,7 +40,7 @@ public class ValidateCreateGeoSpatialIndexTest {
 
     @Test
     public void generateGeospatialIndexCommand() {
-        MigrateAction action = MigrateAction
+        OxAction action = OxAction
                 .createIndex("IndexName")
                 .setCollection("myCollection")
                 .addAttribute("myPositionAttr", OrderingType.GEO_2DSPHERE);
@@ -50,7 +50,7 @@ public class ValidateCreateGeoSpatialIndexTest {
 
     @Test
     public void runActionToCreateGeospatialIndex() {
-        CreateIndexAction action = MigrateAction
+        CreateIndexAction action = OxAction
                 .createIndex("IndexName")
                 .setCollection("myCollection")
                 .addAttribute("myPositionAttr", OrderingType.GEO_2DSPHERE);

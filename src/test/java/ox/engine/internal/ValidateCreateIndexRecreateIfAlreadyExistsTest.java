@@ -17,7 +17,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class ValidateCreateIndexRecreateIfAlreadyExistsTest {
 
     @Mock
-    private MigrationEnvironment env;
+    private OxEnvironment env;
 
     @Mock
     private MongoDBConnector connector;
@@ -37,7 +37,7 @@ public class ValidateCreateIndexRecreateIfAlreadyExistsTest {
                                 Mockito.anyString()))
                 .thenReturn(true);
 
-        MigrateAction
+        OxAction
                 .createIndex("myIndex")
                 .setCollection("myColl")
                 .recreateIfNotEquals()

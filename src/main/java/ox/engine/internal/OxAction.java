@@ -7,7 +7,7 @@ import com.mongodb.Mongo;
  * @author Fernando Nogueira
  * @since 4/11/14 3:04 PM
  */
-public abstract class MigrateAction {
+public abstract class OxAction {
 
     protected String collection;
 
@@ -42,10 +42,10 @@ public abstract class MigrateAction {
     /**
      * Executes this migrate action
      *
-     * @param env The MigrationEnvironment instance
+     * @param env The OxEnvironment instance
      * @throws InvalidMigrateActionException
      */
-    public void execute(MigrationEnvironment env) throws InvalidMigrateActionException {
+    public void execute(OxEnvironment env) throws InvalidMigrateActionException {
         validateAction();
         env.execute(this);
     }

@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
  * @author Fernando Nogueira
  * @since 4/17/14 6:33 PM
  */
-public class RemoveIndexAction extends MigrateAction {
+public class RemoveIndexAction extends OxAction {
 
     private static final Logger LOG = LoggerFactory.getLogger(RemoveIndexAction.class);
     private final String indexName;

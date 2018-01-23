@@ -6,9 +6,6 @@ import com.mongodb.Mongo;
  * MongoDBConnector Configuration.
  * <p/>
  * createCollectionIfDontExists is true by default
- *
- * @author Fernando Nogueira
- * @since 4/15/14 3:34 PM
  */
 public final class MongoDBConnectorConfig {
 

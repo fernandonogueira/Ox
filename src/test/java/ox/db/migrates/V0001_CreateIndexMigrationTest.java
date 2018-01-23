@@ -1,8 +1,8 @@
 package ox.db.migrates;
 
 import ox.engine.exception.InvalidMigrateActionException;
-import ox.engine.internal.MigrateAction;
-import ox.engine.internal.MigrationEnvironment;
+import ox.engine.internal.OxAction;
+import ox.engine.internal.OxEnvironment;
 import ox.engine.structure.Migration;
 import ox.engine.structure.OrderingType;
 
@@ -13,15 +13,15 @@ import ox.engine.structure.OrderingType;
 public class V0001_CreateIndexMigrationTest implements Migration {
 
     @Override
-    public void up(MigrationEnvironment env) throws InvalidMigrateActionException {
+    public void up(OxEnvironment env) throws InvalidMigrateActionException {
 
-        MigrateAction
+        OxAction
                 .createIndex("myIndex")
                 .setCollection("myCollection")
                 .addAttribute("attr1", OrderingType.ASC)
                 .execute(env);
 
-        MigrateAction
+        OxAction
                 .createIndex("myIndex2")
                 .setCollection("myCollection")
                 .addAttribute("attr2", OrderingType.DESC)
@@ -31,6 +31,6 @@ public class V0001_CreateIndexMigrationTest implements Migration {
     }
 
     @Override
-    public void down(MigrationEnvironment env) {
+    public void down(OxEnvironment env) {
     }
 }

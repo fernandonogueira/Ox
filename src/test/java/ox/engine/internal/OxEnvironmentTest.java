@@ -13,23 +13,23 @@ import org.mockito.runners.MockitoJUnitRunner;
  * @since 4/29/14 11:33 AM
  */
 @RunWith(MockitoJUnitRunner.class)
-public class MigrationEnvironmentTest {
+public class OxEnvironmentTest {
 
     @InjectMocks
-    private MigrationEnvironment e = new MigrationEnvironment();
+    private OxEnvironment e = new OxEnvironment();
 
     @Mock
     private MongoDBConnector mongoConnector;
 
     /**
-     * Validates the MigrationEnvironment.execute() method
+     * Validates the OxEnvironment.execute() method
      *
      * @throws InvalidMongoConfiguration
      */
     @Test
     public void environmentTest() throws InvalidMongoConfiguration {
 
-        MigrateAction action = MigrateAction
+        OxAction action = OxAction
                 .createIndex("IndexName")
                 .setCollection("myCollection")
                 .addAttribute("attr1", OrderingType.ASC)

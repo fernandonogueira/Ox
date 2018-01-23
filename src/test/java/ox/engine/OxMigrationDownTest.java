@@ -14,7 +14,7 @@ import java.util.List;
  * @author Fernando Nogueira
  * @since 4/22/14 6:25 PM
  */
-public class MigratorEngineDownTest {
+public class OxMigrationDownTest {
 
     @Test
     public void runDownMigrationOnANonEmptyDBTest() throws InvalidMongoConfiguration {
@@ -44,7 +44,7 @@ public class MigratorEngineDownTest {
         Mockito.when(cursor.hasNext()).thenReturn(true).thenReturn(false);
         Mockito.when(cursor.next()).thenReturn(dbObject);
 
-        MigratorEngine engine = MigratorEngine
+        Ox engine = Ox
                 .setUp(mongo, "ox.db.migrates", "string", true);
 
 

@@ -15,7 +15,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.io.IOException;
 
 @RunWith(MockitoJUnitRunner.class)
-public class MigratorEngineTest {
+public class OxMigrationTest {
 
     @Mock
     private MongoDBConnector mongoConnector;
@@ -36,7 +36,7 @@ public class MigratorEngineTest {
 
         Mockito.when(db.getCollection(Mockito.anyString())).thenReturn(coll);
 
-        MigratorEngine engine = MigratorEngine.setUp(mongo, "ox.db.migrates", "myDB", true);
+        Ox engine = Ox.setUp(mongo, "ox.db.migrates", "myDB", true);
         engine.simulate()
                 .up();
     }
@@ -48,7 +48,7 @@ public class MigratorEngineTest {
         Mockito.when(db.getCollection(Mockito.anyString())).thenReturn(coll);
         Mockito.when(coll.count(Mockito.any(DBObject.class))).thenReturn(1l);
 
-        MigratorEngine
+        Ox
                 .setUp(mongo, "ox.db.migrates", "myDB", true)
                 .simulate()
                 .down();
@@ -57,7 +57,7 @@ public class MigratorEngineTest {
     @Test(expected = InvalidMongoConfiguration.class)
     public void validateInvalidMongoInstance() throws InvalidMongoConfiguration {
 
-        MigratorEngine
+        Ox
                 .setUp(null, "ox.db.migrates", "myDB", true)
                 .up();
     }

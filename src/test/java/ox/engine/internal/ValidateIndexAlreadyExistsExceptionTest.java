@@ -31,7 +31,7 @@ public class ValidateIndexAlreadyExistsExceptionTest {
     public void validateIndexAlreadyExistsException() {
 
         action =
-                MigrateAction
+                OxAction
                         .createIndex("myIndexTest")
                         .setCollection("myCollectionTest")
                         .addAttribute("anyAttr", OrderingType.GEO_2DSPHERE);

@@ -27,7 +27,7 @@ public class ValidateCreateIndexTest {
     private MongoClient mongo;
 
     @Mock
-    private MigrationEnvironment env;
+    private OxEnvironment env;
 
     @Mock
     private DB db;
@@ -47,7 +47,7 @@ public class ValidateCreateIndexTest {
         Mockito.when(mongo.getDB("myDatabase")).thenReturn(db);
         Mockito.when(db.getCollection(Mockito.anyString())).thenReturn(collection);
 
-        MigrateAction
+        OxAction
                 .createIndex("myIndex")
                 .ifNotExists()
                 .setCollection("myCollection")
@@ -68,7 +68,7 @@ public class ValidateCreateIndexTest {
         Mockito.when(mongo.getDB("myDatabase")).thenReturn(db);
         Mockito.when(db.getCollection(Mockito.anyString())).thenReturn(collection);
 
-        MigrateAction
+        OxAction
                 .createIndex("myIndex")
                 .ifNotExists()
                 .setCollection("myCollection")
@@ -115,7 +115,7 @@ public class ValidateCreateIndexTest {
                                 Mockito.anyString()))
                 .thenReturn(true);
 
-        MigrateAction
+        OxAction
                 .createIndex("myIndex")
                 .ifNotExists()
                 .setCollection("myCollection")
@@ -148,7 +148,7 @@ public class ValidateCreateIndexTest {
 
         Mockito.when(collection.getIndexInfo()).thenReturn(indexInfo);
 
-        MigrateAction
+        OxAction
                 .createIndex("myIndex")
                 .ifNotExists()
                 .setCollection("myCollection")
@@ -180,7 +180,7 @@ public class ValidateCreateIndexTest {
 
         Mockito.when(collection.getIndexInfo()).thenReturn(indexInfo);
 
-        MigrateAction
+        OxAction
                 .createIndex("myIndex")
                 .ifNotExists()
                 .addAttribute("attr1", OrderingType.ASC)
@@ -209,7 +209,7 @@ public class ValidateCreateIndexTest {
 
         Mockito.when(collection.getIndexInfo()).thenReturn(indexInfo);
 
-        MigrateAction
+        OxAction
                 .createIndex("myIndex")
                 .setCollection("myLittleCollection")
                 .ifNotExists()

@@ -9,9 +9,9 @@ import org.slf4j.LoggerFactory;
  * @author Fernando Nogueira
  * @since 4/14/14 3:10 PM
  */
-public class MigrationEnvironment {
+public class OxEnvironment {
 
-    private static final Logger LOG = LoggerFactory.getLogger(MigrationEnvironment.class);
+    private static final Logger LOG = LoggerFactory.getLogger(OxEnvironment.class);
 
     /**
      * If true, nothing will be executed. Just simulated (and printed).
@@ -19,17 +19,17 @@ public class MigrationEnvironment {
     private boolean simulate = false;
     private MongoDBConnector mongoConnector;
 
-    public void execute(MigrateAction migrateAction) {
+    public void execute(OxAction oxAction) {
 
         long cmdStartTime = System.currentTimeMillis();
 
-        LOG.info(Log.preff(" ----------- Executing action: " + migrateAction));
+        LOG.info(Log.preff(" ----------- Executing action: " + oxAction));
 
         if (isSimulate()) {
             LOG.info(Log.preff("[Simulate] Executing action: "));
-            LOG.info(Log.preff(migrateAction.toString()));
+            LOG.info(Log.preff(oxAction.toString()));
         } else {
-            mongoConnector.executeCommand(migrateAction);
+            mongoConnector.executeCommand(oxAction);
         }
 
         long cmdEndTime = System.currentTimeMillis();
@@ -38,7 +38,7 @@ public class MigrationEnvironment {
     }
 
     /**
-     * @deprecated use {@link MigrationEnvironment#getMongoDatabase()} instead
+     * @deprecated use {@link OxEnvironment#getMongoDatabase()} instead
      */
     @Deprecated
     public DB getMongoDatabae() {

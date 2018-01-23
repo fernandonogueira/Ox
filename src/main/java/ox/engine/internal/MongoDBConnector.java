@@ -1,14 +1,15 @@
 package ox.engine.internal;
 
+import com.mongodb.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ox.Configuration;
 import ox.engine.exception.CouldNotCreateCollectionException;
+import ox.engine.exception.InvalidCollectionException;
 import ox.engine.exception.InvalidMongoDatabaseConfiguration;
 import ox.engine.structure.OrderingType;
 import ox.utils.CollectionUtils;
 import ox.utils.Log;
-import com.mongodb.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -95,13 +96,16 @@ public class MongoDBConnector {
         return 0;
     }
 
-    public void executeCommand(MigrateAction action) {
+    public void executeCommand(OxAction action) {
         LOG.warn(Log.preff("Executing action: " + action));
         verifyAndCreateCollectionIfNecessary(action);
         action.runAction(this, mongo, databaseName);
     }
 
-    private void verifyAndCreateCollectionIfNecessary(MigrateAction action) {
+    private void verifyAndCreateCollectionIfNecessary(OxAction action) {
+
+        validateCollection(action);
+
         if (!mongo.getDB(databaseName).collectionExists(action.getCollection())) {
             mongo.getDB(databaseName)
                     .createCollection(
@@ -109,6 +113,12 @@ public class MongoDBConnector {
                             new BasicDBObject()
                                     .append("capped", false)
                     );
+        }
+    }
+
+    private void validateCollection(OxAction action) {
+        if (action == null || action.getCollection() == null) {
+            throw new InvalidCollectionException();
         }
     }
 

@@ -1,7 +1,7 @@
 package ox.engine.structure;
 
 import ox.engine.exception.OxException;
-import ox.engine.internal.MigrationEnvironment;
+import ox.engine.internal.OxEnvironment;
 
 /**
  * This is a migration template file.
@@ -13,8 +13,8 @@ import ox.engine.internal.MigrationEnvironment;
  */
 public interface Migration {
 
-    void up(MigrationEnvironment env) throws OxException;
+    void up(OxEnvironment env) throws OxException;
 
-    void down(MigrationEnvironment env) throws OxException;
+    void down(OxEnvironment env) throws OxException;
 
 }

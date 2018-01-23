@@ -2,7 +2,7 @@ package ox.engine;
 
 import ox.engine.exception.InvalidAttributeException;
 import ox.engine.internal.CreateIndexAction;
-import ox.engine.internal.MigrateAction;
+import ox.engine.internal.OxAction;
 import ox.engine.structure.OrderingType;
 import org.junit.Assert;
 import org.junit.Test;
@@ -11,20 +11,20 @@ import org.junit.Test;
  * @author Fernando Nogueira
  * @since 4/11/14 3:01 PM
  */
-public class MigrateActionsTest {
+public class OxActionsTest {
 
     /**
      * A created migrateaction should have the properties that I set, right?
      */
     @Test
     public void createIndexCriteriaTest() {
-        MigrateAction action = MigrateAction
+        OxAction action = OxAction
                 .createIndex("IndexName")
                 .setCollection("myCollection")
                 .addAttribute("attr1", OrderingType.ASC)
                 .addAttribute("attr2", OrderingType.ASC);
 
-        Assert.assertTrue("MigrateAction must be valid", validateCreateIndexAction((CreateIndexAction) action));
+        Assert.assertTrue("OxAction must be valid", validateCreateIndexAction((CreateIndexAction) action));
     }
 
     /**
@@ -32,7 +32,7 @@ public class MigrateActionsTest {
      */
     @Test(expected = InvalidAttributeException.class)
     public void createIndexCriteriaNullAttributeValidationTest() {
-        MigrateAction
+        OxAction
                 .createIndex("IndexName")
                 .setCollection("myCollection")
                 .addAttribute("attr1", OrderingType.ASC)
@@ -44,7 +44,7 @@ public class MigrateActionsTest {
      */
     @Test
     public void createIndexDescOrderingTest() {
-        MigrateAction
+        OxAction
                 .createIndex("IndexName")
                 .setCollection("myCollection")
                 .addAttribute("attr1", OrderingType.DESC);
@@ -52,7 +52,7 @@ public class MigrateActionsTest {
 
     @Test
     public void createIndexWithRecreateIfAlreadyExists() {
-        CreateIndexAction action = MigrateAction
+        CreateIndexAction action = OxAction
                 .createIndex("myIndex")
                 .setCollection("myColl")
                 .addAttribute("attr1", OrderingType.GEO_2DSPHERE)

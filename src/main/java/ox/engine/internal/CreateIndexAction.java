@@ -19,7 +19,7 @@ import java.util.Set;
  * @author Fernando Nogueira
  * @since 4/11/14 9:21 PM
  */
-public class CreateIndexAction extends MigrateAction {
+public class CreateIndexAction extends OxAction {
 
     private static final Logger LOG = LoggerFactory.getLogger(CreateIndexAction.class);
 

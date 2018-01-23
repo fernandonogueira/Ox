@@ -129,7 +129,7 @@ public class MongoDBConnectorTest {
                 .setMongoClient(mongo)
                 .setDatabaseName("testCollection1"));
 
-        MigrateAction action = Mockito.mock(MigrateAction.class);
+        OxAction action = Mockito.mock(OxAction.class);
 
         DB db = createMockedDB(false);
         Mockito

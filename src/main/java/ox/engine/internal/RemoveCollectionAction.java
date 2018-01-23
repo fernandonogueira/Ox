@@ -6,7 +6,7 @@ import com.mongodb.Mongo;
 /**
  * Created by matheus on 16/02/16.
  */
-public class RemoveCollectionAction extends MigrateAction {
+public class RemoveCollectionAction extends OxAction {
     public RemoveCollectionAction(String collection) {
         this.collection = collection;
     }
