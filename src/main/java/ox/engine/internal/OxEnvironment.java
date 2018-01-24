@@ -1,14 +1,9 @@
 package ox.engine.internal;
 
-import ox.utils.Log;
 import com.mongodb.DB;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * @author Fernando Nogueira
- * @since 4/14/14 3:10 PM
- */
 public class OxEnvironment {
 
     private static final Logger LOG = LoggerFactory.getLogger(OxEnvironment.class);
@@ -23,18 +18,18 @@ public class OxEnvironment {
 
         long cmdStartTime = System.currentTimeMillis();
 
-        LOG.info(Log.preff(" ----------- Executing action: " + oxAction));
+        LOG.info("[Ox] ----------- Executing action: {}", oxAction);
 
         if (isSimulate()) {
-            LOG.info(Log.preff("[Simulate] Executing action: "));
-            LOG.info(Log.preff(oxAction.toString()));
+            LOG.info("[Ox] [Simulate] Executing action: ");
+            LOG.info(oxAction.toString());
         } else {
             mongoConnector.executeCommand(oxAction);
         }
 
         long cmdEndTime = System.currentTimeMillis();
 
-        LOG.info(Log.preff(" ----------- Action Executed. (" + (cmdEndTime - cmdStartTime) + "ms)"));
+        LOG.info("[Ox] ----------- Action Executed. ({}ms)", (cmdEndTime - cmdStartTime));
     }
 
     /**

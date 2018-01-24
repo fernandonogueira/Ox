@@ -9,14 +9,9 @@ import ox.engine.exception.InvalidCollectionException;
 import ox.engine.exception.InvalidMongoDatabaseConfiguration;
 import ox.engine.structure.OrderingType;
 import ox.utils.CollectionUtils;
-import ox.utils.Log;
 
 import java.util.*;
 
-/**
- * @author Fernando Nogueira
- * @since 4/15/14 10:20 AM
- */
 public class MongoDBConnector {
 
     private static final Logger LOG = LoggerFactory.getLogger(MongoDBConnector.class);
@@ -26,7 +21,7 @@ public class MongoDBConnector {
     private boolean createCollectionIfDontExists;
 
     public MongoDBConnector(MongoDBConnectorConfig config) {
-        LOG.info(Log.preff("Configuring MongoDB Access..."));
+        LOG.info("[Ox] Configuring MongoDB Access...");
         if (config != null) {
             this.mongo = config.getMongo();
             this.createCollectionIfDontExists = config.isCreateCollectionIfDontExists();
@@ -97,7 +92,7 @@ public class MongoDBConnector {
     }
 
     public void executeCommand(OxAction action) {
-        LOG.warn(Log.preff("Executing action: " + action));
+        LOG.warn("[Ox] Executing action: {}", action);
         verifyAndCreateCollectionIfNecessary(action);
         action.runAction(this, mongo, databaseName);
     }
@@ -214,7 +209,7 @@ public class MongoDBConnector {
 
     private boolean verifyIndexesHaveSameName(String indexName, String currentIndexName) {
         if (indexName.equals(currentIndexName)) {
-            LOG.info(Log.preff("Index already exists. (Same name: " + indexName + ")"));
+            LOG.info("[Ox] Index already exists. (Same name: {})", indexName);
             return true;
         }
         return false;
@@ -225,7 +220,7 @@ public class MongoDBConnector {
             Map<String, OrderingType> existingAttributes = identifyIndexAttributesAndOrdering(current);
 
             if (CollectionUtils.isMapOrderlyEquals(indexAttributes, existingAttributes)) {
-                LOG.info(Log.preff("Index already exists. (Same attributes. Same Order); " + existingAttributes));
+                LOG.info("[Ox] Index already exists. (Same attributes. Same Order); {}", existingAttributes);
                 return true;
             }
         }
@@ -262,15 +257,15 @@ public class MongoDBConnector {
     public void dropIndexByName(String collection, String indexName) {
 
         if (collection == null) {
-            LOG.error(Log.preff("Collection is null. Cannot drop Index."));
+            LOG.error("[Ox] Collection is null. Cannot drop Index.");
             return;
         }
         if (indexName == null) {
-            LOG.error(Log.preff("IndexName is null. Cannot drop Index."));
+            LOG.error("[Ox] IndexName is null. Cannot drop Index.");
             return;
         }
         if (databaseName == null) {
-            LOG.error(Log.preff("database is null. Cannot drop Index."));
+            LOG.error("[Ox] database is null. Cannot drop Index.");
             return;
         }
 

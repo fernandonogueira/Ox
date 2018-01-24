@@ -5,10 +5,6 @@ import ox.engine.internal.resources.ResolvedMigration;
 import java.util.*;
 import java.util.Map.Entry;
 
-/**
- * @author Fernando Nogueira
- * @since 4/17/14 11:27 AM
- */
 public final class CollectionUtils {
 
     /**

@@ -1,15 +1,10 @@
 package ox.engine.internal;
 
-import ox.engine.exception.InvalidMigrateActionException;
-import ox.utils.Log;
 import com.mongodb.Mongo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ox.engine.exception.InvalidMigrateActionException;
 
-/**
- * @author Fernando Nogueira
- * @since 4/17/14 6:33 PM
- */
 public class RemoveIndexAction extends OxAction {
 
     private static final Logger LOG = LoggerFactory.getLogger(RemoveIndexAction.class);
@@ -63,14 +58,14 @@ public class RemoveIndexAction extends OxAction {
 
         if (ifExists) {
             if (doesItExists) {
-                LOG.info(Log.preff("Index exists! Removing... Index name: " + indexName));
+                LOG.info("[Ox] Index exists! Removing... Index name: " + indexName);
                 mongo.getDB(databaseName).getCollection(collection).dropIndex(indexName);
             } else {
-                LOG.warn(Log.preff("Ignoring Index Removal Action " +
-                        "because no index was found with name: " + indexName));
+                LOG.warn("[Ox] Ignoring Index Removal Action " +
+                        "because no index was found with name: " + indexName);
             }
         } else {
-            LOG.info(Log.preff("Removing index... (Existing or not!). Index name: " + indexName));
+            LOG.info("[Ox] Removing index... (Existing or not!). Index name: " + indexName);
             mongo.getDB(databaseName).getCollection(collection).dropIndex(indexName);
         }
 

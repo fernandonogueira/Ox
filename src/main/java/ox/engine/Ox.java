@@ -1,21 +1,20 @@
 package ox.engine;
 
-import ox.engine.exception.OxException;
+import com.mongodb.Mongo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ox.engine.exception.InvalidMongoConfiguration;
 import ox.engine.exception.InvalidPackageToScanException;
 import ox.engine.exception.NoMigrationFileFoundException;
-import ox.engine.internal.OxEnvironment;
+import ox.engine.exception.OxException;
 import ox.engine.internal.MongoDBConnector;
 import ox.engine.internal.MongoDBConnectorConfig;
+import ox.engine.internal.OxEnvironment;
 import ox.engine.internal.resources.Location;
 import ox.engine.internal.resources.ResolvedMigration;
 import ox.engine.internal.resources.scanner.Scanner;
 import ox.engine.structure.Migration;
 import ox.utils.CollectionUtils;
-import ox.utils.Log;
-import com.mongodb.Mongo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -36,9 +35,6 @@ import java.util.regex.Pattern;
  *  .setUp(mongoInstance, "ox.db.migrates", "databaseName", true)
  *  .up();
  * </pre>
- *
- * @author Fernando Nogueira
- * @since 4/11/14 3:01 PM
  */
 public final class Ox {
 
@@ -140,7 +136,7 @@ public final class Ox {
 
                         resolvedMigrations.add(resolvedMigration);
 
-                        LOG.info(Log.preff("Resolved Migrate Found: " + resolvedMigration));
+                        LOG.info("[Ox] Resolved Migrate Found: " + resolvedMigration);
                     }
                 }
             }
@@ -164,7 +160,7 @@ public final class Ox {
             env.setSimulate(simulate);
             env.setMongoConnector(mongoConnector);
 
-            LOG.info(Log.preff("MongoDB Database Current Version: " + currentVersion));
+            LOG.info("[Ox] MongoDB Database Current Version: " + currentVersion);
 
             List<ResolvedMigration> migrationsToProcess;
             if (ExecutionMode.DOWN.equals(mode)) {
@@ -186,39 +182,39 @@ public final class Ox {
                 }
             }
         } catch (OxException e) {
-            LOG.error(Log.preff("MongoDB Migrations Generic Error"), e);
+            LOG.error("MongoDB Migrations Generic Error", e);
         }
 
-        LOG.info(Log.preff("Migration Finished!"));
+        LOG.info("[Ox] Migration Finished!");
     }
 
     private void runMigrationDownIfApplies(Integer desiredVersion, OxEnvironment env, ResolvedMigration migration, long migrateStartTime, boolean isMigrateVersionApplied) throws OxException {
         if (desiredVersion == null || migration.getVersion() > desiredVersion) {
             if (isMigrateVersionApplied) {
-                LOG.info(Log.preff(" ------- Executing migrate (DOWN) Version: " + migration.getVersion() + " migration: " + migration));
+                LOG.info("[Ox] ------- Executing migrate (DOWN) Version: " + migration.getVersion() + " migration: " + migration);
                 migration.getMigrate().down(env);
                 mongoConnector.removeMigrationVersion(migration.getVersion());
-                LOG.info(Log.preff(" ------- Migration Executed. (DOWN) Version: " + migration.getVersion() + " (" + (System.currentTimeMillis() - migrateStartTime) + "ms)"));
+                LOG.info("[Ox] ------- Migration Executed. (DOWN) Version: " + migration.getVersion() + " (" + (System.currentTimeMillis() - migrateStartTime) + "ms)");
             } else {
-                LOG.debug(Log.preff("(DOWN) Skipping migration. Migrate not applied. V" + migration.getVersion()));
+                LOG.debug("[Ox] (DOWN) Skipping migration. Migrate not applied. V" + migration.getVersion());
             }
         } else {
-            LOG.debug(Log.preff("Ignoring Migrate Version (DOWN) " + migration.getVersion() + ". Desired Version: " + desiredVersion));
+            LOG.debug("[Ox] Ignoring Migrate Version (DOWN) " + migration.getVersion() + ". Desired Version: " + desiredVersion);
         }
     }
 
     private void runMigrationUpIfApplies(Integer desiredVersion, OxEnvironment env, ResolvedMigration migration, long migrateStartTime, boolean isMigrateVersionApplied) throws OxException {
         if (desiredVersion == null || migration.getVersion() <= desiredVersion) {
             if (!isMigrateVersionApplied) {
-                LOG.info(Log.preff(" ------- Executing migrate (UP) Version: " + migration.getVersion() + " migration: " + migration));
+                LOG.info("[Ox] ------- Executing migrate (UP) Version: " + migration.getVersion() + " migration: " + migration);
                 migration.getMigrate().up(env);
                 mongoConnector.insertMigrationVersion(migration.getVersion());
-                LOG.info(Log.preff(" ------- Migration Executed. Version: " + migration.getVersion() + " (" + (System.currentTimeMillis() - migrateStartTime) + "ms)"));
+                LOG.info("[Ox] ------- Migration Executed. Version: " + migration.getVersion() + " (" + (System.currentTimeMillis() - migrateStartTime) + "ms)");
             } else {
-                LOG.debug(Log.preff("(UP) Skipping migration. Migrate already applied. V" + migration.getVersion()));
+                LOG.debug("[Ox](UP) Skipping migration. Migrate already applied. V" + migration.getVersion());
             }
         } else {
-            LOG.debug(Log.preff("Ignoring Migrate Version (UP) " + migration.getVersion() + ". Desired Version: " + desiredVersion));
+            LOG.debug("[Ox] Ignoring Migrate Version (UP) " + migration.getVersion() + ". Desired Version: " + desiredVersion);
         }
     }
 
@@ -227,17 +223,17 @@ public final class Ox {
             List<ResolvedMigration> resolvedMigrations = resolveMigrations(scanPackage);
             return CollectionUtils.sortResolvedMigrations(resolvedMigrations);
         } catch (IOException e) {
-            LOG.error(Log.preff("Error updating MONGODB Database Schema"), e);
+            LOG.error("[Ox] Error updating MONGODB Database Schema", e);
         } catch (NoMigrationFileFoundException e) {
-            LOG.error(Log.preff("No Migration File Found Exception"), e);
+            LOG.error("[Ox] No Migration File Found Exception", e);
         } catch (InvalidPackageToScanException invalidPackageToScanException) {
-            LOG.error(Log.preff("Invalid package to scan."), invalidPackageToScanException);
+            LOG.error("[Ox] Invalid package to scan.", invalidPackageToScanException);
         } catch (ClassNotFoundException e) {
-            LOG.error(Log.preff("Class not found error"), e);
+            LOG.error("[Ox] Class not found error", e);
         } catch (InstantiationException | IllegalAccessException e) {
-            LOG.error(Log.preff("There was a problem instantiating a migrate class"), e);
+            LOG.error("[Ox] There was a problem instantiating a migrate class", e);
         } catch (Exception e) {
-            LOG.error(Log.preff("There was a problem instantiating a migrate class"), e);
+            LOG.error("[Ox] There was a problem (generic) instantiating a migrate class", e);
         }
         return null;
     }

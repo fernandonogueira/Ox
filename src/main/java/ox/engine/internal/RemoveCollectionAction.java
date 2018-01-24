@@ -1,12 +1,10 @@
 package ox.engine.internal;
 
-import ox.engine.exception.InvalidMigrateActionException;
 import com.mongodb.Mongo;
+import ox.engine.exception.InvalidMigrateActionException;
 
-/**
- * Created by matheus on 16/02/16.
- */
 public class RemoveCollectionAction extends OxAction {
+
     public RemoveCollectionAction(String collection) {
         this.collection = collection;
     }

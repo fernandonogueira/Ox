@@ -1,24 +1,19 @@
 package ox.engine.internal;
 
-import ox.engine.exception.IndexAlreadyExistsException;
-import ox.engine.exception.InvalidAttributeException;
-import ox.engine.exception.InvalidMigrateActionException;
-import ox.engine.structure.OrderingType;
-import ox.utils.Log;
 import com.mongodb.BasicDBObject;
 import com.mongodb.Mongo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ox.engine.exception.IndexAlreadyExistsException;
+import ox.engine.exception.InvalidAttributeException;
+import ox.engine.exception.InvalidMigrateActionException;
+import ox.engine.structure.OrderingType;
 
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * @author Fernando Nogueira
- * @since 4/11/14 9:21 PM
- */
 public class CreateIndexAction extends OxAction {
 
     private static final Logger LOG = LoggerFactory.getLogger(CreateIndexAction.class);
@@ -166,7 +161,7 @@ public class CreateIndexAction extends OxAction {
                 .verifyIfHasSameNameAndDifferentAttributes(attributes, indexName, collection);
 
         if (existsWithSameNameAndDifferentAttrs && recreateIfNotEquals) {
-            LOG.warn(Log.preff("Index exists with different attrs. Removing to recreate..."));
+            LOG.warn("[Ox] Index exists with different attrs. Removing to recreate...");
             mongoDBConnector.dropIndexByName(collection, indexName);
         }
 
@@ -174,7 +169,7 @@ public class CreateIndexAction extends OxAction {
 
         if (doesItExists) {
             if (ifNotExists) {
-                LOG.warn(Log.preff("Ignoring create index action. Index already exists and \"ifNotExists\" flag is set"));
+                LOG.warn("[Ox] Ignoring create index action. Index already exists and \"ifNotExists\" flag is set");
             } else {
                 throw new IndexAlreadyExistsException("Index already exists. (Same name or same attributes)");
             }

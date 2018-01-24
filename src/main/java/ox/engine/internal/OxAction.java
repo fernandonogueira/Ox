@@ -3,10 +3,6 @@ package ox.engine.internal;
 import ox.engine.exception.InvalidMigrateActionException;
 import com.mongodb.Mongo;
 
-/**
- * @author Fernando Nogueira
- * @since 4/11/14 3:04 PM
- */
 public abstract class OxAction {
 
     protected String collection;
