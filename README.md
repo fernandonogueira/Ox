@@ -1,6 +1,8 @@
 Ox - MongoDB Database Version Migration Tool
 ===================
 
+[![Build Status][travis-badge]][travis-url] [![Code Coverage][codecov-badge]][codecov-url] [![Artifacts][jitpack-badge]][jitpack-url]
+
 ## Description
 Schemaless doesn't mean no schema!
 
@@ -105,3 +107,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
+[codecov-badge]: https://codecov.io/gh/fernandonogueira/Ox/branch/master/graph/badge.svg
+[codecov-url]: https://codecov.io/gh/fernandonogueira/Ox
+[travis-badge]: https://travis-ci.org/fernandonogueira/Ox.svg?branch=master
+[travis-url]: https://travis-ci.org/fernandonogueira/Ox
+[jitpack-badge]: https://jitpack.io/v/fernandonogueira/Ox.svg
+[jitpack-url]: https://jitpack.io/#fernandonogueira/Ox
