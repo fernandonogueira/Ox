@@ -127,16 +127,14 @@ public class MongoDBConnectorTest {
                 .create()
                 .createCollectionIfDontExists(true)
                 .setMongoClient(mongo)
-                .setDatabaseName("testCollection1"));
+                .setDatabaseName("testDatabase1"));
 
         OxAction action = Mockito.mock(OxAction.class);
 
         DB db = createMockedDB(false);
-        Mockito
-                .when(mongo.getDB(Mockito.anyString()))
-                .thenReturn(db);
-
+        Mockito.when(mongo.getDB(Mockito.anyString())).thenReturn(db);
         Mockito.when(db.collectionExists(Mockito.anyString())).thenReturn(false);
+        Mockito.when(action.getCollection()).thenReturn("aTestCollection");
 
         connector.executeCommand(action);
     }
