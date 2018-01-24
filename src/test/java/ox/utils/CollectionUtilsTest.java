@@ -1,9 +1,9 @@
 package ox.utils;
 
-import ox.engine.internal.resources.ResolvedMigration;
-import ox.engine.structure.OrderingType;
 import org.junit.Assert;
 import org.junit.Test;
+import ox.engine.internal.resources.ResolvedMigration;
+import ox.engine.structure.OrderingType;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;

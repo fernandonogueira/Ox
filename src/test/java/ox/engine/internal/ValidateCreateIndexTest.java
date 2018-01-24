@@ -1,7 +1,5 @@
 package ox.engine.internal;
 
-import ox.engine.exception.InvalidMigrateActionException;
-import ox.engine.structure.OrderingType;
 import com.mongodb.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,6 +7,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
+import ox.engine.exception.InvalidMigrateActionException;
+import ox.engine.structure.OrderingType;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;

@@ -1,7 +1,5 @@
 package ox.engine;
 
-import ox.engine.exception.InvalidMongoConfiguration;
-import ox.engine.internal.MongoDBConnector;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
@@ -11,6 +9,8 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
+import ox.engine.exception.InvalidMongoConfiguration;
+import ox.engine.internal.MongoDBConnector;
 
 import java.io.IOException;
 

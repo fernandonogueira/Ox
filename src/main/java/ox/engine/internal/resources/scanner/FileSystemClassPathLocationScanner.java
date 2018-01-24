@@ -15,9 +15,9 @@
  */
 package ox.engine.internal.resources.scanner;
 
-import ox.utils.UrlUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ox.utils.UrlUtils;
 
 import java.io.File;
 import java.io.IOException;

@@ -1,7 +1,7 @@
 package ox.engine.internal;
 
-import ox.engine.exception.InvalidMigrateActionException;
 import com.mongodb.Mongo;
+import ox.engine.exception.InvalidMigrateActionException;
 
 public abstract class OxAction {
 

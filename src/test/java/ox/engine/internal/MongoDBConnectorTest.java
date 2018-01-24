@@ -1,8 +1,5 @@
 package ox.engine.internal;
 
-import ox.Configuration;
-import ox.engine.exception.InvalidMongoDatabaseConfiguration;
-import ox.engine.structure.OrderingType;
 import com.mongodb.*;
 import org.junit.Assert;
 import org.junit.Test;
@@ -11,6 +8,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
+import ox.Configuration;
+import ox.engine.exception.InvalidMongoDatabaseConfiguration;
+import ox.engine.structure.OrderingType;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;

@@ -1,6 +1,5 @@
 package ox.engine.internal;
 
-import ox.engine.structure.OrderingType;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.Mongo;
@@ -10,6 +9,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
+import ox.engine.structure.OrderingType;
 
 /**
  * @author Fernando Nogueira

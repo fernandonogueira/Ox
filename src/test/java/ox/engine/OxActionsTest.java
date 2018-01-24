@@ -1,11 +1,11 @@
 package ox.engine;
 
+import org.junit.Assert;
+import org.junit.Test;
 import ox.engine.exception.InvalidAttributeException;
 import ox.engine.internal.CreateIndexAction;
 import ox.engine.internal.OxAction;
 import ox.engine.structure.OrderingType;
-import org.junit.Assert;
-import org.junit.Test;
 
 /**
  * @author Fernando Nogueira
