@@ -25,7 +25,7 @@ This project simplifies that.
 #### Creating migrations...
 
 ```java
-public class V1_CreateIndexMigrationTest implements Migration {
+public class V0001__CreateIndexMigrationTest implements Migration {
 
     @Override
     public void up(MigrationEnvironment env) {
@@ -71,11 +71,10 @@ public void myMethod(){
 ## Requirements
 
 - Java 7
-- Mongo Java Driver or Spring Data MongoDB 1.0 - 1.4 (Tested with Spring Data MongoDB 1.4.1)
+- Mongo Java Driver 3.x
 
 ## Dependencies
 
-- Mongo Java Driver
 - SLF4j
 
 That' all folks. :)
