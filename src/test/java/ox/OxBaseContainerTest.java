@@ -6,8 +6,6 @@ import org.junit.Before;
 import org.junit.ClassRule;
 import org.testcontainers.containers.GenericContainer;
 
-import java.net.UnknownHostException;
-
 public abstract class OxBaseContainerTest {
 
     @ClassRule

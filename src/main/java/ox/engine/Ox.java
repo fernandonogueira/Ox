@@ -238,6 +238,11 @@ public final class Ox {
         return null;
     }
 
+    public Integer databaseVersion() throws InvalidMongoConfiguration {
+        validateExecution();
+        return mongoConnector.retrieveDatabaseCurrentVersion();
+    }
+
     public Ox simulate() {
         simulate = true;
         return this;
