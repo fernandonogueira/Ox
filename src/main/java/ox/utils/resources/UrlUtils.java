@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ox.utils;
+package ox.utils.resources;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;

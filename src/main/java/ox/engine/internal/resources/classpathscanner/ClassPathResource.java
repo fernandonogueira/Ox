@@ -17,7 +17,7 @@ package ox.engine.internal.resources.classpathscanner;
 
 import ox.engine.exception.OxRuntimeException;
 import ox.engine.internal.resources.Resource;
-import ox.utils.FileCopyUtils;
+import ox.utils.resources.FileCopyUtils;
 
 import java.io.*;
 import java.net.URL;

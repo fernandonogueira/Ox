@@ -8,7 +8,7 @@ import ox.engine.exception.InvalidMongoConfiguration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class OrderedTest extends OxBaseContainerTest {
+public class SequencedTest extends OxBaseContainerTest {
 
     @Test
     public void orderedMigrationsTest() throws InvalidMongoConfiguration {

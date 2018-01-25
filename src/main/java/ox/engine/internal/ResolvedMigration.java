@@ -1,4 +1,4 @@
-package ox.engine.internal.resources;
+package ox.engine.internal;
 
 import ox.engine.structure.Migration;
 

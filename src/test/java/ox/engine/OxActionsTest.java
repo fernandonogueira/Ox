@@ -5,12 +5,9 @@ import org.junit.Test;
 import ox.engine.exception.InvalidAttributeException;
 import ox.engine.internal.CreateIndexAction;
 import ox.engine.internal.OxAction;
+import ox.engine.internal.RemoveCollectionAction;
 import ox.engine.structure.OrderingType;
 
-/**
- * @author Fernando Nogueira
- * @since 4/11/14 3:01 PM
- */
 public class OxActionsTest {
 
     /**
@@ -61,15 +58,27 @@ public class OxActionsTest {
         Assert.assertTrue(validateCreateIndexAction(action));
     }
 
+    /**
+     * A created OxAction should have the properties that I set, right?
+     */
+    @Test
+    public void removeIndexCriteriaTest() {
+        OxAction action = OxAction
+                .removeCollection("myCollection");
+
+        Assert.assertTrue("OxAction must be valid", validateRemoveCollectionAction((RemoveCollectionAction) action));
+    }
+
+    private boolean validateRemoveCollectionAction(RemoveCollectionAction action) {
+        return action != null
+                && action.getCollection() != null;
+    }
+
     private boolean validateCreateIndexAction(CreateIndexAction action) {
-        if (action != null
+        return action != null
                 && action.getAttributes() != null
                 && action.getIndexName() != null
-                && !action.getAttributes().isEmpty()
-                ) {
-            return true;
-        }
-        return false;
+                && !action.getAttributes().isEmpty();
     }
 
 }

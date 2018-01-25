@@ -1,6 +1,6 @@
 package ox.utils;
 
-import ox.engine.internal.resources.ResolvedMigration;
+import ox.engine.internal.ResolvedMigration;
 
 import java.util.*;
 import java.util.Map.Entry;
