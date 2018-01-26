@@ -1,4 +1,4 @@
-package ox;
+package ox.test.base;
 
 import com.mongodb.MongoClient;
 import org.junit.After;

@@ -48,7 +48,7 @@ public class MongoDBConnector {
                 }
 
             } else {
-                throw new CouldNotCreateCollectionException("Collection doesn't exists and auto collection create is set to false");
+                throw new CouldNotCreateCollectionException("Versioning collection doesn't exists and auto collection create is set to false");
             }
         }
     }

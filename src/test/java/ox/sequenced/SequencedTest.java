@@ -2,7 +2,7 @@ package ox.sequenced;
 
 import com.mongodb.MongoClient;
 import org.junit.Test;
-import ox.OxBaseContainerTest;
+import ox.test.base.OxBaseContainerTest;
 import ox.engine.Ox;
 import ox.engine.exception.InvalidMongoConfiguration;
 

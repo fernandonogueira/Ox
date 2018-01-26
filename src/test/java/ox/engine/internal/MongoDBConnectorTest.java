@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import ox.Configuration;
+import ox.engine.exception.InvalidCollectionException;
 import ox.engine.exception.InvalidMongoDatabaseConfiguration;
 import ox.engine.structure.OrderingType;
 
@@ -135,6 +136,24 @@ public class MongoDBConnectorTest {
         Mockito.when(mongo.getDB(Mockito.anyString())).thenReturn(db);
         Mockito.when(db.collectionExists(Mockito.anyString())).thenReturn(false);
         Mockito.when(action.getCollection()).thenReturn("aTestCollection");
+
+        connector.executeCommand(action);
+    }
+
+    @Test(expected = InvalidCollectionException.class)
+    public void executeInvalidCollectionCommandTest() {
+        connector = new MongoDBConnector(MongoDBConnectorConfig
+                .create()
+                .createCollectionIfDontExists(true)
+                .setMongoClient(mongo)
+                .setDatabaseName("testDatabase1"));
+
+        OxAction action = Mockito.mock(OxAction.class);
+
+        DB db = createMockedDB(false);
+        Mockito.when(mongo.getDB(Mockito.anyString())).thenReturn(db);
+        Mockito.when(db.collectionExists(Mockito.anyString())).thenReturn(false);
+        Mockito.when(action.getCollection()).thenReturn(null);
 
         connector.executeCommand(action);
     }

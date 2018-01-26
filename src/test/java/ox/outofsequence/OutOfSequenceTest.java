@@ -6,7 +6,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import org.bson.Document;
 import org.junit.Test;
-import ox.OxBaseContainerTest;
+import ox.test.base.OxBaseContainerTest;
 import ox.engine.Ox;
 import ox.engine.exception.InvalidMongoConfiguration;
 

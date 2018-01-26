@@ -2,7 +2,10 @@ package ox.engine;
 
 import com.mongodb.*;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.runners.MockitoJUnitRunner;
 import ox.Configuration;
 import ox.engine.exception.InvalidMongoConfiguration;
 import ox.engine.internal.MongoDBConnector;
@@ -10,16 +13,17 @@ import ox.engine.internal.MongoDBConnector;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author Fernando Nogueira
- * @since 4/22/14 6:25 PM
- */
+import static org.assertj.core.api.Assertions.assertThat;
+
+@RunWith(MockitoJUnitRunner.class)
 public class OxMigrationDownTest {
+
+    @Mock
+    private Mongo mongo;
 
     @Test
     public void runDownMigrationOnANonEmptyDBTest() throws InvalidMongoConfiguration {
 
-        Mongo mongo = Mockito.mock(Mongo.class);
         MongoDBConnector mongoConnector = Mockito.mock(MongoDBConnector.class);
         DB db = Mockito.mock(DB.class);
         DBCollection collection = Mockito.mock(DBCollection.class);
@@ -44,10 +48,14 @@ public class OxMigrationDownTest {
         Mockito.when(cursor.hasNext()).thenReturn(true).thenReturn(false);
         Mockito.when(cursor.next()).thenReturn(dbObject);
 
-        Ox engine = Ox
-                .setUp(mongo, "ox.db.migrates", "string", true);
+        Ox engine = Ox.setUp(
+                mongo,
+                "ox.db.migrations",
+                "string");
 
 
         engine.down();
+
+        assertThat(engine.databaseVersion()).isEqualTo(0);
     }
 }
