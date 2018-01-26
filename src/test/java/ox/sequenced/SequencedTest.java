@@ -1,4 +1,4 @@
-package ox.ordered;
+package ox.sequenced;
 
 import com.mongodb.MongoClient;
 import org.junit.Test;
@@ -15,21 +15,23 @@ public class SequencedTest extends OxBaseContainerTest {
         MongoClient mongo = getDefaultMongo();
         Ox ox = Ox.setUp(
                 mongo,
-                "ox.ordered.migrations.step1",
-                "oxOrderedTest",
+                "ox.sequenced.migrations.step1",
+                "oxSequencedTest",
                 true);
+
         Integer databaseVersion = ox.databaseVersion();
         assertThat(databaseVersion)
                 .withFailMessage("Database is initializing. It should have version=0")
                 .isEqualTo(0);
+
         ox.up();
         databaseVersion = ox.databaseVersion();
         assertThat(databaseVersion).isEqualTo(1);
 
         ox = Ox.setUp(
                 mongo,
-                "ox.ordered.migrations.step2",
-                "oxOrderedTest",
+                "ox.sequenced.migrations.step2",
+                "oxSequencedTest",
                 true);
 
         ox.up();

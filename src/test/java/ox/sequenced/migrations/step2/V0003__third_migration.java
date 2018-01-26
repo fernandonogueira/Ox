@@ -1,4 +1,4 @@
-package ox.ordered.migrations.step2;
+package ox.sequenced.migrations.step2;
 
 import ox.engine.internal.OxEnvironment;
 import ox.engine.structure.Migration;
