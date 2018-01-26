@@ -1,4 +1,4 @@
-Ox - MongoDB Database Version Migration Tool
+Ox - MongoDB Database Versioning and Migration Tool
 ===================
 
 [![Build Status][travis-badge]][travis-url] [![Code Coverage][codecov-badge]][codecov-url] [![Artifacts][jitpack-badge]][jitpack-url]
