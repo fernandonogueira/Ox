@@ -33,14 +33,6 @@ public class OxEnvironment {
     }
 
     /**
-     * @deprecated use {@link OxEnvironment#getMongoDatabase()} instead
-     */
-    @Deprecated
-    public DB getMongoDatabae() {
-        return getMongoDatabase();
-    }
-
-    /**
      * Retrieves the connected database
      *
      * @return the connected database

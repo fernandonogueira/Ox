@@ -1,4 +1,4 @@
-package ox.db.migrates;
+package ox.db.migrations;
 
 import ox.engine.exception.InvalidMigrateActionException;
 import ox.engine.internal.OxAction;

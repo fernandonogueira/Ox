@@ -1,6 +1,5 @@
-package ox.db.migrates;
+package ox.db.migrations;
 
-import ox.engine.exception.InvalidMigrateActionException;
 import ox.engine.internal.OxEnvironment;
 import ox.engine.structure.Migration;
 
@@ -11,7 +10,7 @@ import ox.engine.structure.Migration;
 public class V0010_JustAnEmptyIndexTest implements Migration {
 
     @Override
-    public void up(OxEnvironment env) throws InvalidMigrateActionException {
+    public void up(OxEnvironment env) {
     }
 
     @Override

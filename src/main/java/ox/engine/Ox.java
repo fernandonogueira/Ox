@@ -4,14 +4,12 @@ import com.mongodb.Mongo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ox.engine.exception.InvalidMongoConfiguration;
-import ox.engine.exception.InvalidPackageToScanException;
-import ox.engine.exception.NoMigrationFileFoundException;
 import ox.engine.exception.OxException;
 import ox.engine.internal.MongoDBConnector;
 import ox.engine.internal.MongoDBConnectorConfig;
 import ox.engine.internal.OxEnvironment;
-import ox.engine.internal.resources.Location;
 import ox.engine.internal.ResolvedMigration;
+import ox.engine.internal.resources.Location;
 import ox.engine.internal.resources.scanner.Scanner;
 import ox.engine.structure.Migration;
 import ox.utils.CollectionUtils;
@@ -48,7 +46,7 @@ public final class Ox {
     private Ox(Mongo mongo,
                String scanPackage,
                String databaseName,
-               boolean createVersioningCollectionIfDoesntExists) {
+               boolean createVersioningCollectionIfMissing) {
 
         this.mongo = mongo;
         this.scanPackage = scanPackage;
@@ -57,7 +55,7 @@ public final class Ox {
                         .create()
                         .setMongoClient(mongo)
                         .setDatabaseName(databaseName)
-                        .createCollectionIfDontExists(createVersioningCollectionIfDoesntExists));
+                        .createCollectionIfDontExists(createVersioningCollectionIfMissing));
 
     }
 
@@ -65,9 +63,17 @@ public final class Ox {
             Mongo mongo,
             String scanPackage,
             String databaseName,
-            boolean createVersioningCollectionIfDoesntExists) {
+            boolean createVersioningCollectionIfMissing) {
 
-        return new Ox(mongo, scanPackage, databaseName, createVersioningCollectionIfDoesntExists);
+        return new Ox(mongo, scanPackage, databaseName, createVersioningCollectionIfMissing);
+    }
+
+    public static Ox setUp(
+            Mongo mongo,
+            String scanPackage,
+            String databaseName) {
+
+        return new Ox(mongo, scanPackage, databaseName, true);
     }
 
     /**
@@ -120,9 +126,7 @@ public final class Ox {
         if (resources != null && resources.length > 0) {
             for (Class<?> resource : resources) {
                 if (Migration.class.isAssignableFrom(resource)) {
-
                     Pattern pattern = Pattern.compile("V\\d*_");
-
                     Matcher matcher = pattern.matcher(resource.getCanonicalName());
                     if (matcher.find()) {
                         String string = matcher.group();
@@ -224,10 +228,6 @@ public final class Ox {
             return CollectionUtils.sortResolvedMigrations(resolvedMigrations);
         } catch (IOException e) {
             LOG.error("[Ox] Error updating MONGODB Database Schema", e);
-        } catch (NoMigrationFileFoundException e) {
-            LOG.error("[Ox] No Migration File Found Exception", e);
-        } catch (InvalidPackageToScanException invalidPackageToScanException) {
-            LOG.error("[Ox] Invalid package to scan.", invalidPackageToScanException);
         } catch (ClassNotFoundException e) {
             LOG.error("[Ox] Class not found error", e);
         } catch (InstantiationException | IllegalAccessException e) {
@@ -235,7 +235,7 @@ public final class Ox {
         } catch (Exception e) {
             LOG.error("[Ox] There was a problem (generic) instantiating a migrate class", e);
         }
-        return null;
+        return new ArrayList<>();
     }
 
     public Integer databaseVersion() throws InvalidMongoConfiguration {
