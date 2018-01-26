@@ -16,7 +16,8 @@ public class RemoveIndexAction extends OxAction {
     }
 
     /**
-     * Removes the index only if it exists
+     * Removes the index only if it exists.
+     * If false (default value), should throw an error if the index do not exists.
      *
      * @return
      */
@@ -28,8 +29,7 @@ public class RemoveIndexAction extends OxAction {
     /**
      * Set the collection that the index will be removed.
      *
-     * @param collection
-     * @return
+     * @param collection the collection that the index should be removed
      */
     public RemoveIndexAction setCollection(String collection) {
         this.collection = collection;

@@ -6,7 +6,7 @@ import org.junit.Test;
 import ox.engine.Ox;
 import ox.engine.exception.CouldNotCreateCollectionException;
 import ox.engine.exception.InvalidMongoConfiguration;
-import ox.test.base.OxBaseContainerTest;
+import ox.integration.base.OxBaseContainerTest;
 
 public class DoNotCreateMigrationsCollectionTest extends OxBaseContainerTest {
 

@@ -1,10 +1,10 @@
-package ox.partial;
+package ox.integration.partial;
 
 import com.mongodb.MongoClient;
 import org.junit.Test;
 import ox.engine.Ox;
 import ox.engine.exception.InvalidMongoConfiguration;
-import ox.test.base.OxBaseContainerTest;
+import ox.integration.base.OxBaseContainerTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

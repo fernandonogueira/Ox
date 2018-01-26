@@ -1,4 +1,4 @@
-package ox.outofsequence.migrations.step2;
+package ox.integration.outofsequence.migrations.step2;
 
 import ox.engine.internal.OxAction;
 import ox.engine.internal.OxEnvironment;
