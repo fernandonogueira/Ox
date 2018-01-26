@@ -18,8 +18,8 @@ package ox.engine.internal.resources.filesystem;
 
 import ox.engine.exception.OxRuntimeException;
 import ox.engine.internal.resources.Resource;
-import ox.utils.FileCopyUtils;
-import ox.utils.StringUtils;
+import ox.utils.resources.FileCopyUtils;
+import ox.utils.resources.StringUtils;
 
 import java.io.*;
 import java.nio.charset.Charset;

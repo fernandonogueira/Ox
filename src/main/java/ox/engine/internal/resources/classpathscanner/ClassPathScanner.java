@@ -24,10 +24,10 @@ import ox.engine.internal.resources.scanner.ClassPathLocationScanner;
 import ox.engine.internal.resources.scanner.FileSystemClassPathLocationScanner;
 import ox.engine.internal.resources.scanner.JarFileClassPathLocationScanner;
 import ox.engine.internal.resources.scanner.ResourceAndClassScanner;
-import ox.utils.ClassUtils;
-import ox.utils.DefaultUrlResolver;
-import ox.utils.UrlResolver;
-import ox.utils.UrlUtils;
+import ox.utils.resources.ClassUtils;
+import ox.utils.resources.DefaultUrlResolver;
+import ox.utils.resources.UrlResolver;
+import ox.utils.resources.UrlUtils;
 
 import java.io.IOException;
 import java.lang.reflect.Modifier;

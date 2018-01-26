@@ -39,7 +39,7 @@ public abstract class OxAction {
      * Executes this migrate action
      *
      * @param env The OxEnvironment instance
-     * @throws InvalidMigrateActionException
+     * @throws InvalidMigrateActionException if migration is not valid
      */
     public void execute(OxEnvironment env) throws InvalidMigrateActionException {
         validateAction();

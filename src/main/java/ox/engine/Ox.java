@@ -11,7 +11,7 @@ import ox.engine.internal.MongoDBConnector;
 import ox.engine.internal.MongoDBConnectorConfig;
 import ox.engine.internal.OxEnvironment;
 import ox.engine.internal.resources.Location;
-import ox.engine.internal.resources.ResolvedMigration;
+import ox.engine.internal.ResolvedMigration;
 import ox.engine.internal.resources.scanner.Scanner;
 import ox.engine.structure.Migration;
 import ox.utils.CollectionUtils;
@@ -236,6 +236,11 @@ public final class Ox {
             LOG.error("[Ox] There was a problem (generic) instantiating a migrate class", e);
         }
         return null;
+    }
+
+    public Integer databaseVersion() throws InvalidMongoConfiguration {
+        validateExecution();
+        return mongoConnector.retrieveDatabaseCurrentVersion();
     }
 
     public Ox simulate() {
