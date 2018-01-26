@@ -1,8 +1,8 @@
-package ox.sequenced;
+package ox.integration.sequenced;
 
 import com.mongodb.MongoClient;
 import org.junit.Test;
-import ox.test.base.OxBaseContainerTest;
+import ox.integration.base.OxBaseContainerTest;
 import ox.engine.Ox;
 import ox.engine.exception.InvalidMongoConfiguration;
 
@@ -15,7 +15,7 @@ public class SequencedTest extends OxBaseContainerTest {
         MongoClient mongo = getDefaultMongo();
         Ox ox = Ox.setUp(
                 mongo,
-                "ox.sequenced.migrations.step1",
+                "ox.integration.sequenced.migrations.step1",
                 "oxSequencedTest",
                 true);
 
@@ -30,7 +30,7 @@ public class SequencedTest extends OxBaseContainerTest {
 
         ox = Ox.setUp(
                 mongo,
-                "ox.sequenced.migrations.step2",
+                "ox.integration.sequenced.migrations.step2",
                 "oxSequencedTest",
                 true);
 

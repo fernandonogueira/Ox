@@ -1,4 +1,4 @@
-package ox.outofsequence;
+package ox.integration.outofsequence;
 
 import com.mongodb.MongoClient;
 import com.mongodb.client.ListIndexesIterable;
@@ -6,21 +6,23 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import org.bson.Document;
 import org.junit.Test;
-import ox.test.base.OxBaseContainerTest;
 import ox.engine.Ox;
 import ox.engine.exception.InvalidMongoConfiguration;
+import ox.integration.base.OxBaseContainerTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class OutOfSequenceTest extends OxBaseContainerTest {
 
-
     @Test
     public void orderedMigrationsTest() throws InvalidMongoConfiguration {
+
+        String migrationsPackage = "ox.integration.outofsequence.migrations";
+
         MongoClient mongo = getDefaultMongo();
         Ox ox = Ox.setUp(
                 mongo,
-                "ox.outofsequence.migrations.step1",
+                migrationsPackage + ".step1",
                 "oxOutOfSequenceTest",
                 true);
 
@@ -35,7 +37,7 @@ public class OutOfSequenceTest extends OxBaseContainerTest {
 
         ox = Ox.setUp(
                 mongo,
-                "ox.outofsequence.migrations.step2",
+                migrationsPackage + ".step2",
                 "oxOutOfSequenceTest",
                 true);
 
@@ -46,7 +48,7 @@ public class OutOfSequenceTest extends OxBaseContainerTest {
 
         ox = Ox.setUp(
                 mongo,
-                "ox.outofsequence.migrations.step3",
+                migrationsPackage + ".step3",
                 "oxOutOfSequenceTest",
                 true);
 
@@ -59,7 +61,7 @@ public class OutOfSequenceTest extends OxBaseContainerTest {
 
         MongoCursor<Document> it = indexes.iterator();
         boolean found = false;
-        while(it.hasNext()) {
+        while (it.hasNext()) {
             Document next = it.next();
             if (next.get("name").equals("my_index3")) {
                 found = true;
@@ -69,8 +71,6 @@ public class OutOfSequenceTest extends OxBaseContainerTest {
         assertThat(found)
                 .withFailMessage("Out of sequence migration should be executed either")
                 .isTrue();
-        System.out.println(indexes);
-
     }
 
 
