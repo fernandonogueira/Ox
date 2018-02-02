@@ -16,3 +16,5 @@ target
 
 atlassian-ide-plugin.xml
 *.iml
+
+docs/_build/
