@@ -4,7 +4,7 @@
 
 ### New features
 
-* Adding new documentation on read the docs (http://ox.readthedocs.io/en/latest/) ([@fernandonogueira][]) 
+* None 
 
 ### Bug fixes
 
@@ -13,6 +13,12 @@
 ### Changes
 
 * None
+
+## 1.1.3
+
+### New features
+
+* Adding new documentation on read the docs (http://ox.readthedocs.io/en/latest/) ([@fernandonogueira][])
 
 ## 1.1.2
 
