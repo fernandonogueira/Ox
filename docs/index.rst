@@ -26,18 +26,18 @@ The main documentation for the site is organized into a couple sections:
 .. _user-docs:
 
 .. toctree::
-:maxdepth: 2
-       :caption: User Documentation
+   :maxdepth: 2
+   :caption: User Documentation
 
-       installation
-       basic_usage
-       actions
+   installation
+   basic_usage
+   actions
 
 
 .. _contributing-docs:
 
 .. toctree::
-:maxdepth: 2
-       :caption: Contributing
+   :maxdepth: 2
+   :caption: Contributing
 
-       contributing
+   contributing
