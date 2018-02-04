@@ -6,10 +6,6 @@ import ox.engine.internal.OxEnvironment;
 import ox.engine.structure.Migration;
 import ox.engine.structure.OrderingType;
 
-/**
- * @author Fernando Nogueira
- * @since 4/11/14 10:23 PM
- */
 public class V0002_CreateIndexIfDoestExistsMigrationTest implements Migration {
 
     @Override

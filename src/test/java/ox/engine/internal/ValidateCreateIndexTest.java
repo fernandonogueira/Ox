@@ -13,10 +13,6 @@ import ox.engine.structure.OrderingType;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
-/**
- * @author Fernando Nogueira
- * @since 4/16/14 9:22 PM
- */
 @RunWith(MockitoJUnitRunner.class)
 public class ValidateCreateIndexTest {
 

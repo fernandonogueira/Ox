@@ -11,10 +11,6 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import ox.engine.structure.OrderingType;
 
-/**
- * @author Fernando Nogueira
- * @since 4/19/14 6:11 PM
- */
 @RunWith(MockitoJUnitRunner.class)
 public class ValidateCreateGeoSpatialIndexTest {
 

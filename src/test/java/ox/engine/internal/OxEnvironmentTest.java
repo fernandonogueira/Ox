@@ -8,10 +8,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 import ox.engine.exception.InvalidMongoConfiguration;
 import ox.engine.structure.OrderingType;
 
-/**
- * @author Fernando Nogueira
- * @since 4/29/14 11:33 AM
- */
 @RunWith(MockitoJUnitRunner.class)
 public class OxEnvironmentTest {
 

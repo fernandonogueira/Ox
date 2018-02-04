@@ -17,10 +17,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-/**
- * @author Fernando Nogueira
- * @since 4/15/14 10:25 AM
- */
+
 @RunWith(MockitoJUnitRunner.class)
 public class MongoDBConnectorTest {
 

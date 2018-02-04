@@ -9,10 +9,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-/**
- * @author Fernando Nogueira
- * @since 4/17/14 11:38 AM
- */
 public class CollectionUtilsTest {
 
     /**

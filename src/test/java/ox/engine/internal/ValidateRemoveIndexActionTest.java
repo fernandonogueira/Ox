@@ -10,10 +10,6 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import ox.engine.exception.InvalidMigrateActionException;
 
-/**
- * @author Fernando Nogueira
- * @since 4/20/14 1:51 PM
- */
 @RunWith(MockitoJUnitRunner.class)
 public class ValidateRemoveIndexActionTest {
 

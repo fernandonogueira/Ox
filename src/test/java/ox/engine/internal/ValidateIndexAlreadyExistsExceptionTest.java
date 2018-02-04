@@ -10,10 +10,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import ox.engine.exception.IndexAlreadyExistsException;
 import ox.engine.structure.OrderingType;
 
-/**
- * @author Fernando Nogueira
- * @since 4/19/14 7:38 PM
- */
+
 @RunWith(MockitoJUnitRunner.class)
 public class ValidateIndexAlreadyExistsExceptionTest {
 

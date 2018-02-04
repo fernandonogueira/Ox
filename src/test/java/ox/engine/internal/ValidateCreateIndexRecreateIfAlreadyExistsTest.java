@@ -9,10 +9,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 import ox.engine.exception.InvalidMigrateActionException;
 import ox.engine.structure.OrderingType;
 
-/**
- * @author Fernando Nogueira
- * @since 4/28/14 4:16 PM
- */
 @RunWith(MockitoJUnitRunner.class)
 public class ValidateCreateIndexRecreateIfAlreadyExistsTest {
 
