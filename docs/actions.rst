@@ -64,3 +64,30 @@ Remove Index
 ------------
 
 Used to remove an index.
+
+Custom Actions/Modifying Data
+-----------------------------
+
+If you want to modify data or create a custom action,
+you should use the `OxEnvironment` that is passed as parameter to `up` and `down` methods described in your migration classes.
+
+E.g.
+
+.. code-block:: java
+
+    public class V0001__first_migration implements Migration {
+
+        @Override
+        public void up(OxEnvironment env) {
+
+            DB db = env.getMongoDatabase();
+            // do what you want with db.
+
+        }
+
+        @Override
+        public void down(OxEnvironment env) {
+            //...
+        }
+
+    }
