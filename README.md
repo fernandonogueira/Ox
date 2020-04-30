@@ -14,7 +14,7 @@ when your application uses a multi-instance architecture and you must upgrade or
 Feel free to contribute and ask changes to this project.
 Pull Requests are also welcome and will be approved quickly.
 
-This project is mature. It is used since 2014 in production but it wasn't public since then.
+Ox is used since 2014 in production but it wasn't open source before.
 
 ## Motivation
 
