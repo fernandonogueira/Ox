@@ -9,7 +9,7 @@ import org.testcontainers.containers.GenericContainer;
 public abstract class OxBaseContainerTest {
 
     @ClassRule
-    public static GenericContainer mongoContainer = new GenericContainer("mongo:3.6")
+    public static GenericContainer mongoContainer = new GenericContainer<>("mongo:3.6")
             .withExposedPorts(27017);
 
     private MongoClient mongoClient;
