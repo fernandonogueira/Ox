@@ -14,13 +14,53 @@ when your application uses a multi-instance architecture and you must upgrade or
 Feel free to contribute and ask changes to this project.
 Pull Requests are also welcome and will be approved quickly.
 
-Ox is used since 2014 in production but it wasn't open source before.
+Ox is used since 2014 in production environments.
 
 ## Motivation
 
 When you have to manage a lot of MongoDB databases it may consume a lot of time when you need to keep your indexes and documents in the right version.
 
 This project simplifies that. 
+
+## Requirements
+
+Compatible with Java 17+ and MongoDB 2.6 to 7.x.
+
+## Installation
+
+### Maven
+
+```xml
+<dependency>
+  <groupId>com.github.fernandonogueira</groupId>
+  <artifactId>ox</artifactId>
+  <version>x.y.z</version>
+</dependency>
+
+<repositories>
+  <repository>
+    <id>jitpack.io</id>
+    <url>https://jitpack.io</url>
+  </repository>
+</repositories>
+```
+
+### Gradle
+
+```groovy
+dependencies {
+    implementation 'com.github.fernandonogueira:Ox:x.y.z'
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        mavenCentral()
+        maven { url 'https://jitpack.io' }
+    }
+}
+```
+
 
 ## Usage
 
