@@ -16,5 +16,6 @@ jobs:
         uses: actions/setup-java@v4
         with:
           java-version: ${{ matrix.java-version }}
+          distribution: 'temurin'
       - name: run tests
         run: mvn -B test
