@@ -76,14 +76,12 @@ See Ox's docs here: http://ox.readthedocs.io/en/latest/
 
 ## Requirements
 
-- Java 7
+- Java 17
 - Mongo Java Driver 3.x
 
 ## Dependencies
 
 - SLF4j
-
-That' all folks. :)
 
 ## LICENSE
 
