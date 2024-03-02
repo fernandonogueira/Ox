@@ -5,25 +5,19 @@ import com.mongodb.DBCollection;
 import com.mongodb.Mongo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import ox.engine.exception.InvalidMigrateActionException;
+import ox.utils.Faker;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ValidateRemoveIndexActionTest {
 
-    @Mock
-    private MongoDBConnector mongoDBConnector;
-
-    @Mock
-    private Mongo mongo;
-
-    @Mock
-    private DB db;
-
-    @Mock
-    private DBCollection collection;
+    private MongoDBConnector newMongoDBConnector() {
+        Mongo mockedMongo = Mockito.mock(Mongo.class);
+        return new MongoDBConnector(MongoDBConnectorConfig.create()
+                .setMongoClient(mockedMongo).setDatabaseName(Faker.fakeDBName()));
+    }
 
     /**
      * IfExists enabled.
@@ -33,10 +27,18 @@ public class ValidateRemoveIndexActionTest {
      */
     @Test
     public void testIndexRemovalWithIfExistsEnabledAndIndexNotFound() throws InvalidMigrateActionException {
+
+        MongoDBConnector connector = newMongoDBConnector();
+
+        DB db = Mockito.mock(DB.class);
+        DBCollection collection = Mockito.mock(DBCollection.class);
+        Mockito.when(connector.getConfig().getMongo().getDB(connector.getConfig().getDatabaseName())).thenReturn(db);
+        Mockito.when(db.getCollection("testCollection")).thenReturn(collection);
+
         OxAction.removeIndex("someIndex")
-                .setCollection("collectionName")
+                .setCollection("testCollection")
                 .ifExists()
-                .runAction(mongoDBConnector, mongo, "databaseName");
+                .runAction(connector, connector.getConfig().getMongo(), "databaseName");
     }
 
     /**
@@ -45,27 +47,22 @@ public class ValidateRemoveIndexActionTest {
      *
      * @throws InvalidMigrateActionException
      */
-    @SuppressWarnings("unchecked")
     @Test
     public void testIndexRemovalWithIfExistsEnabled() throws InvalidMigrateActionException {
 
-        Mockito.when(
-                mongoDBConnector.verifyIfIndexExists(
-                        Mockito.anyMap(),
-                        Mockito.anyString(),
-                        Mockito.anyString())
-        )
-                .thenReturn(true);
+        MongoDBConnector connector = newMongoDBConnector();
 
-        Mockito.when(mongo.getDB(Mockito.anyString())).thenReturn(db);
+        DB db = Mockito.mock(DB.class);
+        DBCollection collection = Mockito.mock(DBCollection.class);
+
+        Mockito.when(connector.getConfig().getMongo().getDB(Mockito.anyString())).thenReturn(db);
         Mockito.when(db.getCollection(Mockito.anyString())).thenReturn(collection);
 
         OxAction
                 .removeIndex("someIndex")
                 .setCollection("collectionName")
                 .ifExists()
-                .runAction(mongoDBConnector, mongo, "databaseName");
-
+                .runAction(connector, connector.getConfig().getMongo(), "databaseName");
 
     }
 
@@ -79,13 +76,18 @@ public class ValidateRemoveIndexActionTest {
     @Test
     public void testIndexRemovalWithoutIfExistsEnabled() throws InvalidMigrateActionException {
 
-        Mockito.when(mongo.getDB(Mockito.anyString())).thenReturn(db);
+        MongoDBConnector mongoDBConnector = newMongoDBConnector();
+
+        DB db = Mockito.mock(DB.class);
+        DBCollection collection = Mockito.mock(DBCollection.class);
+
+        Mockito.when(mongoDBConnector.getConfig().getMongo().getDB(Mockito.anyString())).thenReturn(db);
         Mockito.when(db.getCollection(Mockito.anyString())).thenReturn(collection);
 
         OxAction
                 .removeIndex("someIndex")
                 .setCollection("collectionName")
-                .runAction(mongoDBConnector, mongo, "databaseName");
+                .runAction(mongoDBConnector, mongoDBConnector.getConfig().getMongo(), "databaseName");
 
 
     }

@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import ox.Configuration;
 import ox.engine.exception.InvalidMongoConfiguration;
 import ox.engine.internal.MongoDBConnector;
@@ -24,7 +24,6 @@ public class OxMigrationDownTest {
     @Test
     public void runDownMigrationOnANonEmptyDBTest() throws InvalidMongoConfiguration {
 
-        MongoDBConnector mongoConnector = Mockito.mock(MongoDBConnector.class);
         DB db = Mockito.mock(DB.class);
         DBCollection collection = Mockito.mock(DBCollection.class);
 
@@ -36,7 +35,6 @@ public class OxMigrationDownTest {
         List<String> dbList = new ArrayList<>();
         dbList.add("string");
 
-        Mockito.when(mongoConnector.retrieveDatabaseCurrentVersion()).thenReturn(10);
         Mockito.when(mongo.getDatabaseNames()).thenReturn(dbList);
         Mockito.when(mongo.getDB(Mockito.anyString())).thenReturn(db);
         Mockito.when(db.collectionExists(Mockito.anyString())).thenReturn(true);

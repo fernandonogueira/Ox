@@ -6,7 +6,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import ox.engine.exception.IndexAlreadyExistsException;
 import ox.engine.structure.OrderingType;
 
@@ -23,24 +23,20 @@ public class ValidateIndexAlreadyExistsExceptionTest {
     @Mock
     private MongoDBConnector connector;
 
-    @SuppressWarnings("unchecked")
     @Test(expected = IndexAlreadyExistsException.class)
     public void validateIndexAlreadyExistsException() {
 
-        action =
-                OxAction
-                        .createIndex("myIndexTest")
-                        .setCollection("myCollectionTest")
-                        .addAttribute("anyAttr", OrderingType.GEO_2DSPHERE);
+        action = OxAction
+            .createIndex("myIndexTest")
+            .setCollection("myCollectionTest")
+            .addAttribute("anyAttr", OrderingType.GEO_2DSPHERE);
 
-
-        Mockito.when(
-                connector
-                        .verifyIfIndexExists(
-                                Mockito.anyMap(),
-                                Mockito.anyString(),
-                                Mockito.anyString()))
-                .thenReturn(true);
+        Mockito.when(connector
+        .verifyIfIndexExists(
+                Mockito.anyMap(),
+                Mockito.anyString(),
+                Mockito.anyString()))
+        .thenReturn(true);
 
         action.runAction(connector, mongo, "myDatabase");
     }

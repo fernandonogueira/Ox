@@ -17,23 +17,31 @@ public class MongoDBConnector {
     private static final Logger LOG = LoggerFactory.getLogger(MongoDBConnector.class);
     private String databaseName;
 
-    private Mongo mongo;
     private boolean createCollectionIfDontExists;
+
+    private MongoDBConnectorConfig config;
 
     public MongoDBConnector(MongoDBConnectorConfig config) {
         LOG.info("[Ox] Configuring MongoDB Access...");
-        if (config != null) {
-            this.mongo = config.getMongo();
-            this.createCollectionIfDontExists = config.isCreateCollectionIfDontExists();
-            this.databaseName = config.getDatabaseName();
+        assert config != null;
+        this.config = config;
+        this.createCollectionIfDontExists = config.isCreateCollectionIfDontExists();
+        this.databaseName = config.getDatabaseName();
+
+        if (this.databaseName == null) {
+            throw new InvalidMongoDatabaseConfiguration("Database name is null. Cannot proceed.");
         }
+    }
+
+    protected MongoDBConnectorConfig getConfig() {
+        return config;
     }
 
     public Integer retrieveDatabaseCurrentVersion() {
 
         validateDatabaseNames();
 
-        DB db = mongo.getDB(databaseName);
+        DB db = config.getMongo().getDB(databaseName);
 
         if (db.collectionExists(Configuration.SCHEMA_VERSION_COLLECTION_NAME)) {
             return getVersion(db);
@@ -66,7 +74,7 @@ public class MongoDBConnector {
      * If not exists, validates if is it possible to create it.
      */
     private void validateDatabaseNames() {
-        List<String> dbNames = mongo.getDatabaseNames();
+        List<String> dbNames = config.getMongo().getDatabaseNames();
 
         if (dbNames == null || dbNames.isEmpty()) {
             throw new InvalidMongoDatabaseConfiguration("There is no existing database in this MongoDB. You must first create a new database");
@@ -94,15 +102,15 @@ public class MongoDBConnector {
     public void executeCommand(OxAction action) {
         LOG.warn("[Ox] Executing action: {}", action);
         verifyAndCreateCollectionIfNecessary(action);
-        action.runAction(this, mongo, databaseName);
+        action.runAction(this, config.getMongo(), databaseName);
     }
 
     private void verifyAndCreateCollectionIfNecessary(OxAction action) {
 
         validateCollection(action);
 
-        if (!mongo.getDB(databaseName).collectionExists(action.getCollection())) {
-            mongo.getDB(databaseName)
+        if (!config.getMongo().getDB(databaseName).collectionExists(action.getCollection())) {
+            config.getMongo().getDB(databaseName)
                     .createCollection(
                             action.getCollection(),
                             new BasicDBObject()
@@ -125,7 +133,7 @@ public class MongoDBConnector {
 
         dbObject.append("date", new Date());
 
-        mongo
+        config.getMongo()
                 .getDB(databaseName)
                 .getCollection(Configuration.SCHEMA_VERSION_COLLECTION_NAME)
                 .insert(dbObject);
@@ -136,7 +144,7 @@ public class MongoDBConnector {
                 new BasicDBObject(
                         Configuration.MIGRATION_COLLECTION_VERSION_ATTRIBUTE,
                         version);
-        mongo
+        config.getMongo()
                 .getDB(databaseName)
                 .getCollection(Configuration.SCHEMA_VERSION_COLLECTION_NAME)
                 .remove(dbObject);
@@ -157,7 +165,7 @@ public class MongoDBConnector {
             String indexName,
             String collection) {
 
-        List<DBObject> indexInfo = mongo.getDB(databaseName).getCollection(collection).getIndexInfo();
+        List<DBObject> indexInfo = config.getMongo().getDB(databaseName).getCollection(collection).getIndexInfo();
 
         for (DBObject current : indexInfo) {
             String remoteIndexName = (String) current.get("name");
@@ -185,7 +193,7 @@ public class MongoDBConnector {
             String indexName,
             String collection) {
 
-        List<DBObject> indexInfo = mongo.getDB(databaseName).getCollection(collection).getIndexInfo();
+        List<DBObject> indexInfo = config.getMongo().getDB(databaseName).getCollection(collection).getIndexInfo();
 
         if (indexInfo.isEmpty()) {
             return false;
@@ -269,17 +277,17 @@ public class MongoDBConnector {
             return;
         }
 
-        mongo.getDB(databaseName).getCollection(collection).dropIndex(indexName);
+        config.getMongo().getDB(databaseName).getCollection(collection).dropIndex(indexName);
     }
 
     public void createIndex(String collection, BasicDBObject indexDefinition, BasicDBObject indexOptions) {
         LOG.info("Creating index... ");
-        mongo.getDB(databaseName).getCollection(collection).createIndex(indexDefinition, indexOptions);
+        config.getMongo().getDB(databaseName).getCollection(collection).createIndex(indexDefinition, indexOptions);
     }
 
     public boolean verifyIfMigrateWasAlreadyExecuted(Integer version) {
 
-        DBCollection versionCollection = mongo.getDB(databaseName).getCollection(Configuration.SCHEMA_VERSION_COLLECTION_NAME);
+        DBCollection versionCollection = config.getMongo().getDB(databaseName).getCollection(Configuration.SCHEMA_VERSION_COLLECTION_NAME);
         versionCollection.setReadPreference(ReadPreference.primary());
 
         BasicDBObject dbObject = new BasicDBObject(Configuration.MIGRATION_COLLECTION_VERSION_ATTRIBUTE, version);
@@ -290,7 +298,7 @@ public class MongoDBConnector {
     }
 
     public DB getMongoDatabase() {
-        return mongo.getDB(databaseName);
+        return config.getMongo().getDB(databaseName);
     }
 
     public boolean verifyIfCollectionExists(String collectionName) {
