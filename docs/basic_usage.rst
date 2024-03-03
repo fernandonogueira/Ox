@@ -4,7 +4,7 @@ Basic Usage
 Prerequisites
 -------------
 
-Ox requires Java 7+ and Mongo Java Driver
+Ox requires Java 17+ and Mongo Java Driver
 
 Usage
 -----
@@ -53,7 +53,7 @@ Usage
 
     @Bean
     @Autowired
-    public Ox init(Mongo mongo) {
+    public Ox init(MongoClient mongo) {
 
         Ox ox = Ox.setUp(mongo, "your.application.package.configs.OxConfig", "yourDatabaseName");
         ox.up();
