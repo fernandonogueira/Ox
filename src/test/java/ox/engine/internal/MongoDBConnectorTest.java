@@ -21,8 +21,8 @@ import java.util.List;
 @RunWith(MockitoJUnitRunner.class)
 public class MongoDBConnectorTest {
 
-    private Mongo newMockedMongo() {
-        return Mockito.mock(Mongo.class);
+    private MongoClient newMockedMongo() {
+        return Mockito.mock(MongoClient.class);
     }
 
     private static DB createMockedDB(boolean collectionExists) {
@@ -68,7 +68,7 @@ public class MongoDBConnectorTest {
     @Test(expected = InvalidMongoDatabaseConfiguration.class)
     public void mongoDBConnectorDatabaseNotFoundAndAutoCreationNotSetTest() {
 
-        Mongo mockedMongo = Mockito.mock(Mongo.class);
+        MongoClient mockedMongo = Mockito.mock(MongoClient.class);
 
         MongoDBConnector connector = new MongoDBConnector(MongoDBConnectorConfig
                 .create()
@@ -115,7 +115,7 @@ public class MongoDBConnectorTest {
     @Test
     public void mongoDBConnectorCreateSchemaVersionCollectionIfNotExists() {
 
-        Mongo mockedMongo = Mockito.mock(Mongo.class);
+        MongoClient mockedMongo = Mockito.mock(MongoClient.class);
 
         String fakeDB = Faker.fakeDBName();
 
@@ -161,7 +161,7 @@ public class MongoDBConnectorTest {
     @Test(expected = InvalidCollectionException.class)
     public void executeInvalidCollectionCommandTest() {
 
-        Mongo mockedMongo = Mockito.mock(Mongo.class);
+        MongoClient mockedMongo = Mockito.mock(MongoClient.class);
 
         MongoDBConnector connector = new MongoDBConnector(MongoDBConnectorConfig
                 .create()
@@ -183,7 +183,7 @@ public class MongoDBConnectorTest {
     @Test
     public void verifyIfAn2dsphereIndexWithSameAttributesAlreadyExistsTest() {
 
-        Mongo mockedMongo = Mockito.mock(Mongo.class);
+        MongoClient mockedMongo = Mockito.mock(MongoClient.class);
 
         MongoDBConnectorConfig config = MongoDBConnectorConfig
                 .create()
@@ -220,7 +220,7 @@ public class MongoDBConnectorTest {
     @Test
     public void verifyIfAnIndexWithSameAttributesAlreadyExistsTest() {
 
-        Mongo mockedMongo = Mockito.mock(Mongo.class);
+        MongoClient mockedMongo = Mockito.mock(MongoClient.class);
 
         MongoDBConnectorConfig config = MongoDBConnectorConfig
                 .create()
@@ -260,7 +260,7 @@ public class MongoDBConnectorTest {
     @Test
     public void validateVerifyIfIndexExistsWhenTheCollectionHasNoIndex() {
 
-        Mongo mockedMongo = newMockedMongo();
+        MongoClient mockedMongo = newMockedMongo();
 
         MongoDBConnectorConfig config = MongoDBConnectorConfig
                 .create()
@@ -281,7 +281,7 @@ public class MongoDBConnectorTest {
         Mockito.when(db.getCollection(Mockito.anyString())).thenReturn(collection);
         Mockito.when(collection.getIndexInfo()).thenReturn(indexInfo);
 
-        Assert.assertTrue(!connector.verifyIfIndexExists(attrs, "myIndexTest", "myCollection"));
+        Assert.assertFalse(connector.verifyIfIndexExists(attrs, "myIndexTest", "myCollection"));
     }
 
     /**
@@ -292,7 +292,7 @@ public class MongoDBConnectorTest {
     @Test
     public void validateVerifyIfIndexWithTheSameNameExists() {
 
-        Mongo mockedMongo = newMockedMongo();
+        MongoClient mockedMongo = newMockedMongo();
 
         MongoDBConnectorConfig config = MongoDBConnectorConfig
                 .create()
@@ -386,7 +386,7 @@ public class MongoDBConnectorTest {
     @Test
     public void dropIndexByNameDatabaseNotNullTest() {
 
-        Mongo mockedMongo = Mockito.mock(Mongo.class);
+        MongoClient mockedMongo = Mockito.mock(MongoClient.class);
         DB db = Mockito.mock(DB.class);
         DBCollection collection = Mockito.mock(DBCollection.class);
 
@@ -404,7 +404,7 @@ public class MongoDBConnectorTest {
     @Test
     public void createIndexTest() {
 
-        Mongo mockedMongo = Mockito.mock(Mongo.class);
+        MongoClient mockedMongo = Mockito.mock(MongoClient.class);
         DB db = Mockito.mock(DB.class);
         DBCollection collection = Mockito.mock(DBCollection.class);
 

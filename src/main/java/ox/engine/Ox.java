@@ -1,6 +1,7 @@
 package ox.engine;
 
 import com.mongodb.Mongo;
+import com.mongodb.MongoClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ox.engine.exception.InvalidMongoConfiguration;
@@ -39,11 +40,11 @@ public final class Ox {
     private static final Logger LOG = LoggerFactory.getLogger(Ox.class);
 
     private boolean simulate = false;
-    private Mongo mongo;
-    private String scanPackage;
-    private MongoDBConnector mongoConnector;
+    private final MongoClient mongo;
+    private final String scanPackage;
+    private final MongoDBConnector mongoConnector;
 
-    private Ox(Mongo mongo,
+    private Ox(MongoClient mongo,
                String scanPackage,
                String databaseName,
                boolean createVersioningCollectionIfMissing) {
@@ -60,7 +61,7 @@ public final class Ox {
     }
 
     public static Ox setUp(
-            Mongo mongo,
+            MongoClient mongo,
             String scanPackage,
             String databaseName,
             boolean createVersioningCollectionIfMissing) {
@@ -69,7 +70,7 @@ public final class Ox {
     }
 
     public static Ox setUp(
-            Mongo mongo,
+            MongoClient mongo,
             String scanPackage,
             String databaseName) {
 

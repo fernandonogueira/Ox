@@ -8,7 +8,6 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import ox.Configuration;
 import ox.engine.exception.InvalidMongoConfiguration;
-import ox.engine.internal.MongoDBConnector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class OxMigrationDownTest {
 
     @Mock
-    private Mongo mongo;
+    private MongoClient mongo;
 
     @Test
     public void runDownMigrationOnANonEmptyDBTest() throws InvalidMongoConfiguration {
