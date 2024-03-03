@@ -1,6 +1,6 @@
 package ox.engine.internal;
 
-import com.mongodb.Mongo;
+import com.mongodb.MongoClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ox.engine.exception.InvalidMigrateActionException;
@@ -52,7 +52,7 @@ public class RemoveIndexAction extends OxAction {
     }
 
     @Override
-    void runAction(MongoDBConnector mongoDBConnector, Mongo mongo, String databaseName) {
+    void runAction(MongoDBConnector mongoDBConnector, MongoClient mongo, String databaseName) {
 
         boolean doesItExists = mongoDBConnector.verifyIfIndexExists(null, indexName, collection);
 

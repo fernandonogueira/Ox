@@ -1,7 +1,7 @@
 package ox.engine.internal;
 
 import com.mongodb.BasicDBObject;
-import com.mongodb.Mongo;
+import com.mongodb.MongoClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ox.engine.exception.IndexAlreadyExistsException;
@@ -18,7 +18,7 @@ public class CreateIndexAction extends OxAction {
 
     private static final Logger LOG = LoggerFactory.getLogger(CreateIndexAction.class);
 
-    private Map<String, OrderingType> attributes = new LinkedHashMap<String, OrderingType>();
+    private final Map<String, OrderingType> attributes = new LinkedHashMap<>();
 
     private final String indexName;
     private boolean ifNotExists;
@@ -148,14 +148,14 @@ public class CreateIndexAction extends OxAction {
             throw new InvalidMigrateActionException("Invalid Migrate action.");
         }
 
-        if (attributes != null && attributes.size() > 1 && ttlIndex) {
+        if (attributes.size() > 1 && ttlIndex) {
             throw new InvalidMigrateActionException("TTL indexes can not have more than 1 attribute");
         }
 
     }
 
     @Override
-    void runAction(MongoDBConnector mongoDBConnector, Mongo mongo, String databaseName) {
+    void runAction(MongoDBConnector mongoDBConnector, MongoClient mongo, String databaseName) {
 
         boolean existsWithSameNameAndDifferentAttrs = mongoDBConnector
                 .verifyIfHasSameNameAndDifferentAttributes(attributes, indexName, collection);

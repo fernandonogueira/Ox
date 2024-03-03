@@ -1,6 +1,5 @@
 package ox.engine;
 
-import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -124,25 +123,28 @@ public final class Ox {
         Class<?>[] resources = scanner.scanForClasses(new Location(scanPackage), Migration.class);
 
         List<ResolvedMigration> resolvedMigrations = new ArrayList<>();
-        if (resources != null && resources.length > 0) {
-            for (Class<?> resource : resources) {
-                if (Migration.class.isAssignableFrom(resource)) {
-                    Pattern pattern = Pattern.compile("V\\d*_");
-                    Matcher matcher = pattern.matcher(resource.getCanonicalName());
-                    if (matcher.find()) {
-                        String string = matcher.group();
 
-                        ResolvedMigration resolvedMigration = new ResolvedMigration();
-                        Migration migration = ((Class<Migration>) resource).newInstance();
-                        resolvedMigration.setMigrate(migration);
+        if (resources == null) {
+            return resolvedMigrations;
+        }
 
-                        Integer version = Integer.valueOf(string.substring(1, string.length() - 1));
-                        resolvedMigration.setVersion(version);
+        for (Class<?> resource : resources) {
+            if (Migration.class.isAssignableFrom(resource)) {
+                Pattern pattern = Pattern.compile("V\\d*_");
+                Matcher matcher = pattern.matcher(resource.getCanonicalName());
+                if (matcher.find()) {
+                    String string = matcher.group();
 
-                        resolvedMigrations.add(resolvedMigration);
+                    ResolvedMigration resolvedMigration = new ResolvedMigration();
+                    Migration migration = ((Class<Migration>) resource).newInstance();
+                    resolvedMigration.setMigrate(migration);
 
-                        LOG.info("[Ox] Resolved Migrate Found: " + resolvedMigration);
-                    }
+                    Integer version = Integer.valueOf(string.substring(1, string.length() - 1));
+                    resolvedMigration.setVersion(version);
+
+                    resolvedMigrations.add(resolvedMigration);
+
+                    LOG.info("[Ox] Resolved Migrate Found: " + resolvedMigration);
                 }
             }
         }

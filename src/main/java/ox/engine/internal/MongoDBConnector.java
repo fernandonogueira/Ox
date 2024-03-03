@@ -91,12 +91,13 @@ public class MongoDBConnector {
         DBCollection collection = db.getCollection(Configuration.SCHEMA_VERSION_COLLECTION_NAME);
         BasicDBObject o = new BasicDBObject();
         o.append(Configuration.MIGRATION_COLLECTION_VERSION_ATTRIBUTE, -1);
-        DBCursor result = collection.find().sort(o).limit(1);
-        while (result.hasNext()) {
+        try (DBCursor result = collection.find().sort(o).limit(1)) {
+            if (!result.hasNext()) {
+                return 0;
+            }
             DBObject current = result.next();
             return (Integer) current.get(Configuration.MIGRATION_COLLECTION_VERSION_ATTRIBUTE);
         }
-        return 0;
     }
 
     public void executeCommand(OxAction action) {

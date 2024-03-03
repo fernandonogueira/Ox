@@ -1,6 +1,6 @@
 package ox.engine.internal;
 
-import com.mongodb.Mongo;
+import com.mongodb.MongoClient;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -11,7 +11,7 @@ import ox.engine.structure.OrderingType;
 public class ValidateCreateGeoSpatialIndexTest {
 
     @Mock
-    private Mongo mongo;
+    private MongoClient mongo;
 
     @Mock
     private MongoDBConnector connector;

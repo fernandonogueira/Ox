@@ -1,6 +1,6 @@
 package ox.engine.internal;
 
-import com.mongodb.Mongo;
+import com.mongodb.MongoClient;
 import ox.engine.exception.InvalidMigrateActionException;
 
 public class RemoveCollectionAction extends OxAction {
@@ -21,7 +21,7 @@ public class RemoveCollectionAction extends OxAction {
     }
 
     @Override
-    void runAction(MongoDBConnector mongoDBConnector, Mongo mongo, String databaseName) {
+    void runAction(MongoDBConnector mongoDBConnector, MongoClient mongo, String databaseName) {
         if (mongoDBConnector.verifyIfCollectionExists(collection)) {
             mongoDBConnector.removeCollection(collection);
         }

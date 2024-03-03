@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Faker {
 
-    private static List<String> prefixes = List.of("Bulbasaur", "Ivysaur", "Venusaur", "Charmander",
+    private static final List<String> prefixes = List.of("Bulbasaur", "Ivysaur", "Venusaur", "Charmander",
             "Charmeleon", "Charizard", "Squirtle", "Wartortle", "Blastoise", "Caterpie", "Metapod",
             "Butterfree", "Weedle", "Kakuna", "Beedrill", "Pidgey", "Pidgeotto", "Pidgeot", "Rattata", "Raticate",
             "Spearow", "Fearow", "Ekans", "Arbok", "Pikachu", "Raichu", "Sandshrew", "Sandslash", "Nidoran",
