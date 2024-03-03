@@ -1,6 +1,6 @@
 package ox.engine.internal;
 
-import com.mongodb.Mongo;
+import com.mongodb.MongoClient;
 
 /**
  * MongoDBConnector Configuration.
@@ -9,8 +9,6 @@ import com.mongodb.Mongo;
  */
 public final class MongoDBConnectorConfig {
 
-    private boolean createCollectionIfDontExists;
-    private Mongo mongo;
     private boolean createCollectionIfNotExists;
     private MongoClient mongo;
     private String databaseName;
@@ -33,11 +31,8 @@ public final class MongoDBConnectorConfig {
         return this;
     }
 
-    public boolean isCreateCollectionIfDontExists() {
-        return createCollectionIfDontExists;
     public boolean isCreateCollectionIfNotExists() {
         return createCollectionIfNotExists;
-    }
     }
 
     public MongoClient getMongo() {
