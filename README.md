@@ -1,7 +1,7 @@
 Ox - MongoDB Database Versioning and Migration Tool
 ===================
 
-[![Build Status][travis-badge]][travis-url] [![Code Coverage][codecov-badge]][codecov-url] [![Artifacts][jitpack-badge]][jitpack-url]
+[![Build Status][build-badge]][build-badge-url] [![Code Coverage][codecov-badge]][codecov-url] [![Artifacts][jitpack-badge]][jitpack-url]
 
 ## Description
 Schemaless doesn't mean no schema!
@@ -25,6 +25,11 @@ This project simplifies that.
 ## Requirements
 
 Compatible with Java 17+ and MongoDB 2.6 to 7.x.
+
+## Docs
+Check the [Ox's documentation](http://ox.readthedocs.io/en/latest/)
+
+You can also check the demo project [here](https://github.com/fernandonogueira/ox-example)
 
 ## Installation
 
@@ -110,10 +115,6 @@ public void myMethod(){
 
 ```
 
-## Docs
-
-See Ox's docs here: http://ox.readthedocs.io/en/latest/
-
 ## Requirements
 
 - Java 17
@@ -151,7 +152,7 @@ SOFTWARE.
 
 [codecov-badge]: https://codecov.io/gh/fernandonogueira/Ox/branch/master/graph/badge.svg
 [codecov-url]: https://codecov.io/gh/fernandonogueira/Ox
-[travis-badge]: https://travis-ci.org/fernandonogueira/Ox.svg?branch=master
-[travis-url]: https://travis-ci.org/fernandonogueira/Ox
+[build-badge]: https://github.com/fernandonogueira/Ox/workflows/Test/badge.svg
+[build-badge-url]: https://github.com/fernandonogueira/Ox
 [jitpack-badge]: https://jitpack.io/v/fernandonogueira/Ox.svg
 [jitpack-url]: https://jitpack.io/#fernandonogueira/Ox
