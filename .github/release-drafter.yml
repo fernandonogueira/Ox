@@ -1,7 +1,6 @@
 name-template: '$RESOLVED_VERSION 🌈'
 tag-template: '$RESOLVED_VERSION'
 categories:
-  # breaking changes
   - title: '💥 Breaking Changes'
     labels:
       - 'breaking'
