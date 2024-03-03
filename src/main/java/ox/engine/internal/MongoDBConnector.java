@@ -15,17 +15,17 @@ import java.util.*;
 public class MongoDBConnector {
 
     private static final Logger LOG = LoggerFactory.getLogger(MongoDBConnector.class);
-    private String databaseName;
+    private final String databaseName;
 
-    private boolean createCollectionIfDontExists;
+    private final boolean createCollectionIfDontExists;
 
-    private MongoDBConnectorConfig config;
+    private final MongoDBConnectorConfig config;
 
     public MongoDBConnector(MongoDBConnectorConfig config) {
         LOG.info("[Ox] Configuring MongoDB Access...");
         assert config != null;
         this.config = config;
-        this.createCollectionIfDontExists = config.isCreateCollectionIfDontExists();
+        this.createCollectionIfDontExists = config.isCreateCollectionIfNotExists();
         this.databaseName = config.getDatabaseName();
 
         if (this.databaseName == null) {

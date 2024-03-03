@@ -3,6 +3,7 @@ package ox.engine.internal;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.Mongo;
+import com.mongodb.MongoClient;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -14,7 +15,7 @@ import ox.utils.Faker;
 public class ValidateRemoveIndexActionTest {
 
     private MongoDBConnector newMongoDBConnector() {
-        Mongo mockedMongo = Mockito.mock(Mongo.class);
+        MongoClient mockedMongo = Mockito.mock(MongoClient.class);
         return new MongoDBConnector(MongoDBConnectorConfig.create()
                 .setMongoClient(mockedMongo).setDatabaseName(Faker.fakeDBName()));
     }

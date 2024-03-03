@@ -11,6 +11,8 @@ public final class MongoDBConnectorConfig {
 
     private boolean createCollectionIfDontExists;
     private Mongo mongo;
+    private boolean createCollectionIfNotExists;
+    private MongoClient mongo;
     private String databaseName;
 
     public static MongoDBConnectorConfig create() {
@@ -18,24 +20,27 @@ public final class MongoDBConnectorConfig {
     }
 
     private MongoDBConnectorConfig() {
-        this.createCollectionIfDontExists = true;
+        this.createCollectionIfNotExists = true;
     }
 
     public MongoDBConnectorConfig createCollectionIfDontExists(boolean value) {
-        this.createCollectionIfDontExists = value;
+        this.createCollectionIfNotExists = value;
         return this;
     }
 
-    public MongoDBConnectorConfig setMongoClient(Mongo mongo) {
+    public MongoDBConnectorConfig setMongoClient(MongoClient mongo) {
         this.mongo = mongo;
         return this;
     }
 
     public boolean isCreateCollectionIfDontExists() {
         return createCollectionIfDontExists;
+    public boolean isCreateCollectionIfNotExists() {
+        return createCollectionIfNotExists;
+    }
     }
 
-    public Mongo getMongo() {
+    public MongoClient getMongo() {
         return mongo;
     }
 

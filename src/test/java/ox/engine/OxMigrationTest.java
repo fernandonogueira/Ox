@@ -1,9 +1,6 @@
 package ox.engine;
 
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
-import com.mongodb.Mongo;
+import com.mongodb.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -19,7 +16,7 @@ public class OxMigrationTest {
     private MongoDBConnector mongoConnector;
 
     @Mock
-    private Mongo mongo;
+    private MongoClient mongo;
 
     @Mock
     private DB db;
@@ -44,7 +41,7 @@ public class OxMigrationTest {
 
         Mockito.when(mongo.getDB(Mockito.anyString())).thenReturn(db);
         Mockito.when(db.getCollection(Mockito.anyString())).thenReturn(coll);
-        Mockito.when(coll.count(Mockito.any(DBObject.class))).thenReturn(1l);
+        Mockito.when(coll.count(Mockito.any(DBObject.class))).thenReturn(1L);
 
         Ox
                 .setUp(mongo, "ox.db.migrations", "myDB", true)
