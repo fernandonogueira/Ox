@@ -5,5 +5,5 @@ package ox.engine.structure;
  * be created using ASC, DESC or Geospatial ordering.
  */
 public enum OrderingType {
-    ASC, DESC, GEO_2DSPHERE;
+    ASC, DESC, GEO_2DSPHERE
 }

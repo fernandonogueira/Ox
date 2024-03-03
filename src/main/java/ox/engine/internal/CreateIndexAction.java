@@ -138,7 +138,7 @@ public class CreateIndexAction extends OxAction {
     public String toString() {
         return "CreateIndexAction{" +
                 "attributes=" + attributes +
-                ", indexName=\'" + indexName + '\'' +
+                ", indexName='" + indexName + "'" +
                 "}";
     }
 
