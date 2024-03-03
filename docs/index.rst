@@ -8,7 +8,7 @@ Ox |version| Manual
 .. admonition:: Ox |version| Released
 
    Ox |version| is now available.
-      For new features in Ox |version|, see https://github.com/fernandonogueira/Ox/releases
+      To check out what's new in Ox |version|, see https://github.com/fernandonogueira/Ox/releases
 
 
 Welcome to the Ox |version| Manual! **Ox** is an open-source MongoDB database migration tool.

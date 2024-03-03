@@ -3,7 +3,7 @@
 Installation
 ============
 
-To install Ox is simple:
+Ox is available on `JitPack <https://jitpack.io>`_.
 
 Maven
 -----
@@ -30,11 +30,9 @@ Gradle
 .. code-block:: groovy
 
    dependencies {
-       compile 'com.github.fernandonogueira:ox:x.y.z'
+     implementation 'com.github.fernandonogueira:Ox:x.y.z'
    }
 
    repositories {
-       maven {
-           url 'https://jitpack.io'
-       }
+     maven { url 'https://jitpack.io' }
    }
