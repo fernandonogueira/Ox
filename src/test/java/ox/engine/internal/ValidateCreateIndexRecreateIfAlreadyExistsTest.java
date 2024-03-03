@@ -1,6 +1,6 @@
 package ox.engine.internal;
 
-import com.mongodb.Mongo;
+import com.mongodb.MongoClient;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -19,9 +19,8 @@ public class ValidateCreateIndexRecreateIfAlreadyExistsTest {
     private MongoDBConnector connector;
 
     @Mock
-    private Mongo mongo;
+    private MongoClient mongo;
 
-    @SuppressWarnings("unchecked")
     @Test
     public void testCreateIndexRecreateIfAlreadyExists() throws InvalidMigrateActionException {
 

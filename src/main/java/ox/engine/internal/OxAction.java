@@ -1,6 +1,6 @@
 package ox.engine.internal;
 
-import com.mongodb.Mongo;
+import com.mongodb.MongoClient;
 import ox.engine.exception.InvalidMigrateActionException;
 
 public abstract class OxAction {
@@ -46,5 +46,5 @@ public abstract class OxAction {
         env.execute(this);
     }
 
-    abstract void runAction(MongoDBConnector mongoDBConnector, Mongo mongo, String databaseName);
+    abstract void runAction(MongoDBConnector mongoDBConnector, MongoClient mongo, String databaseName);
 }

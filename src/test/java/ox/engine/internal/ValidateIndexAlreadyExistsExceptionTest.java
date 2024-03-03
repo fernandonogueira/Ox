@@ -1,6 +1,6 @@
 package ox.engine.internal;
 
-import com.mongodb.Mongo;
+import com.mongodb.MongoClient;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -18,7 +18,7 @@ public class ValidateIndexAlreadyExistsExceptionTest {
     private CreateIndexAction action;
 
     @Mock
-    private Mongo mongo;
+    private MongoClient mongo;
 
     @Mock
     private MongoDBConnector connector;
@@ -27,16 +27,15 @@ public class ValidateIndexAlreadyExistsExceptionTest {
     public void validateIndexAlreadyExistsException() {
 
         action = OxAction
-            .createIndex("myIndexTest")
-            .setCollection("myCollectionTest")
-            .addAttribute("anyAttr", OrderingType.GEO_2DSPHERE);
+                .createIndex("myIndexTest")
+                .setCollection("myCollectionTest")
+                .addAttribute("anyAttr", OrderingType.GEO_2DSPHERE);
 
-        Mockito.when(connector
-        .verifyIfIndexExists(
-                Mockito.anyMap(),
-                Mockito.anyString(),
-                Mockito.anyString()))
-        .thenReturn(true);
+        Mockito.when(connector.verifyIfIndexExists(
+                        Mockito.anyMap(),
+                        Mockito.anyString(),
+                        Mockito.anyString()))
+                .thenReturn(true);
 
         action.runAction(connector, mongo, "myDatabase");
     }

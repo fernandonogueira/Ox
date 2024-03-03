@@ -99,14 +99,6 @@ public class ValidateCreateIndexTest {
 
         Mockito.when(collection.getIndexInfo()).thenReturn(indexInfo);
 
-//        Mockito.when(
-//                        connector
-//                                .verifyIfIndexExists(
-//                                        Mockito.anyMap(),
-//                                        Mockito.anyString(),
-//                                        Mockito.anyString()))
-//                .thenReturn(true);
-
         OxAction
                 .createIndex("myIndex")
                 .ifNotExists()
@@ -186,28 +178,10 @@ public class ValidateCreateIndexTest {
     @Test(expected = InvalidMigrateActionException.class)
     public void createAnInvalidTTLIndex() throws InvalidMigrateActionException {
 
-//        DB db = Mockito.mock(DB.class);
-        DBCollection collection = Mockito.mock(DBCollection.class);
         OxEnvironment env = new OxEnvironment();
-
-//        Mockito.when(db.getCollection(Mockito.anyString())).thenReturn(collection);
-
-        ArrayList<DBObject> indexInfo = new ArrayList<DBObject>();
-
-        BasicDBObject keys = new BasicDBObject();
-        keys.append("attr2", 1);
-
-        BasicDBObject o = new BasicDBObject();
-        o.append("key", keys);
-        o.append("name", "myIndex");
-
-//        indexInfo.add(o);
-
-//        Mockito.when(collection.getIndexInfo()).thenReturn(indexInfo);
-
         OxAction
                 .createIndex("myIndex")
-                .setCollection("myLittleCollection")
+                .setCollection("myRandomCollection")
                 .ifNotExists()
                 .addAttribute("attr1", OrderingType.ASC)
                 .addAttribute("attr2", OrderingType.ASC)
