@@ -22,7 +22,7 @@ public class RemoveCollectionAction extends OxAction {
 
     @Override
     void runAction(MongoDBConnector mongoDBConnector, MongoClient mongo, String databaseName) {
-        if (mongoDBConnector.verifyIfCollectionExists(collection)) {
+        if (mongoDBConnector.collectionExists(collection)) {
             mongoDBConnector.removeCollection(collection);
         }
     }

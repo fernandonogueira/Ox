@@ -2,6 +2,7 @@ package ox.engine.internal;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
+import com.mongodb.client.model.IndexOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ox.engine.exception.IndexAlreadyExistsException;
@@ -13,6 +14,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 public class CreateIndexAction extends OxAction {
 
@@ -25,10 +27,6 @@ public class CreateIndexAction extends OxAction {
      * Unique index?
      */
     private boolean unique;
-    /**
-     * DropDups. Deprecated after MongoDB 3.0
-     */
-    private boolean dropDups;
     /**
      * Recreate the index if not equals?
      */
@@ -111,18 +109,6 @@ public class CreateIndexAction extends OxAction {
     }
 
     /**
-     * This method sets a flag to active the "dropDups" MongoDB CreateIndex Option.
-     * <p/>
-     * With this option activated, any existing duplicated values will be deleted by MongoDB automatically.
-     * <p/>
-     * If this option is not set and there are duplicated options, MongoDB will throw an exception trying to create the index.
-     */
-    public CreateIndexAction dropDups() {
-        this.dropDups = true;
-        return this;
-    }
-
-    /**
      * Setting this option, Ox will first verify if there is an existing index with the same name
      * and with different attributes or attributes order.
      * <p/>
@@ -173,26 +159,20 @@ public class CreateIndexAction extends OxAction {
             }
         } else {
             BasicDBObject keys = parseAttributesToDBObject();
-            BasicDBObject opts = generateCreateIndexOptions();
+            IndexOptions opts = generateCreateIndexOptions();
             mongoDBConnector.createIndex(collection, keys, opts);
         }
 
     }
 
-    private BasicDBObject generateCreateIndexOptions() {
-        BasicDBObject opts = new BasicDBObject();
-        opts.append("background", true);
-        opts.append("name", indexName);
-
-        if (unique) {
-            opts.append("unique", true);
-            if (dropDups) {
-                opts.append("dropDups", true);
-            }
-        }
+    private IndexOptions generateCreateIndexOptions() {
+        IndexOptions opts = new IndexOptions();
+        opts.background(true);
+        opts.name(indexName);
+        opts.unique(unique);
 
         if (ttlIndex) {
-            opts.append("expireAfterSeconds", ttlIndexExpireAfterSeconds);
+            opts.expireAfter(ttlIndexExpireAfterSeconds, TimeUnit.SECONDS);
         }
 
         return opts;

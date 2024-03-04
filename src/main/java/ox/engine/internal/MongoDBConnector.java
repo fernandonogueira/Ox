@@ -1,7 +1,7 @@
 package ox.engine.internal;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
-import com.mongodb.*;
 import com.mongodb.client.*;
 import com.mongodb.client.model.CreateCollectionOptions;
 import com.mongodb.client.model.IndexOptions;
@@ -45,7 +45,7 @@ public class MongoDBConnector {
         return mongo().getDatabase(config.getDatabaseName());
     }
 
-    private boolean collectionExists(String collectionName) {
+    public boolean collectionExists(String collectionName) {
         MongoIterable<String> collections = database().listCollectionNames();
         for (String collection : collections) {
             if (collection.equals(collectionName)) {
@@ -151,48 +151,39 @@ public class MongoDBConnector {
     }
 
     public void insertMigrationVersion(Integer version) {
-        BasicDBObject dbObject =
-                new BasicDBObject(
-                        Configuration.MIGRATION_COLLECTION_VERSION_ATTRIBUTE,
-                        version);
+        Document doc = new Document()
+                .append(Configuration.MIGRATION_COLLECTION_VERSION_ATTRIBUTE, version)
+                .append("date", new Date());
 
-        dbObject.append("date", new Date());
+        MongoCollection<Document> db = database()
+                .getCollection(config.getMigrationCollectionName());
 
-        config.getMongo()
-                .getDB(config.getDatabaseName())
-                .getCollection(config.getMigrationCollectionName())
-                .insert(dbObject);
+        db.insertOne(doc);
     }
 
     public void removeMigrationVersion(Integer version) {
-        DBObject dbObject =
-                new BasicDBObject(
-                        Configuration.MIGRATION_COLLECTION_VERSION_ATTRIBUTE,
-                        version);
-        config.getMongo()
-                .getDB(config.getDatabaseName())
+        Document doc = new Document()
+                .append(Configuration.MIGRATION_COLLECTION_VERSION_ATTRIBUTE, version);
+
+        database()
                 .getCollection(config.getMigrationCollectionName())
-                .remove(dbObject);
+                .deleteOne(doc);
     }
 
     /**
      * Verify if the collection contains an index
      * with the same name and different
      * attributes or attributes not equally ordered
-     *
-     * @param indexAttributes
-     * @param indexName
-     * @param collection
-     * @return
      */
     public boolean verifyIfHasSameNameAndDifferentAttributes(
             Map<String, OrderingType> indexAttributes,
             String indexName,
             String collection) {
 
-        List<DBObject> indexInfo = config.getMongo().getDB(config.getDatabaseName()).getCollection(collection).getIndexInfo();
+        ListIndexesIterable<Document> indexesIterable = database().getCollection(collection).listIndexes();
+        List<Document> indexList = indexesIterable.into(new ArrayList<>());
 
-        for (DBObject current : indexInfo) {
+        for (Document current : indexList) {
             String remoteIndexName = (String) current.get("name");
             if (!verifyIfHasSameAttributesWithSameOrder(indexAttributes, current)
                     && verifyIndexesHaveSameName(indexName, remoteIndexName)) {
@@ -218,13 +209,14 @@ public class MongoDBConnector {
             String indexName,
             String collection) {
 
-        List<DBObject> indexInfo = config.getMongo().getDB(config.getDatabaseName()).getCollection(collection).getIndexInfo();
+        ListIndexesIterable<Document> indexesIterable = database().getCollection(collection).listIndexes();
+        List<Document> indexList = indexesIterable.into(new ArrayList<>());
 
-        if (indexInfo.isEmpty()) {
+        if (indexList.isEmpty()) {
             return false;
         }
 
-        for (DBObject current : indexInfo) {
+        for (Document current : indexList) {
 
             if (verifyIfHasSameAttributesWithSameOrder(indexAttributes, current)) {
                 return true;
@@ -248,7 +240,7 @@ public class MongoDBConnector {
         return false;
     }
 
-    private boolean verifyIfHasSameAttributesWithSameOrder(Map<String, OrderingType> indexAttributes, DBObject current) {
+    private boolean verifyIfHasSameAttributesWithSameOrder(Map<String, OrderingType> indexAttributes, Document current) {
         if (indexAttributes != null) {
             Map<String, OrderingType> existingAttributes = identifyIndexAttributesAndOrdering(current);
 
@@ -268,9 +260,9 @@ public class MongoDBConnector {
      * @param current The DBObject retrieved from the IndexInfo List.
      * @return A map containing the attributes and ordering
      */
-    private Map<String, OrderingType> identifyIndexAttributesAndOrdering(DBObject current) {
+    private Map<String, OrderingType> identifyIndexAttributesAndOrdering(Document current) {
         Map<String, OrderingType> existingAttributes = new LinkedHashMap<>();
-        DBObject indexAttrs = (DBObject) current.get("key");
+        Document indexAttrs = (Document) current.get("key");
 
         if (indexAttrs != null) {
             Set<String> attrKeySet = indexAttrs.keySet();
@@ -302,35 +294,26 @@ public class MongoDBConnector {
             return;
         }
 
-        config.getMongo().getDB(config.getDatabaseName()).getCollection(collection).dropIndex(indexName);
+        database().getCollection(collection).dropIndex(indexName);
     }
 
-    public void createIndex(String collection, BasicDBObject indexDefinition, BasicDBObject indexOptions) {
+    public void createIndex(String collection, Bson indexDefinition, IndexOptions indexOptions) {
         LOG.info("Creating index... ");
-        config.getMongo().getDB(config.getDatabaseName()).getCollection(collection).createIndex(indexDefinition, indexOptions);
+        database().getCollection(collection).createIndex(indexDefinition, indexOptions);
     }
 
     public boolean verifyIfMigrateWasAlreadyExecuted(Integer version) {
 
-        DBCollection versionCollection = config.getMongo()
-                .getDB(config.getDatabaseName())
-                .getCollection(config.getMigrationCollectionName());
+        MongoCollection<Document> versionCollection = database().getCollection(config.getMigrationCollectionName());
 
-        versionCollection.setReadPreference(ReadPreference.primary());
-
-        BasicDBObject dbObject = new BasicDBObject(Configuration.MIGRATION_COLLECTION_VERSION_ATTRIBUTE, version);
-
-        long count = versionCollection.count(dbObject);
+        Document doc = new Document(Configuration.MIGRATION_COLLECTION_VERSION_ATTRIBUTE, version);
+        long count = versionCollection.countDocuments(doc);
 
         return count > 0;
     }
 
-    public DB getMongoDatabase() {
-        return config.getMongo().getDB(config.getDatabaseName());
-    }
-
-    public boolean verifyIfCollectionExists(String collectionName) {
-        return getMongoDatabase().collectionExists(collectionName);
+    public MongoDatabase getMongoDatabase() {
+        return database();
     }
 
     public void removeCollection(String collectionName) {
