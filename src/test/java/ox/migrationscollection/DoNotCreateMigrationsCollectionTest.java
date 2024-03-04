@@ -4,6 +4,7 @@ import com.mongodb.MongoClient;
 import org.bson.Document;
 import org.junit.Test;
 import ox.engine.Ox;
+import ox.engine.OxConfig;
 import ox.engine.exception.CouldNotCreateCollectionException;
 import ox.engine.exception.InvalidMongoConfiguration;
 import ox.integration.base.OxBaseContainerTest;
@@ -18,11 +19,14 @@ public class DoNotCreateMigrationsCollectionTest extends OxBaseContainerTest {
                 .getCollection("someTest")
                 .insertOne(new Document("test", true));
 
-        Ox ox = Ox.setUp(
-                mongo,
-                "ox.db.migrations",
-                "withoutSchemaMigrationsCollection",
-                false);
+        OxConfig config = OxConfig.builder()
+                .mongo(mongo)
+                .databaseName("withoutSchemaMigrationsCollection")
+                .scanPackage("ox.db.migrations")
+                .disableMigrationCollectionCreation()
+                .build();
+
+        Ox ox = Ox.setUp(config);
 
         ox.databaseVersion();
 

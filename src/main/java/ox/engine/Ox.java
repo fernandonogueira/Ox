@@ -37,35 +37,20 @@ import java.util.regex.Pattern;
 public final class Ox {
 
     private static final Logger LOG = LoggerFactory.getLogger(Ox.class);
-
-    private boolean simulate = false;
-    private final MongoClient mongo;
-    private final String scanPackage;
+    private final OxConfig config;
     private final MongoDBConnector mongoConnector;
 
-    private Ox(MongoClient mongo,
-               String scanPackage,
-               String databaseName,
-               boolean createVersioningCollectionIfMissing) {
-
-        this.mongo = mongo;
-        this.scanPackage = scanPackage;
-        this.mongoConnector =
-                new MongoDBConnector(MongoDBConnectorConfig
-                        .create()
-                        .setMongoClient(mongo)
-                        .setDatabaseName(databaseName)
-                        .createCollectionIfDontExists(createVersioningCollectionIfMissing));
-
+    private Ox(OxConfig config) {
+        this.config = config;
+        this.mongoConnector = new MongoDBConnector(
+                MongoDBConnectorConfig.fromOxConfig(config)
+        );
     }
 
     public static Ox setUp(
-            MongoClient mongo,
-            String scanPackage,
-            String databaseName,
-            boolean createVersioningCollectionIfMissing) {
-
-        return new Ox(mongo, scanPackage, databaseName, createVersioningCollectionIfMissing);
+            OxConfig config
+    ) {
+        return new Ox(config);
     }
 
     public static Ox setUp(
@@ -73,7 +58,13 @@ public final class Ox {
             String scanPackage,
             String databaseName) {
 
-        return new Ox(mongo, scanPackage, databaseName, true);
+        OxConfig oxConfig = new OxConfigBuilder()
+                .mongo(mongo)
+                .scanPackage(scanPackage)
+                .databaseName(databaseName)
+                .build();
+
+        return new Ox(oxConfig);
     }
 
     /**
@@ -111,7 +102,7 @@ public final class Ox {
     }
 
     private void validateExecution() throws InvalidMongoConfiguration {
-        if (!simulate && mongo == null) {
+        if (!config.dryRun() && config.mongo() == null) {
             throw new InvalidMongoConfiguration("Invalid Mongo Configuration. Please fix it and try again.");
         }
     }
@@ -156,7 +147,7 @@ public final class Ox {
                                     ExecutionMode mode,
                                     Integer desiredVersion) {
         Integer currentVersion;
-        if (!simulate) {
+        if (!config.dryRun()) {
             currentVersion = mongoConnector.retrieveDatabaseCurrentVersion();
         } else {
             currentVersion = 0;
@@ -164,7 +155,7 @@ public final class Ox {
 
         try {
             OxEnvironment env = new OxEnvironment();
-            env.setSimulate(simulate);
+            env.dryRun(config.dryRun());
             env.setMongoConnector(mongoConnector);
 
             LOG.info("[Ox] MongoDB Database Current Version: " + currentVersion);
@@ -227,7 +218,7 @@ public final class Ox {
 
     public List<ResolvedMigration> getMigrationsList() {
         try {
-            List<ResolvedMigration> resolvedMigrations = resolveMigrations(scanPackage);
+            List<ResolvedMigration> resolvedMigrations = resolveMigrations(config.scanPackage());
             return CollectionUtils.sortResolvedMigrations(resolvedMigrations);
         } catch (IOException e) {
             LOG.error("[Ox] Error updating MONGODB Database Schema", e);
@@ -244,11 +235,6 @@ public final class Ox {
     public Integer databaseVersion() throws InvalidMongoConfiguration {
         validateExecution();
         return mongoConnector.retrieveDatabaseCurrentVersion();
-    }
-
-    public Ox simulate() {
-        simulate = true;
-        return this;
     }
 
     private enum ExecutionMode {

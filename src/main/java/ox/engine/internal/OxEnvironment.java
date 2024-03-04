@@ -41,8 +41,8 @@ public class OxEnvironment {
         return mongoConnector.getMongoDatabase();
     }
 
-    public void setSimulate(boolean simulate) {
-        this.simulate = simulate;
+    public void dryRun(boolean dryRun) {
+        this.simulate = dryRun;
     }
 
     public boolean isSimulate() {
