@@ -11,7 +11,7 @@ public class OxEnvironment {
     /**
      * If true, nothing will be executed. Just simulated (and printed).
      */
-    private boolean simulate = false;
+    private boolean dryRun = false;
     private MongoDBConnector mongoConnector;
 
     public void execute(OxAction oxAction) {
@@ -20,7 +20,7 @@ public class OxEnvironment {
 
         LOG.info("[Ox] ----------- Executing action: {}", oxAction);
 
-        if (isSimulate()) {
+        if (isDryRun()) {
             LOG.info("[Ox] [Simulate] Executing action: ");
             LOG.info(oxAction.toString());
         } else {
@@ -42,11 +42,11 @@ public class OxEnvironment {
     }
 
     public void dryRun(boolean dryRun) {
-        this.simulate = dryRun;
+        this.dryRun = dryRun;
     }
 
-    public boolean isSimulate() {
-        return simulate;
+    public boolean isDryRun() {
+        return dryRun;
     }
 
     public void setMongoConnector(MongoDBConnector mongoConnector) {
