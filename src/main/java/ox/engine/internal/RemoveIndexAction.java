@@ -9,21 +9,9 @@ public class RemoveIndexAction extends OxAction {
 
     private static final Logger LOG = LoggerFactory.getLogger(RemoveIndexAction.class);
     private final String indexName;
-    private boolean ifExists;
 
     public RemoveIndexAction(String indexName) {
         this.indexName = indexName;
-    }
-
-    /**
-     * Removes the index only if it exists.
-     * If false (default value), should throw an error if the index do not exists.
-     *
-     * @return
-     */
-    public RemoveIndexAction ifExists() {
-        ifExists = true;
-        return this;
     }
 
     /**
@@ -56,17 +44,12 @@ public class RemoveIndexAction extends OxAction {
 
         boolean doesItExists = mongoDBConnector.verifyIfIndexExists(null, indexName, collection);
 
-        if (ifExists) {
-            if (doesItExists) {
-                LOG.info("[Ox] Index exists! Removing... Index name: " + indexName);
-                mongo.getDB(databaseName).getCollection(collection).dropIndex(indexName);
-            } else {
-                LOG.warn("[Ox] Ignoring Index Removal Action " +
-                        "because no index was found with name: " + indexName);
-            }
-        } else {
-            LOG.info("[Ox] Removing index... (Existing or not!). Index name: " + indexName);
+        if (doesItExists) {
+            LOG.info("[Ox] Index exists! Removing... Index name: " + indexName);
             mongo.getDB(databaseName).getCollection(collection).dropIndex(indexName);
+        } else {
+            LOG.warn("[Ox] Ignoring Index Removal Action " +
+                    "because no index was found with name: " + indexName);
         }
 
     }

@@ -13,7 +13,7 @@ public class V0001__first_migration implements Migration {
                 .createIndex("my_index1")
                 .setCollection("test_col1")
                 .addAttribute("attr1", OrderingType.ASC)
-                .unique().dropDups());
+                .unique());
     }
 
     @Override

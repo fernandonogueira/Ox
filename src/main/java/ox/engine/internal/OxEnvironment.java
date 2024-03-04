@@ -1,6 +1,6 @@
 package ox.engine.internal;
 
-import com.mongodb.DB;
+import com.mongodb.client.MongoDatabase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +37,7 @@ public class OxEnvironment {
      *
      * @return the connected database
      */
-    public DB getMongoDatabase() {
+    public MongoDatabase getMongoDatabase() {
         return mongoConnector.getMongoDatabase();
     }
 

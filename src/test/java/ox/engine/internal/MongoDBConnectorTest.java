@@ -1,9 +1,8 @@
 package ox.engine.internal;
 
-import com.mongodb.*;
-import com.mongodb.client.MongoCursor;
-import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.MongoIterable;
+import com.mongodb.MongoClient;
+import com.mongodb.client.*;
+import org.bson.Document;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,7 +13,6 @@ import ox.engine.structure.OrderingType;
 import ox.utils.Faker;
 import ox.utils.TestUtils;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -101,20 +99,21 @@ public class MongoDBConnectorTest {
         LinkedHashMap<String, OrderingType> attrs = new LinkedHashMap<>();
         attrs.put("attr1", OrderingType.GEO_2DSPHERE);
 
-        DB db = Mockito.mock(DB.class);
-        DBCollection collection = Mockito.mock(DBCollection.class);
-        List<DBObject> indexInfo = new ArrayList<>();
+        Document dbObjectKeys = new Document("attr1", "2dsphere");
+        Document dbObject = new Document("key", dbObjectKeys);
 
-        BasicDBObject dbObjectKeys = new BasicDBObject("attr1", "2dsphere");
-        BasicDBObject dbObject = new BasicDBObject("key", dbObjectKeys);
-
-        indexInfo.add(dbObject);
-
-        Mockito.when(mockedMongo.getDB(Mockito.anyString())).thenReturn(db);
+        ListIndexesIterable<Document> indexInfo = Mockito.mock(ListIndexesIterable.class);
+        MongoDatabase db = Mockito.mock(MongoDatabase.class);
+        MongoCollection collection = Mockito.mock(MongoCollection.class);
+        Mockito.when(connector.getConfig().getMongo().getDatabase(Mockito.anyString())).thenReturn(db);
         Mockito.when(db.getCollection(Mockito.anyString())).thenReturn(collection);
-        Mockito.when(collection.getIndexInfo()).thenReturn(indexInfo);
+        Mockito.when(collection.listIndexes()).thenReturn(indexInfo);
+        Mockito.when(indexInfo.into(Mockito.anyList())).thenReturn(Collections.singletonList(dbObject));
 
-        Assert.assertTrue(connector.verifyIfIndexExists(attrs, "myIndexTest", "myCollection"));
+        boolean indexExists = connector
+                .verifyIfIndexExists(attrs, "myIndexTest", "myCollection");
+
+        Assert.assertTrue(indexExists);
     }
 
     /**
@@ -136,20 +135,21 @@ public class MongoDBConnectorTest {
         LinkedHashMap<String, OrderingType> attrs = new LinkedHashMap<>();
         attrs.put("attr1", OrderingType.ASC);
 
-        DB db = Mockito.mock(DB.class);
-        DBCollection collection = Mockito.mock(DBCollection.class);
-        List<DBObject> indexInfo = new ArrayList<>();
+        MongoDatabase db = Mockito.mock(MongoDatabase.class);
+        MongoCollection collection = Mockito.mock(MongoCollection.class);
+        ListIndexesIterable indexInfo = Mockito.mock(ListIndexesIterable.class);
 
-        BasicDBObject dbObjectKeys = new BasicDBObject("attr1", 1);
-        BasicDBObject dbObject = new BasicDBObject("key", dbObjectKeys);
+        Document dbObjectKeys = new Document("attr1", 1);
+        Document dbObject = new Document("key", dbObjectKeys);
 
-        indexInfo.add(dbObject);
-
-        Mockito.when(mockedMongo.getDB(Mockito.anyString())).thenReturn(db);
+        Mockito.when(mockedMongo.getDatabase(Mockito.anyString())).thenReturn(db);
         Mockito.when(db.getCollection(Mockito.anyString())).thenReturn(collection);
-        Mockito.when(collection.getIndexInfo()).thenReturn(indexInfo);
+        Mockito.when(collection.listIndexes()).thenReturn(indexInfo);
+        Mockito.when(indexInfo.into(Mockito.anyList())).thenReturn(Collections.singletonList(dbObject));
 
-        Assert.assertTrue(connector.verifyIfIndexExists(attrs, "myIndexTest", "myCollection"));
+        boolean indexExists = connector.verifyIfIndexExists(attrs, "myIndexTest", "myCollection");
+
+        Assert.assertTrue(indexExists);
     }
 
     /**
@@ -174,15 +174,16 @@ public class MongoDBConnectorTest {
         LinkedHashMap<String, OrderingType> attrs = new LinkedHashMap<>();
         attrs.put("attr1", OrderingType.ASC);
 
-        DB db = Mockito.mock(DB.class);
-        DBCollection collection = Mockito.mock(DBCollection.class);
-        List<DBObject> indexInfo = new ArrayList<>();
-
-        Mockito.when(mockedMongo.getDB(Mockito.anyString())).thenReturn(db);
+        ListIndexesIterable<Document> indexInfo = Mockito.mock(ListIndexesIterable.class);
+        MongoDatabase db = Mockito.mock(MongoDatabase.class);
+        MongoCollection collection = Mockito.mock(MongoCollection.class);
+        Mockito.when(connector.getConfig().getMongo().getDatabase(Mockito.anyString())).thenReturn(db);
         Mockito.when(db.getCollection(Mockito.anyString())).thenReturn(collection);
-        Mockito.when(collection.getIndexInfo()).thenReturn(indexInfo);
+        Mockito.when(collection.listIndexes()).thenReturn(indexInfo);
+        Mockito.when(indexInfo.into(Mockito.anyList())).thenReturn(Collections.emptyList());
 
-        Assert.assertFalse(connector.verifyIfIndexExists(attrs, "myIndexTest", "myCollection"));
+        boolean indexExists = connector.verifyIfIndexExists(attrs, "myIndexTest", "myCollection");
+        Assert.assertFalse(indexExists);
     }
 
     /**
@@ -204,23 +205,23 @@ public class MongoDBConnectorTest {
         LinkedHashMap<String, OrderingType> attrs = new LinkedHashMap<>();
         attrs.put("attr1", OrderingType.ASC);
 
-        DB db = Mockito.mock(DB.class);
-        DBCollection collection = Mockito.mock(DBCollection.class);
-        List<DBObject> indexInfo = new ArrayList<>();
+        Document dbObjectKeys = new Document("attr1", 1)
+                .append("attr2Geo", "2dsphere");
 
-        BasicDBObject dbObjectKeys = new BasicDBObject("attr1", 1);
-        dbObjectKeys.append("attr2Geo", "2dsphere");
+        Document dbObject = new Document("key", dbObjectKeys)
+                .append("name", "myIndexTest");
 
-        BasicDBObject dbObject = new BasicDBObject("key", dbObjectKeys);
-        dbObject.append("name", "myIndexTest");
-
-        indexInfo.add(dbObject);
-
-        Mockito.when(mockedMongo.getDB(Mockito.anyString())).thenReturn(db);
+        ListIndexesIterable<Document> indexInfo = Mockito.mock(ListIndexesIterable.class);
+        MongoDatabase db = Mockito.mock(MongoDatabase.class);
+        MongoCollection collection = Mockito.mock(MongoCollection.class);
+        Mockito.when(connector.getConfig().getMongo().getDatabase(Mockito.anyString())).thenReturn(db);
         Mockito.when(db.getCollection(Mockito.anyString())).thenReturn(collection);
-        Mockito.when(collection.getIndexInfo()).thenReturn(indexInfo);
+        Mockito.when(collection.listIndexes()).thenReturn(indexInfo);
+        Mockito.when(indexInfo.into(Mockito.anyList())).thenReturn(Collections.singletonList(dbObject));
 
-        Assert.assertTrue(connector.verifyIfIndexExists(attrs, "myIndexTest", "myCollection"));
+        boolean indexExists = connector.verifyIfIndexExists(attrs, "myIndexTest", "myCollection");
+
+        Assert.assertTrue(indexExists);
     }
 
     /**
@@ -232,10 +233,9 @@ public class MongoDBConnectorTest {
 
         MongoDBConnector connector = TestUtils.newMongoDBConnector();
 
-        DB db = Mockito.mock(DB.class);
-
-        DBCollection collection = Mockito.mock(DBCollection.class);
-        Mockito.when(connector.getConfig().getMongo().getDB(Mockito.anyString())).thenReturn(db);
+        MongoDatabase db = Mockito.mock(MongoDatabase.class);
+        MongoCollection collection = Mockito.mock(MongoCollection.class);
+        Mockito.when(connector.getConfig().getMongo().getDatabase(Mockito.anyString())).thenReturn(db);
         Mockito.when(db.getCollection(Mockito.anyString())).thenReturn(collection);
 
         connector.insertMigrationVersion(10);
@@ -249,10 +249,9 @@ public class MongoDBConnectorTest {
     public void removeMigrationVersionTest() {
 
         MongoDBConnector connector = TestUtils.newMongoDBConnector();
-        DB db = Mockito.mock(DB.class);
-
-        DBCollection collection = Mockito.mock(DBCollection.class);
-        Mockito.when(connector.getConfig().getMongo().getDB(Mockito.anyString())).thenReturn(db);
+        MongoDatabase db = Mockito.mock(MongoDatabase.class);
+        MongoCollection collection = Mockito.mock(MongoCollection.class);
+        Mockito.when(connector.getConfig().getMongo().getDatabase(Mockito.anyString())).thenReturn(db);
         Mockito.when(db.getCollection(Mockito.anyString())).thenReturn(collection);
 
         connector.removeMigrationVersion(10);
@@ -262,9 +261,9 @@ public class MongoDBConnectorTest {
     public void dropIndexByNameTest() {
         MongoDBConnector connector = TestUtils.newMongoDBConnector();
 
-        DB db = Mockito.mock(DB.class);
-        DBCollection collection = Mockito.mock(DBCollection.class);
-        Mockito.when(connector.getConfig().getMongo().getDB(Mockito.anyString())).thenReturn(db);
+        MongoDatabase db = Mockito.mock(MongoDatabase.class);
+        MongoCollection collection = Mockito.mock(MongoCollection.class);
+        Mockito.when(connector.getConfig().getMongo().getDatabase(Mockito.anyString())).thenReturn(db);
         Mockito.when(db.getCollection(Mockito.anyString())).thenReturn(collection);
 
         connector.dropIndexByName("collection", "indexName");
@@ -280,44 +279,6 @@ public class MongoDBConnectorTest {
     public void dropIndexByNameIndexNullTest() {
         MongoDBConnector connector = TestUtils.newMongoDBConnector();
         connector.dropIndexByName("collection", null);
-    }
-
-    @Test
-    public void dropIndexByNameDatabaseNotNullTest() {
-
-        MongoClient mockedMongo = Mockito.mock(MongoClient.class);
-        DB db = Mockito.mock(DB.class);
-        DBCollection collection = Mockito.mock(DBCollection.class);
-
-        Mockito.when(db.getCollection(Mockito.anyString())).thenReturn(collection);
-        Mockito.when(mockedMongo.getDB(Mockito.anyString())).thenReturn(db);
-
-        MongoDBConnector connector = new MongoDBConnector(
-                MongoDBConnectorConfig
-                        .builder()
-                        .setMongoClient(mockedMongo)
-                        .setDatabaseName("databaseName")
-                        .build());
-        connector.dropIndexByName("collection", "indexName");
-    }
-
-    @Test
-    public void createIndexTest() {
-
-        MongoClient mockedMongo = Mockito.mock(MongoClient.class);
-        DB db = Mockito.mock(DB.class);
-        DBCollection collection = Mockito.mock(DBCollection.class);
-
-        Mockito.when(mockedMongo.getDB(Mockito.anyString())).thenReturn(db);
-        Mockito.when(db.getCollection(Mockito.anyString())).thenReturn(collection);
-
-        MongoDBConnector connector = new MongoDBConnector(
-                MongoDBConnectorConfig.builder()
-                        .setMongoClient(mockedMongo)
-                        .setDatabaseName("databaseName")
-                        .build());
-
-        connector.createIndex("coll", new BasicDBObject(), new BasicDBObject());
     }
 
 }
