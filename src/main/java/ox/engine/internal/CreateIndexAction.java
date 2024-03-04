@@ -17,7 +17,6 @@ import java.util.Set;
 public class CreateIndexAction extends OxAction {
 
     private static final Logger LOG = LoggerFactory.getLogger(CreateIndexAction.class);
-
     private final Map<String, OrderingType> attributes = new LinkedHashMap<>();
 
     private final String indexName;
@@ -151,7 +150,6 @@ public class CreateIndexAction extends OxAction {
         if (attributes.size() > 1 && ttlIndex) {
             throw new InvalidMigrateActionException("TTL indexes can not have more than 1 attribute");
         }
-
     }
 
     @Override

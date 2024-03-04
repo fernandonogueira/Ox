@@ -9,9 +9,12 @@ public class TestUtils {
 
     public static MongoDBConnector newMongoDBConnector() {
         MongoClient mockedMongo = Mockito.mock(MongoClient.class);
-        return new MongoDBConnector(MongoDBConnectorConfig
-                .create()
+
+        MongoDBConnectorConfig config = MongoDBConnectorConfig.builder()
                 .setMongoClient(mockedMongo)
-                .setDatabaseName(Faker.fakeDBName()));
+                .setDatabaseName(Faker.fakeDBName())
+                .build();
+
+        return new MongoDBConnector(config);
     }
 }

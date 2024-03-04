@@ -7,6 +7,7 @@ import com.mongodb.client.MongoCursor;
 import org.bson.Document;
 import org.junit.Test;
 import ox.engine.Ox;
+import ox.engine.OxConfig;
 import ox.engine.exception.InvalidMongoConfiguration;
 import ox.integration.base.OxBaseContainerTest;
 
@@ -20,11 +21,14 @@ public class OutOfSequenceTest extends OxBaseContainerTest {
         String migrationsPackage = "ox.integration.outofsequence.migrations";
 
         MongoClient mongo = getDefaultMongo();
-        Ox ox = Ox.setUp(
-                mongo,
-                migrationsPackage + ".step1",
-                "oxOutOfSequenceTest",
-                true);
+
+        OxConfig config = OxConfig.builder()
+                .mongo(mongo)
+                .databaseName("oxOutOfSequenceTest")
+                .scanPackage(migrationsPackage + ".step1")
+                .build();
+
+        Ox ox = Ox.setUp(config);
 
         Integer databaseVersion = ox.databaseVersion();
         assertThat(databaseVersion)
@@ -35,22 +39,26 @@ public class OutOfSequenceTest extends OxBaseContainerTest {
         databaseVersion = ox.databaseVersion();
         assertThat(databaseVersion).isEqualTo(1);
 
-        ox = Ox.setUp(
-                mongo,
-                migrationsPackage + ".step2",
-                "oxOutOfSequenceTest",
-                true);
+        config = OxConfig.builder()
+                .mongo(mongo)
+                .databaseName("oxOutOfSequenceTest")
+                .scanPackage(migrationsPackage + ".step2")
+                .build();
+
+        ox = Ox.setUp(config);
 
         ox.up();
         databaseVersion = ox.databaseVersion();
 
         assertThat(databaseVersion).isEqualTo(3);
 
-        ox = Ox.setUp(
-                mongo,
-                migrationsPackage + ".step3",
-                "oxOutOfSequenceTest",
-                true);
+        config = OxConfig.builder()
+                .mongo(mongo)
+                .databaseName("oxOutOfSequenceTest")
+                .scanPackage(migrationsPackage + ".step3")
+                .build();
+
+        ox = Ox.setUp(config);
 
         ox.up();
         databaseVersion = ox.databaseVersion();

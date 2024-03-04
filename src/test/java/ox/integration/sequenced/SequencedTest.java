@@ -2,6 +2,7 @@ package ox.integration.sequenced;
 
 import com.mongodb.MongoClient;
 import org.junit.Test;
+import ox.engine.OxConfig;
 import ox.integration.base.OxBaseContainerTest;
 import ox.engine.Ox;
 import ox.engine.exception.InvalidMongoConfiguration;
@@ -13,11 +14,14 @@ public class SequencedTest extends OxBaseContainerTest {
     @Test
     public void orderedMigrationsTest() throws InvalidMongoConfiguration {
         MongoClient mongo = getDefaultMongo();
-        Ox ox = Ox.setUp(
-                mongo,
-                "ox.integration.sequenced.migrations.step1",
-                "oxSequencedTest",
-                true);
+
+        OxConfig config = OxConfig.builder()
+                .mongo(mongo)
+                .databaseName("oxSequencedTest")
+                .scanPackage("ox.integration.sequenced.migrations.step1")
+                .build();
+
+        Ox ox = Ox.setUp(config);
 
         Integer databaseVersion = ox.databaseVersion();
         assertThat(databaseVersion)
@@ -28,11 +32,13 @@ public class SequencedTest extends OxBaseContainerTest {
         databaseVersion = ox.databaseVersion();
         assertThat(databaseVersion).isEqualTo(1);
 
-        ox = Ox.setUp(
-                mongo,
-                "ox.integration.sequenced.migrations.step2",
-                "oxSequencedTest",
-                true);
+        config = OxConfig.builder()
+                .mongo(mongo)
+                .databaseName("oxSequencedTest")
+                .scanPackage("ox.integration.sequenced.migrations.step2")
+                .build();
+
+        ox = Ox.setUp(config);
 
         ox.up();
         databaseVersion = ox.databaseVersion();

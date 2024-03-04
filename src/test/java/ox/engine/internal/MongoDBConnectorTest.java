@@ -1,19 +1,21 @@
 package ox.engine.internal;
 
 import com.mongodb.*;
+import com.mongodb.client.MongoCursor;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.MongoIterable;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
-import ox.Configuration;
 import ox.engine.exception.InvalidCollectionException;
-import ox.engine.exception.InvalidMongoDatabaseConfiguration;
 import ox.engine.structure.OrderingType;
 import ox.utils.Faker;
 import ox.utils.TestUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -25,117 +27,23 @@ public class MongoDBConnectorTest {
         return Mockito.mock(MongoClient.class);
     }
 
-    private static DB createMockedDB(boolean collectionExists) {
+    private static MongoDatabase createMockedDB(List<String> existingCollections) {
 
-        DB db = Mockito.mock(DB.class);
-        Mockito
-                .when(db.collectionExists(Mockito.anyString()))
-                .thenReturn(collectionExists).thenReturn(true);
+        MongoDatabase db = Mockito.mock(MongoDatabase.class);
 
-        DBCollection dbCollection = Mockito.mock(DBCollection.class);
+        MongoIterable<String> iterable = Mockito.mock(MongoIterable.class);
+        MongoCursor<String> cursor = Mockito.mock(MongoCursor.class);
 
-        Mockito
-                .when((db.getCollection(Mockito.anyString()))).thenReturn(dbCollection);
+        Mockito.when(db.listCollectionNames()).thenReturn(iterable);
+        Mockito.when(iterable.iterator()).thenReturn(cursor);
 
-        DBCursor dbCursor = Mockito.mock(DBCursor.class, "dbCursor1");
-
-        Mockito.when(dbCollection.find()).thenReturn(dbCursor);
-        Mockito.when(dbCursor.sort(Mockito.any(DBObject.class))).thenReturn(dbCursor);
-        Mockito.when(dbCursor.limit(1)).thenReturn(dbCursor);
-        Mockito.when(dbCursor.hasNext()).thenReturn(true).thenReturn(false);
-
-        BasicDBObject o = new BasicDBObject();
-        o.append(Configuration.MIGRATION_COLLECTION_VERSION_ATTRIBUTE, 1);
-
-        Mockito.when(dbCursor.next()).thenReturn(o);
+        if (!existingCollections.isEmpty()) {
+            Mockito.when(cursor.hasNext()).thenReturn(true).thenReturn(false);
+        } else {
+            Mockito.when(cursor.hasNext()).thenReturn(false);
+        }
 
         return db;
-    }
-
-    /**
-     * Validates if no database is found
-     */
-    @Test(expected = InvalidMongoDatabaseConfiguration.class)
-    public void mongoDBConnectorNoDatabaseValidationTest() {
-        TestUtils.newMongoDBConnector().retrieveDatabaseCurrentVersion();
-    }
-
-    /**
-     * The configured database doesn't exists
-     * and can't be created because automatic
-     * creation is not set true
-     */
-    @Test(expected = InvalidMongoDatabaseConfiguration.class)
-    public void mongoDBConnectorDatabaseNotFoundAndAutoCreationNotSetTest() {
-
-        MongoClient mockedMongo = Mockito.mock(MongoClient.class);
-
-        MongoDBConnector connector = new MongoDBConnector(MongoDBConnectorConfig
-                .create()
-                .setMongoClient(mockedMongo)
-                .setDatabaseName("invalidDatabase")
-                .createCollectionIfDontExists(false));
-
-        ArrayList<String> dbNames = new ArrayList<>();
-        dbNames.add("myDBName");
-
-        Mockito
-                .when(mockedMongo.getDatabaseNames())
-                .thenReturn(dbNames);
-
-        connector.retrieveDatabaseCurrentVersion();
-    }
-
-    /**
-     * Validates the migration_versions get version method
-     */
-    @Test
-    public void mongoDBConnectorGetSchemaVersionTest() {
-
-        MongoDBConnector connector = TestUtils.newMongoDBConnector();
-        List<String> dbNames = new ArrayList<>();
-
-        dbNames.add(connector.getConfig().getDatabaseName());
-        Mockito
-                .when(connector.getConfig().getMongo().getDatabaseNames())
-                .thenReturn(dbNames);
-
-        DB db = createMockedDB(true);
-
-        Mockito.when(connector.getConfig().getMongo().getDB(Mockito.anyString())).thenReturn(db);
-
-        Integer version = connector.retrieveDatabaseCurrentVersion();
-        Assert.assertEquals("DB Schema Version must be 1", Integer.valueOf(1), version);
-    }
-
-    /**
-     * Tests the method that verifies
-     * if the migration_versions collection exists
-     */
-    @Test
-    public void mongoDBConnectorCreateSchemaVersionCollectionIfNotExists() {
-
-        MongoClient mockedMongo = Mockito.mock(MongoClient.class);
-
-        String fakeDB = Faker.fakeDBName();
-
-        MongoDBConnector connector = new MongoDBConnector(MongoDBConnectorConfig
-                .create()
-                .setMongoClient(mockedMongo)
-                .setDatabaseName(fakeDB)
-                .createCollectionIfDontExists(true));
-
-        List<String> dbNames = new ArrayList<>();
-        dbNames.add(fakeDB);
-
-        Mockito
-                .when(connector.getConfig().getMongo().getDatabaseNames())
-                .thenReturn(dbNames);
-
-        DB db = createMockedDB(false);
-        Mockito.when(connector.getConfig().getMongo().getDB(Mockito.anyString())).thenReturn(db);
-
-        connector.retrieveDatabaseCurrentVersion();
     }
 
     /**
@@ -150,9 +58,8 @@ public class MongoDBConnectorTest {
 
         OxAction action = Mockito.mock(OxAction.class);
 
-        DB db = createMockedDB(false);
-        Mockito.when(connector.getConfig().getMongo().getDB(Mockito.anyString())).thenReturn(db);
-        Mockito.when(db.collectionExists(Mockito.anyString())).thenReturn(false);
+        MongoDatabase db = createMockedDB(Collections.emptyList());
+        Mockito.when(connector.getConfig().getMongo().getDatabase(Mockito.anyString())).thenReturn(db);
         Mockito.when(action.getCollection()).thenReturn("aTestCollection");
 
         connector.executeCommand(action);
@@ -163,11 +70,11 @@ public class MongoDBConnectorTest {
 
         MongoClient mockedMongo = Mockito.mock(MongoClient.class);
 
-        MongoDBConnector connector = new MongoDBConnector(MongoDBConnectorConfig
-                .create()
-                .createCollectionIfDontExists(true)
-                .setMongoClient(mockedMongo)
-                .setDatabaseName(Faker.fakeDBName()));
+        MongoDBConnector connector = new MongoDBConnector(
+                MongoDBConnectorConfig.builder()
+                        .setMongoClient(mockedMongo)
+                        .setDatabaseName(Faker.fakeDBName())
+                        .build());
 
         OxAction action = Mockito.mock(OxAction.class);
         Mockito.when(action.getCollection()).thenReturn(null);
@@ -185,11 +92,9 @@ public class MongoDBConnectorTest {
 
         MongoClient mockedMongo = Mockito.mock(MongoClient.class);
 
-        MongoDBConnectorConfig config = MongoDBConnectorConfig
-                .create()
-                .createCollectionIfDontExists(true)
+        MongoDBConnectorConfig config = MongoDBConnectorConfig.builder()
                 .setMongoClient(mockedMongo)
-                .setDatabaseName("myDB");
+                .setDatabaseName("myDB").build();
 
         MongoDBConnector connector = new MongoDBConnector(config);
 
@@ -222,11 +127,9 @@ public class MongoDBConnectorTest {
 
         MongoClient mockedMongo = Mockito.mock(MongoClient.class);
 
-        MongoDBConnectorConfig config = MongoDBConnectorConfig
-                .create()
-                .createCollectionIfDontExists(true)
+        MongoDBConnectorConfig config = MongoDBConnectorConfig.builder()
                 .setMongoClient(mockedMongo)
-                .setDatabaseName(Faker.fakeDBName());
+                .setDatabaseName(Faker.fakeDBName()).build();
 
         MongoDBConnector connector = new MongoDBConnector(config);
 
@@ -262,11 +165,9 @@ public class MongoDBConnectorTest {
 
         MongoClient mockedMongo = newMockedMongo();
 
-        MongoDBConnectorConfig config = MongoDBConnectorConfig
-                .create()
-                .createCollectionIfDontExists(true)
+        MongoDBConnectorConfig config = MongoDBConnectorConfig.builder()
                 .setMongoClient(mockedMongo)
-                .setDatabaseName("myDB");
+                .setDatabaseName("myDB").build();
 
         MongoDBConnector connector = new MongoDBConnector(config);
 
@@ -294,11 +195,9 @@ public class MongoDBConnectorTest {
 
         MongoClient mockedMongo = newMockedMongo();
 
-        MongoDBConnectorConfig config = MongoDBConnectorConfig
-                .create()
-                .createCollectionIfDontExists(true)
+        MongoDBConnectorConfig config = MongoDBConnectorConfig.builder()
                 .setMongoClient(mockedMongo)
-                .setDatabaseName("myDB");
+                .setDatabaseName("myDB").build();
 
         MongoDBConnector connector = new MongoDBConnector(config);
 
@@ -393,11 +292,12 @@ public class MongoDBConnectorTest {
         Mockito.when(db.getCollection(Mockito.anyString())).thenReturn(collection);
         Mockito.when(mockedMongo.getDB(Mockito.anyString())).thenReturn(db);
 
-        MongoDBConnector connector = new MongoDBConnector(MongoDBConnectorConfig
-                .create()
-                .setMongoClient(mockedMongo)
-                .createCollectionIfDontExists(true)
-                .setDatabaseName("databaseName"));
+        MongoDBConnector connector = new MongoDBConnector(
+                MongoDBConnectorConfig
+                        .builder()
+                        .setMongoClient(mockedMongo)
+                        .setDatabaseName("databaseName")
+                        .build());
         connector.dropIndexByName("collection", "indexName");
     }
 
@@ -411,14 +311,13 @@ public class MongoDBConnectorTest {
         Mockito.when(mockedMongo.getDB(Mockito.anyString())).thenReturn(db);
         Mockito.when(db.getCollection(Mockito.anyString())).thenReturn(collection);
 
-        MongoDBConnector connector = new MongoDBConnector(MongoDBConnectorConfig
-                .create()
-                .setMongoClient(mockedMongo)
-                .createCollectionIfDontExists(true)
-                .setDatabaseName("databaseName"));
+        MongoDBConnector connector = new MongoDBConnector(
+                MongoDBConnectorConfig.builder()
+                        .setMongoClient(mockedMongo)
+                        .setDatabaseName("databaseName")
+                        .build());
 
         connector.createIndex("coll", new BasicDBObject(), new BasicDBObject());
     }
-
 
 }
