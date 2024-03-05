@@ -34,7 +34,7 @@ public class CreateIfNotExistsIndexTest extends OxBaseContainerTest {
 
         Assertions.assertThat(allIndexes).isEmpty();
 
-        Ox ox = Ox.setUp(config);
+        Ox ox = Ox.configure(config);
         ox.up();
 
         allIndexes = getDefaultMongo()

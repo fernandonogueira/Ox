@@ -11,7 +11,7 @@ public class OxMigrationTest {
 
     @Test(expected = InvalidMongoDatabaseConfiguration.class)
     public void validateInvalidMongoInstance() throws InvalidMongoConfiguration {
-        Ox.setUp(null, "ox.db.migrations", "myDB").up();
+        Ox.configure(null, "ox.db.migrations", "myDB").up();
     }
 
 }

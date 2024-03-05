@@ -22,7 +22,7 @@ public class RollbackTest extends OxBaseContainerTest {
                 .scanPackage("ox.db.migrations")
                 .build();
 
-        Ox ox = Ox.setUp(config);
+        Ox ox = Ox.configure(config);
 
         ox.up();
         assertThat(ox.databaseVersion()).isEqualTo(10);

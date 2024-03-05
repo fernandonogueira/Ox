@@ -4,14 +4,15 @@ import com.mongodb.MongoClient;
 import org.bson.Document;
 import org.junit.Test;
 import ox.engine.Ox;
+import ox.engine.OxCollectionsConfig;
 import ox.engine.OxConfig;
-import ox.engine.exception.CouldNotCreateCollectionException;
 import ox.engine.exception.InvalidMongoConfiguration;
+import ox.engine.exception.MissingMigrationHistoryCollectionException;
 import ox.integration.base.OxBaseContainerTest;
 
 public class DoNotCreateMigrationsCollectionTest extends OxBaseContainerTest {
 
-    @Test(expected = CouldNotCreateCollectionException.class)
+    @Test(expected = MissingMigrationHistoryCollectionException.class)
     public void shouldNotCreateMigrationsCollection() throws InvalidMongoConfiguration {
 
         MongoClient mongo = getDefaultMongo();
@@ -23,10 +24,12 @@ public class DoNotCreateMigrationsCollectionTest extends OxBaseContainerTest {
                 .mongo(mongo)
                 .databaseName("withoutSchemaMigrationsCollection")
                 .scanPackage("ox.db.migrations")
-                .disableMigrationCollectionCreation()
+                .collectionsConfig(OxCollectionsConfig.builder()
+                        .createMigrationCollection(false)
+                        .build())
                 .build();
 
-        Ox ox = Ox.setUp(config);
+        Ox ox = Ox.configure(config);
 
         ox.databaseVersion();
 

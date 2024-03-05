@@ -5,14 +5,14 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import ox.engine.exception.InvalidMongoConfiguration;
+import ox.engine.exception.InvalidMigrateActionException;
 import ox.engine.structure.OrderingType;
 
 @RunWith(MockitoJUnitRunner.class)
 public class OxEnvironmentTest {
 
     @InjectMocks
-    private OxEnvironment e = new OxEnvironment();
+    private OxEnvironment e = new OxEnvironmentImpl();
 
     @Mock
     private MongoDBConnector mongoConnector;
@@ -20,10 +20,9 @@ public class OxEnvironmentTest {
     /**
      * Validates the OxEnvironment.execute() method
      *
-     * @throws InvalidMongoConfiguration
      */
     @Test
-    public void environmentTest() throws InvalidMongoConfiguration {
+    public void environmentTest() throws InvalidMigrateActionException {
 
         OxAction action = OxAction
                 .createIndex("IndexName")

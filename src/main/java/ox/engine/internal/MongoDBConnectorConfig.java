@@ -87,9 +87,9 @@ public final class MongoDBConnectorConfig {
         return new MongoDBConnectorConfig(
                 oxConfig.mongo(),
                 oxConfig.databaseName(),
-                oxConfig.migrationCollectionName(),
-                oxConfig.createMigrationCollection(),
-                oxConfig.failOnMissingCollection()
+                oxConfig.collectionsConfig().migrationCollectionName(),
+                oxConfig.collectionsConfig().createMigrationCollection(),
+                oxConfig.extras().failOnMissingCollection()
         );
     }
 

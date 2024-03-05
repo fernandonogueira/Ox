@@ -22,7 +22,7 @@ public class CreateTTLIndexTest extends OxBaseContainerTest {
                 .scanPackage("ox.integration.ttl.migrations")
                 .build();
 
-        Ox ox = Ox.setUp(config);
+        Ox ox = Ox.configure(config);
         ox.up();
 
         List<Document> allIndexes = getDefaultMongo()

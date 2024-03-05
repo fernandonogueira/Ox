@@ -165,7 +165,7 @@ public class CreateIndexAction extends OxAction {
 
     }
 
-    private IndexOptions generateCreateIndexOptions() {
+    protected IndexOptions generateCreateIndexOptions() {
         IndexOptions opts = new IndexOptions();
         opts.background(true);
         opts.name(indexName);
@@ -178,7 +178,7 @@ public class CreateIndexAction extends OxAction {
         return opts;
     }
 
-    private BasicDBObject parseAttributesToDBObject() {
+    protected BasicDBObject parseAttributesToDBObject() {
         Set<Map.Entry<String, OrderingType>> entries = attributes.entrySet();
         Iterator<Map.Entry<String, OrderingType>> it = entries.iterator();
 

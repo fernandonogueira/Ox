@@ -1,14 +1,14 @@
 package ox.engine;
 
 import com.mongodb.MongoClient;
+import com.mongodb.ReadPreference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ox.engine.exception.InvalidMongoConfiguration;
+import ox.engine.exception.InvalidMongoDatabaseConfiguration;
+import ox.engine.exception.InvalidReadPreferenceException;
 import ox.engine.exception.OxException;
-import ox.engine.internal.MongoDBConnector;
-import ox.engine.internal.MongoDBConnectorConfig;
-import ox.engine.internal.OxEnvironment;
-import ox.engine.internal.ResolvedMigration;
+import ox.engine.internal.*;
 import ox.engine.internal.resources.Location;
 import ox.engine.internal.resources.scanner.Scanner;
 import ox.engine.structure.Migration;
@@ -39,32 +39,61 @@ public final class Ox {
     private static final Logger LOG = LoggerFactory.getLogger(Ox.class);
     private final OxConfig config;
     private final MongoDBConnector mongoConnector;
+    private final LockHandler lockHandler;
 
-    private Ox(OxConfig config) {
+    private Ox(OxConfig config, LockHandler lockHandler) {
         this.config = config;
         this.mongoConnector = new MongoDBConnector(
                 MongoDBConnectorConfig.fromOxConfig(config)
         );
+        this.lockHandler = lockHandler;
     }
 
-    public static Ox setUp(
+    private static void validateConfig(OxConfig config) {
+        if (config.scanPackage() == null || config.scanPackage().isEmpty()) {
+            throw new IllegalArgumentException("Invalid scanPackage.");
+        }
+        if (config.databaseName() == null || config.databaseName().isEmpty()) {
+            throw new IllegalArgumentException("Invalid databaseName.");
+        }
+        if (config.mongo() == null) {
+            throw new InvalidMongoDatabaseConfiguration("MongoClient is null. Please provide a valid MongoClient.");
+        }
+        if (ReadPreference.primary() != config.mongo().getReadPreference()) {
+            throw new InvalidReadPreferenceException();
+        }
+        if (config.collectionsConfig() == null) {
+            throw new IllegalArgumentException("Invalid collectionsConfig.");
+        }
+        if (config.collectionsConfig().migrationCollectionName() == null || config.collectionsConfig().migrationCollectionName().isEmpty()) {
+            throw new IllegalArgumentException("Invalid migrationCollectionName.");
+        }
+        if (config.collectionsConfig().lockCollectionName() == null || config.collectionsConfig().lockCollectionName().isEmpty()) {
+            throw new IllegalArgumentException("Invalid lockCollectionName.");
+        }
+    }
+
+    public static Ox configure(
             OxConfig config
     ) {
-        return new Ox(config);
+        validateConfig(config);
+        LockHandler lockHandler = new LockHandler(config);
+        lockHandler.ensureLockCollectionExists();
+        return new Ox(config, lockHandler);
     }
 
-    public static Ox setUp(
+    public static Ox configure(
             MongoClient mongo,
             String scanPackage,
             String databaseName) {
 
-        OxConfig oxConfig = new OxConfigBuilder()
+        OxConfig oxConfig = OxConfig.builder()
                 .mongo(mongo)
                 .scanPackage(scanPackage)
                 .databaseName(databaseName)
                 .build();
 
-        return new Ox(oxConfig);
+        return configure(oxConfig);
     }
 
     /**
@@ -102,7 +131,7 @@ public final class Ox {
     }
 
     private void validateExecution() throws InvalidMongoConfiguration {
-        if (!config.dryRun() && config.mongo() == null) {
+        if (!config.extras().dryRun() && config.mongo() == null) {
             throw new InvalidMongoConfiguration("Invalid Mongo Configuration. Please fix it and try again.");
         }
     }
@@ -147,15 +176,15 @@ public final class Ox {
                                     ExecutionMode mode,
                                     Integer desiredVersion) {
         Integer currentVersion;
-        if (!config.dryRun()) {
+        if (!config.extras().dryRun()) {
             currentVersion = mongoConnector.retrieveDatabaseCurrentVersion();
         } else {
             currentVersion = 0;
         }
 
         try {
-            OxEnvironment env = new OxEnvironment();
-            env.dryRun(config.dryRun());
+            OxEnvironmentImpl env = new OxEnvironmentImpl();
+            env.dryRun(config.extras().dryRun());
             env.setMongoConnector(mongoConnector);
 
             LOG.info("[Ox] MongoDB Database Current Version: " + currentVersion);
@@ -180,7 +209,7 @@ public final class Ox {
                 }
             }
         } catch (OxException e) {
-            LOG.error("MongoDB Migrations Generic Error", e);
+            LOG.error("[Ox] Runtime error", e);
         }
 
         LOG.info("[Ox] Migration Finished!");

@@ -12,9 +12,12 @@ import org.slf4j.LoggerFactory;
 import ox.Configuration;
 import ox.engine.exception.*;
 import ox.engine.structure.OrderingType;
-import ox.utils.CollectionUtils;
+import ox.utils.IndexUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 public class MongoDBConnector {
 
@@ -74,7 +77,7 @@ public class MongoDBConnector {
                 throw new CouldNotCreateCollectionException("Error trying to create collection.");
             }
         } else {
-            throw new CouldNotCreateCollectionException("Versioning collection doesn't exists and auto collection create is set to false");
+            throw new MissingMigrationHistoryCollectionException("Versioning collection doesn't exists and auto collection create is set to false");
         }
     }
 
@@ -185,7 +188,7 @@ public class MongoDBConnector {
 
         for (Document current : indexList) {
             String remoteIndexName = (String) current.get("name");
-            if (!verifyIfHasSameAttributesWithSameOrder(indexAttributes, current)
+            if (!IndexUtils.verifyIfHasSameAttributesWithSameOrder(indexAttributes, current)
                     && verifyIndexesHaveSameName(indexName, remoteIndexName)) {
                 return true;
             }
@@ -218,7 +221,7 @@ public class MongoDBConnector {
 
         for (Document current : indexList) {
 
-            if (verifyIfHasSameAttributesWithSameOrder(indexAttributes, current)) {
+            if (IndexUtils.verifyIfHasSameAttributesWithSameOrder(indexAttributes, current)) {
                 return true;
             }
 
@@ -238,45 +241,6 @@ public class MongoDBConnector {
             return true;
         }
         return false;
-    }
-
-    private boolean verifyIfHasSameAttributesWithSameOrder(Map<String, OrderingType> indexAttributes, Document current) {
-        if (indexAttributes != null) {
-            Map<String, OrderingType> existingAttributes = identifyIndexAttributesAndOrdering(current);
-
-            if (CollectionUtils.isMapOrderlyEquals(indexAttributes, existingAttributes)) {
-                LOG.info("[Ox] Index already exists. (Same attributes. Same Order); {}", existingAttributes);
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Identify index attributes and ordering from a DBObject
-     * <p/>
-     * This DBObject is the DBObject that contains the info from an index retrieved from Database.
-     *
-     * @param current The DBObject retrieved from the IndexInfo List.
-     * @return A map containing the attributes and ordering
-     */
-    private Map<String, OrderingType> identifyIndexAttributesAndOrdering(Document current) {
-        Map<String, OrderingType> existingAttributes = new LinkedHashMap<>();
-        Document indexAttrs = (Document) current.get("key");
-
-        if (indexAttrs != null) {
-            Set<String> attrKeySet = indexAttrs.keySet();
-
-            for (String currentAttr : attrKeySet) {
-                Object attrOrdering = indexAttrs.get(currentAttr);
-                if (attrOrdering instanceof Integer) {
-                    existingAttributes.put(currentAttr, attrOrdering.equals(1) ? OrderingType.ASC : OrderingType.DESC);
-                } else if (attrOrdering instanceof String) {
-                    existingAttributes.put(currentAttr, OrderingType.GEO_2DSPHERE);
-                }
-            }
-        }
-        return existingAttributes;
     }
 
     public void dropIndexByName(String collection, String indexName) {

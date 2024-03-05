@@ -39,7 +39,7 @@ public class DuplicateIndexTest extends OxBaseContainerTest {
 
         Assertions.assertThat(allIndexes).isEmpty();
 
-        Ox ox = Ox.setUp(config);
+        Ox ox = Ox.configure(config);
         ox.up(1);
 
         allIndexes = getDefaultMongo()

@@ -35,16 +35,5 @@ public abstract class OxAction {
 
     protected abstract void validateAction() throws InvalidMigrateActionException;
 
-    /**
-     * Executes this migrate action
-     *
-     * @param env The OxEnvironment instance
-     * @throws InvalidMigrateActionException if migration is not valid
-     */
-    public void execute(OxEnvironment env) throws InvalidMigrateActionException {
-        validateAction();
-        env.execute(this);
-    }
-
     abstract void runAction(MongoDBConnector mongoDBConnector, MongoClient mongo, String databaseName);
 }

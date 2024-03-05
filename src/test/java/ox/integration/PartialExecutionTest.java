@@ -22,7 +22,7 @@ public class PartialExecutionTest extends OxBaseContainerTest {
                 .scanPackage("ox.db.migrations")
                 .build();
 
-        Ox ox = Ox.setUp(config);
+        Ox ox = Ox.configure(config);
 
         ox.up(2);
         assertThat(ox.databaseVersion()).isEqualTo(2);

@@ -14,7 +14,7 @@ public class RemoveCollectionTest extends OxBaseContainerTest {
     @Test
     public void remoteCollectionTest() throws InvalidMongoConfiguration {
         MongoClient mongo = getDefaultMongo();
-        Ox ox = Ox.setUp(
+        Ox ox = Ox.configure(
                 mongo,
                 "ox.integration.actions.migrations",
                 "removeCollectionTest");

@@ -23,7 +23,7 @@ public class CreateIndexTest extends OxBaseContainerTest {
                 .scanPackage("ox.db.migrations")
                 .build();
 
-        Ox ox = Ox.setUp(config);
+        Ox ox = Ox.configure(config);
         ox.up(1);
 
         List<Document> allIndexes = getDefaultMongo()

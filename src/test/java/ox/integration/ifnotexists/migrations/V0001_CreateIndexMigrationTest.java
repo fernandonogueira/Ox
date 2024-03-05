@@ -11,13 +11,13 @@ public class V0001_CreateIndexMigrationTest implements Migration {
     @Override
     public void up(OxEnvironment env) throws InvalidMigrateActionException {
 
-        OxAction
+        env.execute(OxAction
                 .createIndex("myIndex")
                 .ifNotExists()
                 .setCollection("myCollection")
                 .unique()
                 .addAttribute("attr1", OrderingType.ASC)
-                .execute(env);
+        );
 
     }
 
