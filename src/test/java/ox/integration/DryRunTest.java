@@ -7,7 +7,7 @@ import org.junit.Test;
 import ox.engine.Ox;
 import ox.engine.OxConfig;
 import ox.engine.OxConfigExtras;
-import ox.engine.exception.InvalidMongoConfiguration;
+import ox.engine.exception.InvalidMongoClientConfiguration;
 import ox.integration.base.OxBaseContainerTest;
 
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ import java.util.List;
 public class DryRunTest extends OxBaseContainerTest {
 
     @Test
-    public void dryRunUpTest() throws InvalidMongoConfiguration {
+    public void dryRunUpTest() {
         OxConfig config = OxConfig.builder()
                 .mongo(getDefaultMongo())
                 .databaseName("up_dry_run_db")
@@ -38,7 +38,7 @@ public class DryRunTest extends OxBaseContainerTest {
     }
 
     @Test
-    public void dryRunDownTest() throws InvalidMongoConfiguration {
+    public void dryRunDownTest() {
         OxConfig config = OxConfig.builder()
                 .mongo(getDefaultMongo())
                 .databaseName("up_dry_run_db")

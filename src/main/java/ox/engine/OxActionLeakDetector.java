@@ -7,8 +7,8 @@ import java.util.List;
 
 public class OxActionLeakDetector {
 
-    private static List<OxAction> pendingActions = new ArrayList<>();
-    private static List<OxAction> executedActions = new ArrayList<>();
+    private static final List<OxAction> pendingActions = new ArrayList<>();
+    private static final List<OxAction> executedActions = new ArrayList<>();
 
     protected static void addAction(OxAction action) {
         pendingActions.add(action);

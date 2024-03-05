@@ -8,7 +8,7 @@ import org.bson.Document;
 import org.junit.Test;
 import ox.engine.Ox;
 import ox.engine.OxConfig;
-import ox.engine.exception.InvalidMongoConfiguration;
+import ox.engine.exception.InvalidMongoClientConfiguration;
 import ox.integration.base.OxBaseContainerTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class OutOfSequenceTest extends OxBaseContainerTest {
 
     @Test
-    public void orderedMigrationsTest() throws InvalidMongoConfiguration {
+    public void orderedMigrationsTest() {
 
         String migrationsPackage = "ox.integration.outofsequence.migrations";
 

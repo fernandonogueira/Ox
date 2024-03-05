@@ -5,7 +5,7 @@ import org.bson.Document;
 import org.junit.Test;
 import ox.engine.Ox;
 import ox.engine.OxConfig;
-import ox.engine.exception.InvalidMongoConfiguration;
+import ox.engine.exception.InvalidMongoClientConfiguration;
 import ox.integration.base.OxBaseContainerTest;
 import ox.utils.Faker;
 
@@ -21,7 +21,7 @@ public class DuplicateIndexTest extends OxBaseContainerTest {
      * The index must not be created. This action should be ignored.
      */
     @Test
-    public void shouldIgnoreDuplicateIndex() throws InvalidMongoConfiguration {
+    public void shouldIgnoreDuplicateIndex() {
 
         String pkg = "ox.integration.duplicate.migrations";
         String collection = "test_collection";

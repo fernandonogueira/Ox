@@ -26,10 +26,7 @@ public class CollectionUtilsTest {
         map2.put("attr2", OrderingType.ASC);
         map2.put("attr1", OrderingType.ASC);
 
-        Assert.assertEquals(
-                "Different sorted maps should not be equals",
-                false,
-                CollectionUtils.isMapOrderlyEquals(map1, map2));
+        Assert.assertFalse("Different sorted maps should not be equals", CollectionUtils.isMapOrderlyEquals(map1, map2));
 
     }
 
@@ -48,10 +45,7 @@ public class CollectionUtilsTest {
         map2.put("attr1", OrderingType.ASC);
         map2.put("attr2", OrderingType.ASC);
 
-        Assert.assertEquals(
-                "Different sorted maps should not be equals",
-                true,
-                CollectionUtils.isMapOrderlyEquals(map1, map2));
+        Assert.assertTrue("Different sorted maps should not be equals", CollectionUtils.isMapOrderlyEquals(map1, map2));
 
     }
 
@@ -62,10 +56,7 @@ public class CollectionUtilsTest {
         map2.put("attr1", OrderingType.ASC);
         map2.put("attr2", OrderingType.ASC);
 
-        Assert.assertEquals(
-                "Different sorted maps should not be equals",
-                false,
-                CollectionUtils.isMapOrderlyEquals(null, map2));
+        Assert.assertFalse("Different sorted maps should not be equals", CollectionUtils.isMapOrderlyEquals(null, map2));
 
     }
 
@@ -76,20 +67,14 @@ public class CollectionUtilsTest {
         map1.put("attr1", OrderingType.ASC);
         map1.put("attr2", OrderingType.ASC);
 
-        Assert.assertEquals(
-                "Different sorted maps should not be equals",
-                false,
-                CollectionUtils.isMapOrderlyEquals(map1, null));
+        Assert.assertFalse("Different sorted maps should not be equals", CollectionUtils.isMapOrderlyEquals(map1, null));
 
     }
 
     @Test
     public void validateIsMapOrderlyEqualsWithTwoNullMaps() {
 
-        Assert.assertEquals(
-                "Different sorted maps should not be equals",
-                true,
-                CollectionUtils.isMapOrderlyEquals(null, null));
+        Assert.assertTrue("Different sorted maps should not be equals", CollectionUtils.isMapOrderlyEquals(null, null));
 
     }
 
@@ -106,10 +91,7 @@ public class CollectionUtilsTest {
         LinkedHashMap<String, OrderingType> map2 = new LinkedHashMap<String, OrderingType>();
         map2.put("attr1", OrderingType.ASC);
 
-        Assert.assertEquals(
-                "Different sorted maps should not be equals",
-                false,
-                CollectionUtils.isMapOrderlyEquals(map1, map2));
+        Assert.assertFalse("Different sorted maps should not be equals", CollectionUtils.isMapOrderlyEquals(map1, map2));
 
     }
 

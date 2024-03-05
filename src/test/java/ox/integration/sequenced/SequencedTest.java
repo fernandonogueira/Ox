@@ -5,14 +5,14 @@ import org.junit.Test;
 import ox.engine.OxConfig;
 import ox.integration.base.OxBaseContainerTest;
 import ox.engine.Ox;
-import ox.engine.exception.InvalidMongoConfiguration;
+import ox.engine.exception.InvalidMongoClientConfiguration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SequencedTest extends OxBaseContainerTest {
 
     @Test
-    public void orderedMigrationsTest() throws InvalidMongoConfiguration {
+    public void orderedMigrationsTest() {
         MongoClient mongo = getDefaultMongo();
 
         OxConfig config = OxConfig.builder()

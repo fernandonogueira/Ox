@@ -4,7 +4,6 @@ import com.mongodb.MongoClient;
 import org.junit.Test;
 import ox.engine.Ox;
 import ox.engine.OxConfig;
-import ox.engine.exception.InvalidMongoConfiguration;
 import ox.integration.base.OxBaseContainerTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -12,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class RollbackTest extends OxBaseContainerTest {
 
     @Test
-    public void shouldRollback() throws InvalidMongoConfiguration {
+    public void shouldRollback() {
 
         MongoClient mongo = getDefaultMongo();
 

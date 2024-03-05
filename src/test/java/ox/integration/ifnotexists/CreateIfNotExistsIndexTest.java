@@ -6,7 +6,7 @@ import org.bson.Document;
 import org.junit.Test;
 import ox.engine.Ox;
 import ox.engine.OxConfig;
-import ox.engine.exception.InvalidMongoConfiguration;
+import ox.engine.exception.InvalidMongoClientConfiguration;
 import ox.integration.base.OxBaseContainerTest;
 
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ public class CreateIfNotExistsIndexTest extends OxBaseContainerTest {
      * simplest case of creating an index
      */
     @Test
-    public void shouldCreateIndex() throws InvalidMongoConfiguration {
+    public void shouldCreateIndex() {
         MongoClient mongo = getDefaultMongo();
 
         OxConfig config = OxConfig.builder()

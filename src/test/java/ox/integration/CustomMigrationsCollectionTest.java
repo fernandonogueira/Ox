@@ -6,7 +6,7 @@ import org.junit.Test;
 import ox.engine.Ox;
 import ox.engine.OxCollectionsConfig;
 import ox.engine.OxConfig;
-import ox.engine.exception.InvalidMongoConfiguration;
+import ox.engine.exception.InvalidMongoClientConfiguration;
 import ox.integration.base.OxBaseContainerTest;
 
 import java.util.HashSet;
@@ -17,7 +17,7 @@ import static org.junit.Assert.assertTrue;
 public class CustomMigrationsCollectionTest extends OxBaseContainerTest {
 
     @Test
-    public void shouldCreateCustomMigrationsCollection() throws InvalidMongoConfiguration {
+    public void shouldCreateCustomMigrationsCollection() {
 
         String customCollectionName = "ox_schema_migration_history_custom";
 

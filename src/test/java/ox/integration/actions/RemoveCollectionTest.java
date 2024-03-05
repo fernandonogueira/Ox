@@ -4,7 +4,6 @@ import com.mongodb.MongoClient;
 import org.bson.Document;
 import org.junit.Test;
 import ox.engine.Ox;
-import ox.engine.exception.InvalidMongoConfiguration;
 import ox.integration.base.OxBaseContainerTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -12,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class RemoveCollectionTest extends OxBaseContainerTest {
 
     @Test
-    public void remoteCollectionTest() throws InvalidMongoConfiguration {
+    public void remoteCollectionTest() {
         MongoClient mongo = getDefaultMongo();
         Ox ox = Ox.configure(
                 mongo,

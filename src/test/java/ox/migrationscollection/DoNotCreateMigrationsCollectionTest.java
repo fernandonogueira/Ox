@@ -6,14 +6,14 @@ import org.junit.Test;
 import ox.engine.Ox;
 import ox.engine.OxCollectionsConfig;
 import ox.engine.OxConfig;
-import ox.engine.exception.InvalidMongoConfiguration;
+import ox.engine.exception.InvalidMongoClientConfiguration;
 import ox.engine.exception.MissingMigrationHistoryCollectionException;
 import ox.integration.base.OxBaseContainerTest;
 
 public class DoNotCreateMigrationsCollectionTest extends OxBaseContainerTest {
 
     @Test(expected = MissingMigrationHistoryCollectionException.class)
-    public void shouldNotCreateMigrationsCollection() throws InvalidMongoConfiguration {
+    public void shouldNotCreateMigrationsCollection() {
 
         MongoClient mongo = getDefaultMongo();
         mongo.getDatabase("withoutSchemaMigrationsCollection")

@@ -12,13 +12,13 @@ import ox.engine.OxConfig;
 public final class MongoDBConnectorConfig {
 
     private boolean createMigrationCollection = true;
-    private String migrationCollectionName;
+    private final String migrationCollectionName;
     /**
      * if true, Ox will throw an exception if the collections targeted by the OxActions or Migrations do not exist
      */
-    private boolean failOnMissingCollection;
-    private MongoClient mongo;
-    private String databaseName;
+    private final boolean failOnMissingCollection;
+    private final MongoClient mongo;
+    private final String databaseName;
 
     public static class Builder {
         private boolean createMigrationCollectionIfNotExists = true;

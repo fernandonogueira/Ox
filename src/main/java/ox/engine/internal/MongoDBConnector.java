@@ -26,14 +26,7 @@ public class MongoDBConnector {
 
     public MongoDBConnector(MongoDBConnectorConfig config) {
         LOG.info("[Ox] Configuring MongoDB Access...");
-        if (!isConfigValid(config)) {
-            throw new InvalidMongoDatabaseConfiguration("Database name is null. Cannot proceed.");
-        }
         this.config = config;
-    }
-
-    private boolean isConfigValid(MongoDBConnectorConfig config) {
-        return config != null && config.getDatabaseName() != null && config.getMongo() != null;
     }
 
     protected MongoDBConnectorConfig getConfig() {

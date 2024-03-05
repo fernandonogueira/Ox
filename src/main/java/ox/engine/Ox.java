@@ -4,7 +4,7 @@ import com.mongodb.MongoClient;
 import com.mongodb.ReadPreference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ox.engine.exception.InvalidMongoConfiguration;
+import ox.engine.exception.InvalidMongoClientConfiguration;
 import ox.engine.exception.InvalidMongoDatabaseConfiguration;
 import ox.engine.exception.InvalidReadPreferenceException;
 import ox.engine.exception.OxException;
@@ -54,10 +54,10 @@ public final class Ox {
             throw new IllegalArgumentException("Invalid scanPackage.");
         }
         if (config.databaseName() == null || config.databaseName().isEmpty()) {
-            throw new IllegalArgumentException("Invalid databaseName.");
+            throw new InvalidMongoDatabaseConfiguration("Invalid databaseName");
         }
         if (config.mongo() == null) {
-            throw new InvalidMongoDatabaseConfiguration("MongoClient is null. Please provide a valid MongoClient.");
+            throw new InvalidMongoClientConfiguration("MongoClient is null. Please provide a valid MongoClient.");
         }
         if (ReadPreference.primary() != config.mongo().getReadPreference()) {
             throw new InvalidReadPreferenceException();
@@ -98,42 +98,28 @@ public final class Ox {
 
     /**
      * Run all migrations (UP)
-     *
-     * @throws InvalidMongoConfiguration
      */
-    public void up() throws InvalidMongoConfiguration {
-        validateExecution();
+    public void up() {
         List<ResolvedMigration> migrations = getMigrationsList();
         executeEachMigrate(migrations, ExecutionMode.UP, null);
     }
 
-    public void up(int version) throws InvalidMongoConfiguration {
-        validateExecution();
+    public void up(int version) {
         List<ResolvedMigration> migrations = getMigrationsList();
         executeEachMigrate(migrations, ExecutionMode.UP, version);
     }
 
     /**
      * Run all migrations (DOWN)
-     *
-     * @throws InvalidMongoConfiguration
      */
-    public void down() throws InvalidMongoConfiguration {
-        validateExecution();
+    public void down() {
         List<ResolvedMigration> migrations = getMigrationsList();
         executeEachMigrate(migrations, ExecutionMode.DOWN, null);
     }
 
-    public void down(int version) throws InvalidMongoConfiguration {
-        validateExecution();
+    public void down(int version) {
         List<ResolvedMigration> migrations = getMigrationsList();
         executeEachMigrate(migrations, ExecutionMode.DOWN, version);
-    }
-
-    private void validateExecution() throws InvalidMongoConfiguration {
-        if (!config.extras().dryRun() && config.mongo() == null) {
-            throw new InvalidMongoConfiguration("Invalid Mongo Configuration. Please fix it and try again.");
-        }
     }
 
     private List<ResolvedMigration> resolveMigrations(String scanPackage)
@@ -175,6 +161,10 @@ public final class Ox {
     private void executeEachMigrate(List<ResolvedMigration> migrations,
                                     ExecutionMode mode,
                                     Integer desiredVersion) {
+        // Lock
+        // Run migrations in separate threads while refreshing the lock
+        // Unlock
+
         Integer currentVersion;
         if (!config.extras().dryRun()) {
             currentVersion = mongoConnector.retrieveDatabaseCurrentVersion();
@@ -261,8 +251,7 @@ public final class Ox {
         return new ArrayList<>();
     }
 
-    public Integer databaseVersion() throws InvalidMongoConfiguration {
-        validateExecution();
+    public Integer databaseVersion() {
         return mongoConnector.retrieveDatabaseCurrentVersion();
     }
 

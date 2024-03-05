@@ -11,7 +11,7 @@ public record Lock(
         ZonedDateTime lockDate,
         ZonedDateTime expireAt
 ) {
-    protected static Lock fromDocument(Document document) {
+    static Lock fromDocument(Document document) {
         if (document == null) {
             return null;
         }

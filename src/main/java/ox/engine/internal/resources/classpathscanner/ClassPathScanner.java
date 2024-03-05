@@ -35,6 +35,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -183,8 +184,7 @@ public class ClassPathScanner implements ResourceAndClassScanner {
         boolean locationResolved = !locationUrls.isEmpty();
 
         // Make an additional attempt at finding resources in jar files that don't contain directory entries
-        if (classLoader instanceof URLClassLoader) {
-            URLClassLoader urlClassLoader = (URLClassLoader) classLoader;
+        if (classLoader instanceof URLClassLoader urlClassLoader) {
             for (URL url : urlClassLoader.getURLs()) {
                 if ("file".equals(url.getProtocol())
                         && url.getPath().endsWith(".jar")
@@ -258,7 +258,7 @@ public class ClassPathScanner implements ResourceAndClassScanner {
             }
             while (urls.hasMoreElements()) {
                 URL url = urls.nextElement();
-                locationUrls.add(new URL(URLDecoder.decode(url.toExternalForm(), "UTF-8").replace("/flyway.location", "")));
+                locationUrls.add(new URL(URLDecoder.decode(url.toExternalForm(), StandardCharsets.UTF_8).replace("/flyway.location", "")));
             }
         } else {
             Enumeration<URL> urls = classLoader.getResources(location.getPath());

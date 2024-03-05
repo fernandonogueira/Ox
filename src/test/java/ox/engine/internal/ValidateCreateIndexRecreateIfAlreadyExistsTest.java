@@ -22,7 +22,7 @@ public class ValidateCreateIndexRecreateIfAlreadyExistsTest {
     private MongoClient mongo;
 
     @Test
-    public void testCreateIndexRecreateIfAlreadyExists() throws InvalidMigrateActionException {
+    public void testCreateIndexRecreateIfAlreadyExists() {
 
         Mockito
                 .when(connector
