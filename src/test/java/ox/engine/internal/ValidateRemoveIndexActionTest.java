@@ -1,7 +1,5 @@
 package ox.engine.internal;
 
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
 import org.junit.Test;
 import org.junit.runner.RunWith;

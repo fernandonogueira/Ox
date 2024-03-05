@@ -2,10 +2,9 @@ package ox.integration.sequenced;
 
 import com.mongodb.MongoClient;
 import org.junit.Test;
+import ox.engine.Ox;
 import ox.engine.OxConfig;
 import ox.integration.base.OxBaseContainerTest;
-import ox.engine.Ox;
-import ox.engine.exception.InvalidMongoClientConfiguration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

@@ -4,7 +4,6 @@ import org.junit.Test;
 import ox.engine.Ox;
 import ox.engine.OxConfig;
 import ox.engine.OxConfigExtras;
-import ox.engine.exception.InvalidMongoClientConfiguration;
 import ox.engine.exception.MissingCollectionException;
 import ox.integration.base.OxBaseContainerTest;
 

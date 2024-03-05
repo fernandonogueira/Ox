@@ -6,7 +6,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
-import ox.engine.exception.InvalidMigrateActionException;
 import ox.engine.structure.OrderingType;
 
 @RunWith(MockitoJUnitRunner.class)

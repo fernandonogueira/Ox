@@ -6,7 +6,6 @@ import org.junit.Test;
 import ox.engine.Ox;
 import ox.engine.OxCollectionsConfig;
 import ox.engine.OxConfig;
-import ox.engine.exception.InvalidMongoClientConfiguration;
 import ox.integration.base.OxBaseContainerTest;
 
 import java.util.HashSet;
