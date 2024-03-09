@@ -9,11 +9,11 @@ import com.mongodb.client.model.ReturnDocument;
 import com.mongodb.client.model.Updates;
 import org.bson.Document;
 import org.bson.conversions.Bson;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ox.engine.OxConfig;
 import ox.engine.exception.NoLockCollectionException;
 import ox.engine.structure.OrderingType;
+import ox.utils.logging.Logger;
+import ox.utils.logging.Loggers;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -26,14 +26,13 @@ import java.util.UUID;
 
 public class LockHandler {
 
-    private static final Logger LOG = LoggerFactory.getLogger(LockHandler.class);
+    private static final Logger LOG = Loggers.getLogger(LockHandler.class);
     private static final String LOCK_NAME = "ox-migration-lock";
 
     private enum LockStatus {
         PROCESSING, DONE
     }
 
-    private final Logger logger = LoggerFactory.getLogger(LockHandler.class);
     private final OxConfig oxConfig;
 
     public LockHandler(OxConfig oxConfig) {
@@ -104,7 +103,7 @@ public class LockHandler {
         boolean indexExists = indexes.stream().anyMatch(index -> index.get("name").equals("idx_lock_name_1"));
 
         if (!indexExists) {
-            logger.info("[Ox] Lock index does not exist. Creating: idx_lock_name_1");
+            LOG.info("[Ox] Lock index does not exist. Creating: idx_lock_name_1");
 
             CreateIndexAction idxDef = OxAction.createIndex("idx_lock_name_1")
                     .addAttribute("lock_name", OrderingType.ASC)
@@ -115,17 +114,17 @@ public class LockHandler {
             try {
                 collection.createIndex(idxDef.parseAttributesToDBObject(), idxDef.generateCreateIndexOptions());
             } catch (RuntimeException e) {
-                logger.error("Error creating lock index", e);
+                LOG.error("Error creating lock index", e);
                 throw new NoLockCollectionException("Error creating lock index");
             }
         } else {
-            logger.info("[Ox] Lock indexes exist.");
+            LOG.info("[Ox] Lock indexes exist.");
         }
 
         try {
             collection.insertOne(new Document("lock_name", LOCK_NAME).append("status", LockStatus.DONE.name()));
         } catch (Exception e) {
-            logger.debug("[Ox] ensuring lock document exists", e);
+            LOG.debug("[Ox] ensuring lock document exists", e);
         }
 
     }
@@ -142,13 +141,13 @@ public class LockHandler {
         List<String> collectionNames = database.listCollectionNames().into(new ArrayList<>());
         if (!collectionNames.contains(oxConfig.collectionsConfig().lockCollectionName())) {
             if (oxConfig.collectionsConfig().createLockCollection()) {
-                logger.info("[Ox] Lock collection does not exist. Creating: " + oxConfig.collectionsConfig().lockCollectionName());
+                LOG.info("[Ox] Lock collection does not exist. Creating: " + oxConfig.collectionsConfig().lockCollectionName());
                 database.createCollection(oxConfig.collectionsConfig().lockCollectionName());
             } else {
                 throw new NoLockCollectionException("Lock collection does not exist and createLockCollection is set to false. Collection name: " + oxConfig.collectionsConfig().lockCollectionName());
             }
         } else {
-            logger.info("[Ox] Lock collection exists: " + oxConfig.collectionsConfig().lockCollectionName());
+            LOG.info("[Ox] Lock collection exists: " + oxConfig.collectionsConfig().lockCollectionName());
         }
     }
 

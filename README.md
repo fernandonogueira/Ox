@@ -124,10 +124,6 @@ public void myMethod(){
 - Java 17
 - Mongo Java Driver 3.x
 
-## Dependencies
-
-- SLF4j
-
 ## LICENSE
 
 ```

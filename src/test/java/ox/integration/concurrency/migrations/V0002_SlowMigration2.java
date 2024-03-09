@@ -3,10 +3,8 @@ package ox.integration.concurrency.migrations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ox.engine.exception.InvalidMigrateActionException;
-import ox.engine.internal.OxAction;
 import ox.engine.internal.OxEnvironment;
 import ox.engine.structure.Migration;
-import ox.engine.structure.OrderingType;
 
 public class V0002_SlowMigration2 implements Migration {
 

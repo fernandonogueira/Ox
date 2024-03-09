@@ -1,13 +1,13 @@
 package ox.engine.internal;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import ox.utils.logging.Logger;
+import ox.utils.logging.Loggers;
 
 import static java.lang.Thread.sleep;
 
 public class LockRefresher implements Runnable {
 
-    private final static Logger LOG = LoggerFactory.getLogger(LockRefresher.class);
+    private final static Logger LOG = Loggers.getLogger(LockRefresher.class);
     private final LockHandler lockHandler;
     private final int interval;
     private final Lock lock;

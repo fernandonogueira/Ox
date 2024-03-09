@@ -1,9 +1,9 @@
 package ox.engine.internal;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ox.engine.OxConfig;
 import ox.engine.exception.OxException;
+import ox.utils.logging.Logger;
+import ox.utils.logging.Loggers;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,7 +11,7 @@ import java.util.List;
 
 public class MigrationRunner {
 
-    private static final Logger LOG = LoggerFactory.getLogger(MigrationRunner.class);
+    private static final Logger LOG = Loggers.getLogger(MigrationRunner.class);
 
     private final MongoDBConnector mongoConnector;
     private final OxConfig config;

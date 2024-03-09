@@ -1,13 +1,13 @@
 package ox.engine.internal;
 
 import com.mongodb.client.MongoDatabase;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ox.engine.exception.InvalidMigrateActionException;
+import ox.utils.logging.Logger;
+import ox.utils.logging.Loggers;
 
 public class OxEnvironmentImpl implements OxEnvironment {
 
-    private static final Logger LOG = LoggerFactory.getLogger(OxEnvironment.class);
+    private static final Logger LOG = Loggers.getLogger(OxEnvironment.class);
 
     /**
      * If true, nothing will be executed. Just simulated (and printed).

@@ -1,9 +1,9 @@
 package ox.utils;
 
 import org.bson.Document;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ox.engine.structure.OrderingType;
+import ox.utils.logging.Logger;
+import ox.utils.logging.Loggers;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -11,7 +11,7 @@ import java.util.Set;
 
 public class IndexUtils {
 
-    private static final Logger LOG = LoggerFactory.getLogger(IndexUtils.class);
+    private static final Logger LOG = Loggers.getLogger(IndexUtils.class);
 
     /**
      * Identify index attributes and ordering from a DBObject

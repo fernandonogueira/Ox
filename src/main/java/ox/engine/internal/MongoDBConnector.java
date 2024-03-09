@@ -7,12 +7,12 @@ import com.mongodb.client.model.CreateCollectionOptions;
 import com.mongodb.client.model.IndexOptions;
 import org.bson.Document;
 import org.bson.conversions.Bson;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ox.Configuration;
 import ox.engine.exception.*;
 import ox.engine.structure.OrderingType;
 import ox.utils.IndexUtils;
+import ox.utils.logging.Logger;
+import ox.utils.logging.Loggers;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,7 +21,7 @@ import java.util.Map;
 
 public class MongoDBConnector {
 
-    private static final Logger LOG = LoggerFactory.getLogger(MongoDBConnector.class);
+    private static final Logger LOG = Loggers.getLogger(MongoDBConnector.class);
     private final MongoDBConnectorConfig config;
 
     public MongoDBConnector(MongoDBConnectorConfig config) {

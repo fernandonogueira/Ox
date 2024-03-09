@@ -2,13 +2,13 @@ package ox.engine;
 
 import com.mongodb.MongoClient;
 import com.mongodb.ReadPreference;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ox.engine.exception.InvalidMongoClientConfiguration;
 import ox.engine.exception.InvalidMongoDatabaseConfiguration;
 import ox.engine.exception.InvalidReadPreferenceException;
 import ox.engine.internal.*;
 import ox.utils.CollectionUtils;
+import ox.utils.logging.Logger;
+import ox.utils.logging.Loggers;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ import java.util.concurrent.Future;
  */
 public final class Ox {
 
-    private static final Logger LOG = LoggerFactory.getLogger(Ox.class);
+    private static final Logger LOG = Loggers.getLogger(Ox.class);
     private final OxConfig config;
     private final MongoDBConnector mongoConnector;
     private final LockHandler lockHandler;

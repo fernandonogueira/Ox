@@ -15,8 +15,6 @@
  */
 package ox.engine.internal.resources.classpathscanner;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ox.engine.exception.OxRuntimeException;
 import ox.engine.internal.resources.Location;
 import ox.engine.internal.resources.Resource;
@@ -24,6 +22,8 @@ import ox.engine.internal.resources.scanner.ClassPathLocationScanner;
 import ox.engine.internal.resources.scanner.FileSystemClassPathLocationScanner;
 import ox.engine.internal.resources.scanner.JarFileClassPathLocationScanner;
 import ox.engine.internal.resources.scanner.ResourceAndClassScanner;
+import ox.utils.logging.Logger;
+import ox.utils.logging.Loggers;
 import ox.utils.resources.ClassUtils;
 import ox.utils.resources.DefaultUrlResolver;
 import ox.utils.resources.UrlResolver;
@@ -45,7 +45,7 @@ import java.util.regex.Pattern;
  * ClassPath scanner.
  */
 public class ClassPathScanner implements ResourceAndClassScanner {
-    private static final Logger LOG = LoggerFactory.getLogger(ClassPathScanner.class);
+    private static final Logger LOG = Loggers.getLogger(ClassPathScanner.class);
 
     /**
      * The ClassLoader for loading migrations on the classpath.

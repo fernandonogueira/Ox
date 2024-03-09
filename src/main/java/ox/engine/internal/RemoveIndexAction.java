@@ -1,13 +1,13 @@
 package ox.engine.internal;
 
 import com.mongodb.MongoClient;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ox.engine.exception.InvalidMigrateActionException;
+import ox.utils.logging.Logger;
+import ox.utils.logging.Loggers;
 
 public class RemoveIndexAction extends OxAction {
 
-    private static final Logger LOG = LoggerFactory.getLogger(RemoveIndexAction.class);
+    private static final Logger LOG = Loggers.getLogger(RemoveIndexAction.class);
     private final String indexName;
 
     public RemoveIndexAction(String indexName) {
@@ -31,7 +31,7 @@ public class RemoveIndexAction extends OxAction {
 
     @Override
     protected void validateAction() throws InvalidMigrateActionException {
-        if (indexName == null || indexName.equals("")) {
+        if (indexName == null || indexName.isEmpty()) {
             throw new InvalidMigrateActionException("Index Name not set. Index Remove Action cannot be executed.");
         }
         if (collection == null) {
@@ -46,7 +46,7 @@ public class RemoveIndexAction extends OxAction {
 
         if (doesItExists) {
             LOG.info("[Ox] Index exists! Removing... Index name: " + indexName);
-            mongo.getDB(databaseName).getCollection(collection).dropIndex(indexName);
+            mongo.getDatabase(databaseName).getCollection(collection).dropIndex(indexName);
         } else {
             LOG.warn("[Ox] Ignoring Index Removal Action " +
                     "because no index was found with name: " + indexName);

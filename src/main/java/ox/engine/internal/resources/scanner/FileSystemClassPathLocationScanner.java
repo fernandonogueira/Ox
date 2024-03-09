@@ -15,8 +15,8 @@
  */
 package ox.engine.internal.resources.scanner;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import ox.utils.logging.Logger;
+import ox.utils.logging.Loggers;
 import ox.utils.resources.UrlUtils;
 
 import java.io.File;
@@ -29,7 +29,7 @@ import java.util.TreeSet;
  * ClassPathLocationScanner for the file system.
  */
 public class FileSystemClassPathLocationScanner implements ClassPathLocationScanner {
-    private static final Logger LOG = LoggerFactory.getLogger(FileSystemClassPathLocationScanner.class);
+    private static final Logger LOG = Loggers.getLogger(FileSystemClassPathLocationScanner.class);
 
     public Set<String> findResourceNames(String location, URL locationUrl) throws IOException {
         String filePath = UrlUtils.toFilePath(locationUrl);

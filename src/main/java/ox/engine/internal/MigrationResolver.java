@@ -1,10 +1,10 @@
 package ox.engine.internal;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ox.engine.internal.resources.Location;
 import ox.engine.internal.resources.scanner.Scanner;
 import ox.engine.structure.Migration;
+import ox.utils.logging.Logger;
+import ox.utils.logging.Loggers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 
 public class MigrationResolver {
 
-    private static final Logger LOG = LoggerFactory.getLogger(MigrationResolver.class);
+    private static final Logger LOG = Loggers.getLogger(MigrationResolver.class);
 
     public List<ResolvedMigration> resolveMigrations(String scanPackage)
             throws Exception {
