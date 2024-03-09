@@ -16,6 +16,11 @@ public class Slf4jLogger implements Logger {
     }
 
     @Override
+    public boolean isWarnEnabled() {
+        return delegate.isWarnEnabled();
+    }
+
+    @Override
     public void warn(final String msg) {
         delegate.warn(msg);
     }
@@ -27,7 +32,7 @@ public class Slf4jLogger implements Logger {
 
     @Override
     public void warn(String msg, Object... objects) {
-        Logger.super.warn(msg, objects);
+        delegate.warn(msg, objects);
     }
 
     @Override
@@ -62,7 +67,12 @@ public class Slf4jLogger implements Logger {
 
     @Override
     public void info(String msg, Object... objects) {
-        Logger.super.info(msg, objects);
+        this.delegate.info(msg, objects);
+    }
+
+    @Override
+    public boolean isDebugEnabled() {
+        return this.delegate.isDebugEnabled();
     }
 
     @Override

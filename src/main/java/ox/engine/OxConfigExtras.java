@@ -13,7 +13,7 @@ public record OxConfigExtras(
 
         boolean failOnMissingCollection = false;
         boolean dryRun = false;
-        long lockTTLSeconds = 1200;
+        long lockTTLSeconds = 180;
 
         public Builder failOnMissingCollection(boolean failOnMissingCollection) {
             this.failOnMissingCollection = failOnMissingCollection;

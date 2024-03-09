@@ -4,6 +4,10 @@ public interface Logger {
 
     String name();
 
+    default boolean isWarnEnabled() {
+        return false;
+    }
+
     default void warn(String msg) {
     }
 
@@ -34,6 +38,10 @@ public interface Logger {
     }
 
     default void info(String msg, Object... objects) {
+    }
+
+    default boolean isDebugEnabled() {
+        return false;
     }
 
     default void debug(String msg) {

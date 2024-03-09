@@ -8,7 +8,10 @@ import com.mongodb.client.model.IndexOptions;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import ox.Configuration;
-import ox.engine.exception.*;
+import ox.engine.exception.DatabaseNotFoundException;
+import ox.engine.exception.InvalidCollectionException;
+import ox.engine.exception.MissingCollectionException;
+import ox.engine.exception.MissingMigrationHistoryCollectionException;
 import ox.engine.structure.OrderingType;
 import ox.utils.IndexUtils;
 import ox.utils.logging.Logger;
@@ -67,7 +70,7 @@ public class MongoDBConnector {
                 createMigrateVersionsCollectionIndex();
                 return getVersion();
             } else {
-                throw new CouldNotCreateCollectionException("Error trying to create collection.");
+                throw new MissingMigrationHistoryCollectionException("Error trying to create collection.");
             }
         } else {
             throw new MissingMigrationHistoryCollectionException("Versioning collection doesn't exists and auto collection create is set to false");

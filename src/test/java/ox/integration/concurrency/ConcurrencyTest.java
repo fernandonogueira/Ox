@@ -3,7 +3,9 @@ package ox.integration.concurrency;
 import com.mongodb.MongoClient;
 import org.junit.Test;
 import ox.engine.Ox;
+import ox.engine.OxCollectionsConfig;
 import ox.engine.OxConfig;
+import ox.engine.OxConfigExtras;
 import ox.integration.base.OxBaseContainerTest;
 
 public class ConcurrencyTest extends OxBaseContainerTest {
@@ -14,6 +16,14 @@ public class ConcurrencyTest extends OxBaseContainerTest {
                 .mongo(mongo)
                 .databaseName("concurrency-test")
                 .scanPackage("ox.integration.concurrency.migrations")
+                .collectionsConfig(OxCollectionsConfig.builder()
+                        .createMigrationCollection(true)
+                        .createLockCollection(true)
+                        .lockCollectionName("ox_locks")
+                        .build())
+                .extras(OxConfigExtras.builder()
+                        .lockTTLSeconds(600)
+                        .build())
                 .build();
     }
 
