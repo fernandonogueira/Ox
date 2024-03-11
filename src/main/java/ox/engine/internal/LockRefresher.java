@@ -9,16 +9,16 @@ public class LockRefresher implements Runnable {
 
     private final static Logger LOG = Loggers.getLogger(LockRefresher.class);
     private final LockHandler lockHandler;
-    private final int interval;
+    private final int intervalMillis;
     private final Lock lock;
     private boolean completed = false;
 
     public LockRefresher(
             LockHandler lockHandler,
             Lock lock,
-            int interval) {
+            int intervalMillis) {
         this.lockHandler = lockHandler;
-        this.interval = interval;
+        this.intervalMillis = intervalMillis;
         this.lock = lock;
     }
 
@@ -32,7 +32,7 @@ public class LockRefresher implements Runnable {
                     completed = true;
                 }
                 if (!completed) {
-                    sleep(interval);
+                    sleep(intervalMillis);
                 }
             }
         } catch (InterruptedException e) {
