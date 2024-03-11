@@ -1,16 +1,12 @@
 package ox.engine.internal;
 
 import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import ox.engine.exception.InvalidMigrateActionException;
 import ox.engine.structure.OrderingType;
-import ox.utils.TestUtils;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
@@ -26,7 +22,7 @@ public class ValidateCreateIndexTest {
     @Test(expected = InvalidMigrateActionException.class)
     public void createAnInvalidIndexTest() throws InvalidMigrateActionException {
 
-        OxEnvironment env = new OxEnvironment();
+        OxEnvironment env = new OxEnvironmentImpl();
 
         ArrayList<DBObject> indexInfo = new ArrayList<DBObject>();
 
@@ -39,11 +35,11 @@ public class ValidateCreateIndexTest {
 
         indexInfo.add(o);
 
-        OxAction
+        env.execute(OxAction
                 .createIndex("myIndex")
                 .ifNotExists()
                 .addAttribute("attr1", OrderingType.ASC)
-                .execute(env);
+        );
 
     }
 
@@ -53,15 +49,17 @@ public class ValidateCreateIndexTest {
     @Test(expected = InvalidMigrateActionException.class)
     public void createAnInvalidTTLIndex() throws InvalidMigrateActionException {
 
-        OxEnvironment env = new OxEnvironment();
-        OxAction
+        OxEnvironment env = new OxEnvironmentImpl();
+        CreateIndexAction action = OxAction
                 .createIndex("myIndex")
                 .setCollection("myRandomCollection")
                 .ifNotExists()
                 .addAttribute("attr1", OrderingType.ASC)
                 .addAttribute("attr2", OrderingType.ASC)
-                .markAsTTL(TimeUnit.DAYS.toSeconds(90))
-                .execute(env);
+                .markAsTTL(TimeUnit.DAYS.toSeconds(90));
+
+        env.execute(action);
+
     }
 
 }

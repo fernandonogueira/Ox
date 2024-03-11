@@ -3,12 +3,12 @@ package ox.engine.internal;
 import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.client.model.IndexOptions;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ox.engine.exception.IndexAlreadyExistsException;
 import ox.engine.exception.InvalidAttributeException;
 import ox.engine.exception.InvalidMigrateActionException;
 import ox.engine.structure.OrderingType;
+import ox.utils.logging.Logger;
+import ox.utils.logging.Loggers;
 
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 
 public class CreateIndexAction extends OxAction {
 
-    private static final Logger LOG = LoggerFactory.getLogger(CreateIndexAction.class);
+    private static final Logger LOG = Loggers.getLogger(CreateIndexAction.class);
     private final Map<String, OrderingType> attributes = new LinkedHashMap<>();
 
     private final String indexName;
@@ -165,7 +165,7 @@ public class CreateIndexAction extends OxAction {
 
     }
 
-    private IndexOptions generateCreateIndexOptions() {
+    protected IndexOptions generateCreateIndexOptions() {
         IndexOptions opts = new IndexOptions();
         opts.background(true);
         opts.name(indexName);
@@ -178,7 +178,7 @@ public class CreateIndexAction extends OxAction {
         return opts;
     }
 
-    private BasicDBObject parseAttributesToDBObject() {
+    protected BasicDBObject parseAttributesToDBObject() {
         Set<Map.Entry<String, OrderingType>> entries = attributes.entrySet();
         Iterator<Map.Entry<String, OrderingType>> it = entries.iterator();
 

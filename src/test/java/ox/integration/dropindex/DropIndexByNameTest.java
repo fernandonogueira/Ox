@@ -6,7 +6,6 @@ import org.bson.Document;
 import org.junit.Test;
 import ox.engine.Ox;
 import ox.engine.OxConfig;
-import ox.engine.exception.InvalidMongoConfiguration;
 import ox.integration.base.OxBaseContainerTest;
 
 import java.util.ArrayList;
@@ -15,14 +14,14 @@ import java.util.List;
 public class DropIndexByNameTest extends OxBaseContainerTest {
 
     @Test
-    public void shouldDropIndexByName() throws InvalidMongoConfiguration {
+    public void shouldDropIndexByName() {
         OxConfig config = OxConfig.builder()
                 .mongo(getDefaultMongo())
                 .databaseName("drop_index_test_db")
                 .scanPackage("ox.integration.dropindex.migrations")
                 .build();
 
-        Ox ox = Ox.setUp(config);
+        Ox ox = Ox.configure(config);
         ox.up(1);
 
         Assertions.assertThat(ox.databaseVersion()).isEqualTo(1);

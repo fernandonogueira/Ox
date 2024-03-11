@@ -10,11 +10,12 @@ public class V0001__create_index implements Migration {
 
     @Override
     public void up(OxEnvironment env) throws OxException {
-        OxAction.createIndex("ttl_index")
+        env.execute(OxAction
+                .createIndex("ttl_index")
                 .addAttribute("createdAt", OrderingType.ASC)
                 .setCollection("ttl_collection")
                 .markAsTTL(600)
-                .execute(env);
+        );
     }
 
     @Override

@@ -16,10 +16,10 @@
 package ox.engine.internal.resources.filesystem;
 
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ox.engine.internal.resources.Location;
 import ox.engine.internal.resources.Resource;
+import ox.utils.logging.Logger;
+import ox.utils.logging.Loggers;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,7 +30,7 @@ import java.util.TreeSet;
  * FileSystem scanner.
  */
 public class FileSystemScanner {
-    private static final Logger LOG = LoggerFactory.getLogger(FileSystemScanner.class);
+    private static final Logger LOG = Loggers.getLogger(FileSystemScanner.class);
 
     /**
      * Scans the FileSystem for resources under the specified location, starting with the specified prefix and ending with

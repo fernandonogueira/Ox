@@ -7,30 +7,29 @@ import com.mongodb.client.model.CreateCollectionOptions;
 import com.mongodb.client.model.IndexOptions;
 import org.bson.Document;
 import org.bson.conversions.Bson;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ox.Configuration;
-import ox.engine.exception.*;
+import ox.engine.exception.DatabaseNotFoundException;
+import ox.engine.exception.InvalidCollectionException;
+import ox.engine.exception.MissingCollectionException;
+import ox.engine.exception.MissingMigrationHistoryCollectionException;
 import ox.engine.structure.OrderingType;
-import ox.utils.CollectionUtils;
+import ox.utils.IndexUtils;
+import ox.utils.logging.Logger;
+import ox.utils.logging.Loggers;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 public class MongoDBConnector {
 
-    private static final Logger LOG = LoggerFactory.getLogger(MongoDBConnector.class);
+    private static final Logger LOG = Loggers.getLogger(MongoDBConnector.class);
     private final MongoDBConnectorConfig config;
 
     public MongoDBConnector(MongoDBConnectorConfig config) {
         LOG.info("[Ox] Configuring MongoDB Access...");
-        if (!isConfigValid(config)) {
-            throw new InvalidMongoDatabaseConfiguration("Database name is null. Cannot proceed.");
-        }
         this.config = config;
-    }
-
-    private boolean isConfigValid(MongoDBConnectorConfig config) {
-        return config != null && config.getDatabaseName() != null && config.getMongo() != null;
     }
 
     protected MongoDBConnectorConfig getConfig() {
@@ -56,26 +55,25 @@ public class MongoDBConnector {
     }
 
     public Integer retrieveDatabaseCurrentVersion() {
-
         validateDatabaseNames();
-
         MongoDatabase db = database();
 
         if (collectionExists(config.getMigrationCollectionName())) {
             return getVersion();
         }
 
-        if (config.shouldCreateMigrationCollection()) {
-            db.createCollection(config.getMigrationCollectionName(), new CreateCollectionOptions().capped(false));
-            if (collectionExists(config.getMigrationCollectionName())) {
-                createMigrateVersionsCollectionIndex();
-                return getVersion();
-            } else {
-                throw new CouldNotCreateCollectionException("Error trying to create collection.");
-            }
-        } else {
-            throw new CouldNotCreateCollectionException("Versioning collection doesn't exists and auto collection create is set to false");
+        if (!config.shouldCreateMigrationCollection()) {
+            throw new MissingMigrationHistoryCollectionException("Versioning collection doesn't exists and auto collection create is set to false");
         }
+
+        db.createCollection(config.getMigrationCollectionName(), new CreateCollectionOptions().capped(false));
+
+        if (collectionExists(config.getMigrationCollectionName())) {
+            createMigrateVersionsCollectionIndex();
+            return getVersion();
+        }
+
+        throw new MissingMigrationHistoryCollectionException("Error trying to create collection.");
     }
 
     private void createMigrateVersionsCollectionIndex() {
@@ -185,7 +183,7 @@ public class MongoDBConnector {
 
         for (Document current : indexList) {
             String remoteIndexName = (String) current.get("name");
-            if (!verifyIfHasSameAttributesWithSameOrder(indexAttributes, current)
+            if (!IndexUtils.verifyIfHasSameAttributesWithSameOrder(indexAttributes, current)
                     && verifyIndexesHaveSameName(indexName, remoteIndexName)) {
                 return true;
             }
@@ -218,7 +216,7 @@ public class MongoDBConnector {
 
         for (Document current : indexList) {
 
-            if (verifyIfHasSameAttributesWithSameOrder(indexAttributes, current)) {
+            if (IndexUtils.verifyIfHasSameAttributesWithSameOrder(indexAttributes, current)) {
                 return true;
             }
 
@@ -238,45 +236,6 @@ public class MongoDBConnector {
             return true;
         }
         return false;
-    }
-
-    private boolean verifyIfHasSameAttributesWithSameOrder(Map<String, OrderingType> indexAttributes, Document current) {
-        if (indexAttributes != null) {
-            Map<String, OrderingType> existingAttributes = identifyIndexAttributesAndOrdering(current);
-
-            if (CollectionUtils.isMapOrderlyEquals(indexAttributes, existingAttributes)) {
-                LOG.info("[Ox] Index already exists. (Same attributes. Same Order); {}", existingAttributes);
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Identify index attributes and ordering from a DBObject
-     * <p/>
-     * This DBObject is the DBObject that contains the info from an index retrieved from Database.
-     *
-     * @param current The DBObject retrieved from the IndexInfo List.
-     * @return A map containing the attributes and ordering
-     */
-    private Map<String, OrderingType> identifyIndexAttributesAndOrdering(Document current) {
-        Map<String, OrderingType> existingAttributes = new LinkedHashMap<>();
-        Document indexAttrs = (Document) current.get("key");
-
-        if (indexAttrs != null) {
-            Set<String> attrKeySet = indexAttrs.keySet();
-
-            for (String currentAttr : attrKeySet) {
-                Object attrOrdering = indexAttrs.get(currentAttr);
-                if (attrOrdering instanceof Integer) {
-                    existingAttributes.put(currentAttr, attrOrdering.equals(1) ? OrderingType.ASC : OrderingType.DESC);
-                } else if (attrOrdering instanceof String) {
-                    existingAttributes.put(currentAttr, OrderingType.GEO_2DSPHERE);
-                }
-            }
-        }
-        return existingAttributes;
     }
 
     public void dropIndexByName(String collection, String indexName) {

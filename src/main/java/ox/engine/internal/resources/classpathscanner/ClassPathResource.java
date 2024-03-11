@@ -23,6 +23,7 @@ import java.io.*;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 /**
  * A resource on the classpath.
@@ -31,12 +32,12 @@ public class ClassPathResource implements Comparable<ClassPathResource>, Resourc
     /**
      * The location of the resource on the classpath.
      */
-    private String location;
+    private final String location;
 
     /**
      * The ClassLoader to use.
      */
-    private ClassLoader classLoader;
+    private final ClassLoader classLoader;
 
     /**
      * Creates a new ClassPathResource.
@@ -58,11 +59,7 @@ public class ClassPathResource implements Comparable<ClassPathResource>, Resourc
         if (url == null) {
             throw new OxRuntimeException("Unable to location resource on disk: " + location);
         }
-        try {
-            return new File(URLDecoder.decode(url.getPath(), "UTF-8")).getAbsolutePath();
-        } catch (UnsupportedEncodingException e) {
-            throw new OxRuntimeException("Unknown encoding: UTF-8", e);
-        }
+        return new File(URLDecoder.decode(url.getPath(), StandardCharsets.UTF_8)).getAbsolutePath();
     }
 
     /**

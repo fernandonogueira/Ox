@@ -26,6 +26,10 @@ This project simplifies that.
 
 Compatible with Java 17+ and MongoDB 2.6 to 7.x.
 
+> [!IMPORTANT]
+> Ox requires a Mongo Client with PRIMARY read preference set.
+> The primary read preference is required to avoid dirty reads when creating indexes and collections.
+
 ## Docs
 Check the [Ox's documentation](http://ox.readthedocs.io/en/latest/)
 
@@ -119,10 +123,6 @@ public void myMethod(){
 
 - Java 17
 - Mongo Java Driver 3.x
-
-## Dependencies
-
-- SLF4j
 
 ## LICENSE
 

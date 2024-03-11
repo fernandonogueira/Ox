@@ -2,17 +2,16 @@ package ox.integration.sequenced;
 
 import com.mongodb.MongoClient;
 import org.junit.Test;
+import ox.engine.Ox;
 import ox.engine.OxConfig;
 import ox.integration.base.OxBaseContainerTest;
-import ox.engine.Ox;
-import ox.engine.exception.InvalidMongoConfiguration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SequencedTest extends OxBaseContainerTest {
 
     @Test
-    public void orderedMigrationsTest() throws InvalidMongoConfiguration {
+    public void orderedMigrationsTest() {
         MongoClient mongo = getDefaultMongo();
 
         OxConfig config = OxConfig.builder()
@@ -21,7 +20,7 @@ public class SequencedTest extends OxBaseContainerTest {
                 .scanPackage("ox.integration.sequenced.migrations.step1")
                 .build();
 
-        Ox ox = Ox.setUp(config);
+        Ox ox = Ox.configure(config);
 
         Integer databaseVersion = ox.databaseVersion();
         assertThat(databaseVersion)
@@ -38,7 +37,7 @@ public class SequencedTest extends OxBaseContainerTest {
                 .scanPackage("ox.integration.sequenced.migrations.step2")
                 .build();
 
-        ox = Ox.setUp(config);
+        ox = Ox.configure(config);
 
         ox.up();
         databaseVersion = ox.databaseVersion();

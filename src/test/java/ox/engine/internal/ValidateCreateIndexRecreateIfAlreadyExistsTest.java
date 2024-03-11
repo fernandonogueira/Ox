@@ -6,7 +6,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
-import ox.engine.exception.InvalidMigrateActionException;
 import ox.engine.structure.OrderingType;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -22,7 +21,7 @@ public class ValidateCreateIndexRecreateIfAlreadyExistsTest {
     private MongoClient mongo;
 
     @Test
-    public void testCreateIndexRecreateIfAlreadyExists() throws InvalidMigrateActionException {
+    public void testCreateIndexRecreateIfAlreadyExists() {
 
         Mockito
                 .when(connector

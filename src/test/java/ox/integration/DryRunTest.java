@@ -6,7 +6,7 @@ import org.bson.Document;
 import org.junit.Test;
 import ox.engine.Ox;
 import ox.engine.OxConfig;
-import ox.engine.exception.InvalidMongoConfiguration;
+import ox.engine.OxConfigExtras;
 import ox.integration.base.OxBaseContainerTest;
 
 import java.util.ArrayList;
@@ -15,19 +15,19 @@ import java.util.List;
 public class DryRunTest extends OxBaseContainerTest {
 
     @Test
-    public void dryRunUpTest() throws InvalidMongoConfiguration {
+    public void dryRunUpTest() {
         OxConfig config = OxConfig.builder()
                 .mongo(getDefaultMongo())
                 .databaseName("up_dry_run_db")
                 .scanPackage("ox.db.migrations")
-                .dryRun()
+                .extras(OxConfigExtras.builder().dryRun().build())
                 .build();
 
-        Ox.setUp(config).up();
+        Ox.configure(config).up();
 
         ListIndexesIterable<Document> indexes = getDefaultMongo()
                 .getDatabase("up_dry_run_db")
-                .getCollection(config.migrationCollectionName())
+                .getCollection(config.collectionsConfig().migrationCollectionName())
                 .listIndexes();
 
         List<Document> indexesList = indexes.into(new ArrayList<>())
@@ -37,19 +37,19 @@ public class DryRunTest extends OxBaseContainerTest {
     }
 
     @Test
-    public void dryRunDownTest() throws InvalidMongoConfiguration {
+    public void dryRunDownTest() {
         OxConfig config = OxConfig.builder()
                 .mongo(getDefaultMongo())
                 .databaseName("up_dry_run_db")
                 .scanPackage("ox.db.migrations")
-                .dryRun()
+                .extras(OxConfigExtras.builder().dryRun().build())
                 .build();
 
-        Ox.setUp(config).down();
+        Ox.configure(config).down();
 
         ListIndexesIterable<Document> indexes = getDefaultMongo()
                 .getDatabase("up_dry_run_db")
-                .getCollection(config.migrationCollectionName())
+                .getCollection(config.collectionsConfig().migrationCollectionName())
                 .listIndexes();
 
         List<Document> indexesList = indexes.into(new ArrayList<>())

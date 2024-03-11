@@ -8,7 +8,6 @@ import org.bson.Document;
 import org.junit.Test;
 import ox.engine.Ox;
 import ox.engine.OxConfig;
-import ox.engine.exception.InvalidMongoConfiguration;
 import ox.integration.base.OxBaseContainerTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -16,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class OutOfSequenceTest extends OxBaseContainerTest {
 
     @Test
-    public void orderedMigrationsTest() throws InvalidMongoConfiguration {
+    public void orderedMigrationsTest() {
 
         String migrationsPackage = "ox.integration.outofsequence.migrations";
 
@@ -28,7 +27,7 @@ public class OutOfSequenceTest extends OxBaseContainerTest {
                 .scanPackage(migrationsPackage + ".step1")
                 .build();
 
-        Ox ox = Ox.setUp(config);
+        Ox ox = Ox.configure(config);
 
         Integer databaseVersion = ox.databaseVersion();
         assertThat(databaseVersion)
@@ -45,7 +44,7 @@ public class OutOfSequenceTest extends OxBaseContainerTest {
                 .scanPackage(migrationsPackage + ".step2")
                 .build();
 
-        ox = Ox.setUp(config);
+        ox = Ox.configure(config);
 
         ox.up();
         databaseVersion = ox.databaseVersion();
@@ -58,7 +57,7 @@ public class OutOfSequenceTest extends OxBaseContainerTest {
                 .scanPackage(migrationsPackage + ".step3")
                 .build();
 
-        ox = Ox.setUp(config);
+        ox = Ox.configure(config);
 
         ox.up();
         databaseVersion = ox.databaseVersion();

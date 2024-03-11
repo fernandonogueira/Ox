@@ -15,8 +15,6 @@
  */
 package ox.engine.internal.resources.classpathscanner;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ox.engine.exception.OxRuntimeException;
 import ox.engine.internal.resources.Location;
 import ox.engine.internal.resources.Resource;
@@ -24,6 +22,8 @@ import ox.engine.internal.resources.scanner.ClassPathLocationScanner;
 import ox.engine.internal.resources.scanner.FileSystemClassPathLocationScanner;
 import ox.engine.internal.resources.scanner.JarFileClassPathLocationScanner;
 import ox.engine.internal.resources.scanner.ResourceAndClassScanner;
+import ox.utils.logging.Logger;
+import ox.utils.logging.Loggers;
 import ox.utils.resources.ClassUtils;
 import ox.utils.resources.DefaultUrlResolver;
 import ox.utils.resources.UrlResolver;
@@ -35,6 +35,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -44,7 +45,7 @@ import java.util.regex.Pattern;
  * ClassPath scanner.
  */
 public class ClassPathScanner implements ResourceAndClassScanner {
-    private static final Logger LOG = LoggerFactory.getLogger(ClassPathScanner.class);
+    private static final Logger LOG = Loggers.getLogger(ClassPathScanner.class);
 
     /**
      * The ClassLoader for loading migrations on the classpath.
@@ -183,8 +184,7 @@ public class ClassPathScanner implements ResourceAndClassScanner {
         boolean locationResolved = !locationUrls.isEmpty();
 
         // Make an additional attempt at finding resources in jar files that don't contain directory entries
-        if (classLoader instanceof URLClassLoader) {
-            URLClassLoader urlClassLoader = (URLClassLoader) classLoader;
+        if (classLoader instanceof URLClassLoader urlClassLoader) {
             for (URL url : urlClassLoader.getURLs()) {
                 if ("file".equals(url.getProtocol())
                         && url.getPath().endsWith(".jar")
@@ -258,7 +258,7 @@ public class ClassPathScanner implements ResourceAndClassScanner {
             }
             while (urls.hasMoreElements()) {
                 URL url = urls.nextElement();
-                locationUrls.add(new URL(URLDecoder.decode(url.toExternalForm(), "UTF-8").replace("/flyway.location", "")));
+                locationUrls.add(new URL(URLDecoder.decode(url.toExternalForm(), StandardCharsets.UTF_8).replace("/flyway.location", "")));
             }
         } else {
             Enumeration<URL> urls = classLoader.getResources(location.getPath());
