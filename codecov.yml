@@ -1,0 +1,4 @@
+ignore:
+  - "**/internal/resources/**"
+  - "**/utils/resources/**"
+  - "**/ox/utils/logging/Logger.java"
