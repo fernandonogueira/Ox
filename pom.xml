@@ -113,6 +113,7 @@
                     <excludes>
                         <exclude>**/internal/resources/**</exclude>
                         <exclude>**/utils/resources/**</exclude>
+                        <exclude>**/ox/utils/logging/Logger.java</exclude>
                     </excludes>
                 </configuration>
                 <executions>
