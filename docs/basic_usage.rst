@@ -47,18 +47,14 @@ Usage
 
     }
 
-* Then, run Ox while your application is initializing (if you want to run it inside your application) like below:
+* Run Ox during your application initialization or in another process before app initialization.
 
 .. code-block:: java
 
-    @Bean
-    @Autowired
     public Ox init(MongoClient mongo) {
 
-        Ox ox = Ox.setUp(mongo, "your.application.package.configs.OxConfig", "yourDatabaseName");
+        Ox ox = Ox.configure(mongo, "your.application.package.configs.OxConfig", "yourDatabaseName");
         ox.up();
         return ox;
 
     }
-
-Enjoy Ox! :)

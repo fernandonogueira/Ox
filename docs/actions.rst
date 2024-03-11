@@ -39,12 +39,9 @@ Supported options:
 +----------------------------+-----------------------------------------------------+
 | unique                     | Creates a unique index                              |
 +----------------------------+-----------------------------------------------------+
-| dropDups                   | Drop the duplicated rows, if this index is unique.  |
-|                            | Deprecated after MongoDB 3.0                        |
+| recreateIfNotEquals        | Recreates the index if not equals definition        |
 +----------------------------+-----------------------------------------------------+
-| recreateIfNotEquals        | Recreates the index if not equals                   |
-+----------------------------+-----------------------------------------------------+
-| ttlIndex                   | Sets the index to be an TTL index                   |
+| ttlIndex                   | Sets the index as TTL index                         |
 +----------------------------+-----------------------------------------------------+
 | ttlIndexExpireAfterSeconds | The time-to-live, if it is a TTL index.             |
 +----------------------------+-----------------------------------------------------+
@@ -80,14 +77,14 @@ E.g.
         @Override
         public void up(OxEnvironment env) {
 
-            DB db = env.getMongoDatabase();
-            // do what you want with db.
+            MongoDatabase db = env.getMongoDatabase();
+            // do something with the database
 
         }
 
         @Override
         public void down(OxEnvironment env) {
-            //...
+            // undo something
         }
 
     }
