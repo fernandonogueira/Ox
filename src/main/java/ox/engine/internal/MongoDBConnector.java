@@ -55,26 +55,25 @@ public class MongoDBConnector {
     }
 
     public Integer retrieveDatabaseCurrentVersion() {
-
         validateDatabaseNames();
-
         MongoDatabase db = database();
 
         if (collectionExists(config.getMigrationCollectionName())) {
             return getVersion();
         }
 
-        if (config.shouldCreateMigrationCollection()) {
-            db.createCollection(config.getMigrationCollectionName(), new CreateCollectionOptions().capped(false));
-            if (collectionExists(config.getMigrationCollectionName())) {
-                createMigrateVersionsCollectionIndex();
-                return getVersion();
-            } else {
-                throw new MissingMigrationHistoryCollectionException("Error trying to create collection.");
-            }
-        } else {
+        if (!config.shouldCreateMigrationCollection()) {
             throw new MissingMigrationHistoryCollectionException("Versioning collection doesn't exists and auto collection create is set to false");
         }
+
+        db.createCollection(config.getMigrationCollectionName(), new CreateCollectionOptions().capped(false));
+
+        if (collectionExists(config.getMigrationCollectionName())) {
+            createMigrateVersionsCollectionIndex();
+            return getVersion();
+        }
+
+        throw new MissingMigrationHistoryCollectionException("Error trying to create collection.");
     }
 
     private void createMigrateVersionsCollectionIndex() {
