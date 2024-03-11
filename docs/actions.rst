@@ -2,19 +2,18 @@ Actions
 =======
 
 An Ox migration is composed of one or more actions.
-The types of actions are described in this page.
+The types of actions are described on this page.
 
 OxAction
 --------
 
-All actions should be created using the OxAction class. This class also have a ``setCollection`` method
-that all actions will use to know which collection will be modified.
+All actions should be created using the OxAction class. This class also has a mandatory ``setCollection`` method.
 
 Create Index
 ------------
 
 
-Action used to create a new index or to ensure that the index is created.
+This action is used to create a new index or to ensure that the index is created.
 
 Example:
 
@@ -26,7 +25,7 @@ Example:
         .addAttribute("attr1", OrderingType.ASC)
         .build()
 
-This action supports a lot of create index options supported by MongoDB database.
+This action supports several options supported by the MongoDB database.
 
 Supported options:
 
@@ -35,7 +34,7 @@ Supported options:
 +----------------------------+-----------------------------------------------------+
 | indexName                  | The index name                                      |
 +----------------------------+-----------------------------------------------------+
-| ifNotExists                | Creates the index only if it do not exists yet      |
+| ifNotExists                | Creates the index only if it does not exist yet     |
 +----------------------------+-----------------------------------------------------+
 | unique                     | Creates a unique index                              |
 +----------------------------+-----------------------------------------------------+
@@ -47,26 +46,19 @@ Supported options:
 +----------------------------+-----------------------------------------------------+
 
 It's worth mentioning that the ``recreateIfNotEquals`` option.
-This option ensure that the described index (with the given name) should have the same attributes
-or it will be deleted and re-created.
-
-
-Remove Collection
------------------
-
-Used to remove a collection.
+This option ensures that the described index (with the given name) should have the exact attributes, or it will be deleted and re-created.
 
 
 Remove Index
 ------------
 
-Used to remove an index.
+Removes an index by name.
 
 Custom Actions/Modifying Data
 -----------------------------
 
 If you want to modify data or create a custom action,
-you should use the `OxEnvironment` that is passed as parameter to `up` and `down` methods described in your migration classes.
+you should use the `OxEnvironment` object passed as the parameter in the `up` and `down` methods described in your migration classes.
 
 E.g.
 
@@ -78,13 +70,13 @@ E.g.
         public void up(OxEnvironment env) {
 
             MongoDatabase db = env.getMongoDatabase();
-            // do something with the database
+            // apply your changes
 
         }
 
         @Override
         public void down(OxEnvironment env) {
-            // undo something
+            // undo changes
         }
 
     }
