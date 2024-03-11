@@ -2,3 +2,4 @@ ignore:
   - "**/internal/resources/**"
   - "**/utils/resources/**"
   - "**/ox/utils/logging/Logger.java"
+  - "**/ox/utils/logging/Loggers.java"
