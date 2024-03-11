@@ -5,12 +5,12 @@ import com.mongodb.ReadPreference;
 import ox.engine.exception.InvalidMongoClientConfiguration;
 import ox.engine.exception.InvalidMongoDatabaseConfiguration;
 import ox.engine.exception.InvalidReadPreferenceException;
+import ox.engine.exception.InvalidScanPackageException;
 import ox.engine.internal.*;
 import ox.utils.CollectionUtils;
 import ox.utils.logging.Logger;
 import ox.utils.logging.Loggers;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -45,7 +45,7 @@ public final class Ox {
 
     private static void validateConfig(OxConfig config) {
         if (config.scanPackage() == null || config.scanPackage().isEmpty()) {
-            throw new IllegalArgumentException("Invalid scanPackage.");
+            throw new InvalidScanPackageException("Invalid scanPackage.");
         }
         if (config.databaseName() == null || config.databaseName().isEmpty()) {
             throw new InvalidMongoDatabaseConfiguration("Invalid databaseName");
@@ -149,14 +149,8 @@ public final class Ox {
         try {
             List<ResolvedMigration> resolvedMigrations = migrationResolver.resolveMigrations(config.scanPackage());
             return CollectionUtils.sortResolvedMigrations(resolvedMigrations);
-        } catch (IOException e) {
-            LOG.error("[Ox] Error updating MONGODB Database Schema", e);
-        } catch (ClassNotFoundException e) {
-            LOG.error("[Ox] Class not found error", e);
-        } catch (InstantiationException | IllegalAccessException e) {
-            LOG.error("[Ox] There was a problem instantiating a migrate class", e);
         } catch (Exception e) {
-            LOG.error("[Ox] There was a problem (generic) instantiating a migrate class", e);
+            LOG.error("[Ox] Error during migration classes resolution", e);
         }
         return new ArrayList<>();
     }

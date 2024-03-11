@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
+import ox.engine.OxConfig;
 import ox.engine.exception.InvalidCollectionException;
 import ox.engine.structure.OrderingType;
 import ox.utils.Faker;
@@ -68,11 +69,12 @@ public class MongoDBConnectorTest {
 
         MongoClient mockedMongo = Mockito.mock(MongoClient.class);
 
-        MongoDBConnector connector = new MongoDBConnector(
-                MongoDBConnectorConfig.builder()
-                        .setMongoClient(mockedMongo)
-                        .setDatabaseName(Faker.fakeDBName())
-                        .build());
+        OxConfig oxConfig = OxConfig.builder()
+                .mongo(mockedMongo)
+                .databaseName(Faker.fakeDBName())
+                .build();
+
+        MongoDBConnector connector = new MongoDBConnector(MongoDBConnectorConfig.fromOxConfig(oxConfig));
 
         OxAction action = Mockito.mock(OxAction.class);
         Mockito.when(action.getCollection()).thenReturn(null);
@@ -90,9 +92,12 @@ public class MongoDBConnectorTest {
 
         MongoClient mockedMongo = Mockito.mock(MongoClient.class);
 
-        MongoDBConnectorConfig config = MongoDBConnectorConfig.builder()
-                .setMongoClient(mockedMongo)
-                .setDatabaseName("myDB").build();
+        OxConfig oxConfig = OxConfig.builder()
+                .mongo(mockedMongo)
+                .databaseName("myDB")
+                .build();
+
+        MongoDBConnectorConfig config = MongoDBConnectorConfig.fromOxConfig(oxConfig);
 
         MongoDBConnector connector = new MongoDBConnector(config);
 
@@ -126,9 +131,12 @@ public class MongoDBConnectorTest {
 
         MongoClient mockedMongo = Mockito.mock(MongoClient.class);
 
-        MongoDBConnectorConfig config = MongoDBConnectorConfig.builder()
-                .setMongoClient(mockedMongo)
-                .setDatabaseName(Faker.fakeDBName()).build();
+        OxConfig oxConfig = OxConfig.builder()
+                .mongo(mockedMongo)
+                .databaseName(Faker.fakeDBName())
+                .build();
+
+        MongoDBConnectorConfig config = MongoDBConnectorConfig.fromOxConfig(oxConfig);
 
         MongoDBConnector connector = new MongoDBConnector(config);
 
@@ -165,9 +173,12 @@ public class MongoDBConnectorTest {
 
         MongoClient mockedMongo = newMockedMongo();
 
-        MongoDBConnectorConfig config = MongoDBConnectorConfig.builder()
-                .setMongoClient(mockedMongo)
-                .setDatabaseName("myDB").build();
+        OxConfig oxConfig = OxConfig.builder()
+                .mongo(mockedMongo)
+                .databaseName("myDB")
+                .build();
+
+        MongoDBConnectorConfig config = MongoDBConnectorConfig.fromOxConfig(oxConfig);
 
         MongoDBConnector connector = new MongoDBConnector(config);
 
@@ -196,9 +207,12 @@ public class MongoDBConnectorTest {
 
         MongoClient mockedMongo = newMockedMongo();
 
-        MongoDBConnectorConfig config = MongoDBConnectorConfig.builder()
-                .setMongoClient(mockedMongo)
-                .setDatabaseName("myDB").build();
+        OxConfig oxConfig = OxConfig.builder()
+                .mongo(mockedMongo)
+                .databaseName("myDB")
+                .build();
+
+        MongoDBConnectorConfig config = MongoDBConnectorConfig.fromOxConfig(oxConfig);
 
         MongoDBConnector connector = new MongoDBConnector(config);
 
