@@ -16,6 +16,10 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+      - name: Set version from release tag
+        env:
+          TAG: ${{ github.event.release.tag_name }}
+        run: mvn --batch-mode versions:set -DnewVersion="${TAG#v}" -DgenerateBackupPoms=false
       - name: Publish package
         run: mvn --batch-mode deploy
         env:
